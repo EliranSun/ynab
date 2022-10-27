@@ -67,15 +67,11 @@ const CategorySelection = () => {
 	const { categories, items } = useContext(CategoriesContext);
 	const { setExpenses, expenses } = useContext(ExpensesContext);
 	const [selectedCategoryId, setSelectedCategoryId] = useState("");
-	const selectedCategoryName = useMemo(() => {
-		return categories[selectedCategoryId]?.name || categories[0]?.name;
-	}, [categories, selectedCategoryId]);
-	const sortedItems = useMemo(
-		() =>
-			sortBy(
-				Object.entries(items),
-				([_itemName, { lastTransactionTimestamp }]) => lastTransactionTimestamp
-			).reverse(),
+	// const selectedCategoryName = useMemo(() => {
+	// 	return categories[selectedCategoryId]?.name || categories[0]?.name;
+	// }, [categories, selectedCategoryId]);
+	const sortedItemsByDate = useMemo(
+		() => sortBy(items, ({ timestamp }) => timestamp).reverse(),
 		[items]
 	);
 
@@ -95,17 +91,13 @@ const CategorySelection = () => {
 				options={categories}
 				isCategoryView
 				selectedCategoryId={selectedCategoryId}
-				onCategorySelect={(id) => {
-					setSelectedCategoryId(id);
+				onCategorySelect={(categoryId) => {
+					setSelectedCategoryId(categoryId);
 					setExpenses(
-						sortedItems.map(
-							([itemName, { lastTransactionTimestamp, totalAmounts }]) => ({
-								name: itemName,
-								id,
-								timestamp: lastTransactionTimestamp,
-								totalAmounts,
-							})
-						)
+						sortedItemsByDate.map((item) => ({
+							...item,
+							categoryId,
+						}))
 					);
 				}}
 			/>
@@ -121,76 +113,69 @@ const CategorySelection = () => {
 					</tr>
 				</thead>
 				<tbody>
-					{sortedItems.map(
-						([name, { totalAmounts, lastTransactionTimestamp }]) => {
-							return (
-								<tr key={name}>
-									<td>
-										<span className="category-selection__item__name">
-											{name}
-										</span>
-									</td>
-									<td>
-										<span className="category-selection__item__name">
-											{totalAmounts?.toFixed(2)}
-										</span>
-									</td>
-									<td>
-										<span className="category-selection__item__name">
-											{new Date(lastTransactionTimestamp).toLocaleDateString(
-												"en-gb",
-												{
-													year: "numeric",
-													month: "short",
-													day: "numeric",
-												}
-											)}
-										</span>
-									</td>
-									<td>
-										<Selection
-											isDisabled
-											isCategoryView
-											options={categories}
-											selectedCategoryId={selectedCategoryId}
-										/>
-									</td>
-									<td>
-										<Selection
-											selectedCategoryId={
-												expenses
-													.map((expense) => {
-														if (expense.name === name) {
-															return expense.id;
-														}
+					{sortedItemsByDate.map(({ id, name, amount, timestamp }) => {
+						return (
+							<tr key={name}>
+								<td>
+									<span className="category-selection__item__name">{name}</span>
+								</td>
+								<td>
+									<span className="category-selection__item__name">
+										{amount?.toFixed(2)}
+									</span>
+								</td>
+								<td>
+									<span className="category-selection__item__name">
+										{new Date(timestamp).toLocaleDateString("en-gb", {
+											year: "numeric",
+											month: "short",
+											day: "numeric",
+										})}
+									</span>
+								</td>
+								<td>
+									<Selection
+										isDisabled
+										isCategoryView
+										options={categories}
+										selectedCategoryId={selectedCategoryId}
+									/>
+								</td>
+								<td>
+									<Selection
+										selectedCategoryId={
+											expenses
+												.map((expense) => {
+													if (expense.name === name) {
+														return expense.id;
+													}
 
-														return null;
-													})
-													.filter(Boolean)[0]
-											}
-											onSubcategorySelect={(id) => {
-												setExpenses({
-													name,
-													timestamp: lastTransactionTimestamp,
-													totalAmounts,
-													id,
-												});
-											}}
-											options={
-												selectedCategoryId
-													? categories.filter(
-															(category) =>
-																String(category.id) ===
-																String(selectedCategoryId)
-													  )
-													: categories
-											}
-										/>
-									</td>
-								</tr>
-							);
-						}
-					)}
+													return null;
+												})
+												.filter(Boolean)[0]
+										}
+										onSubcategorySelect={(categoryId) => {
+											setExpenses({
+												id,
+												name,
+												amount,
+												timestamp,
+												categoryId,
+											});
+										}}
+										options={
+											selectedCategoryId
+												? categories.filter(
+														(category) =>
+															String(category.id) === String(selectedCategoryId)
+												  )
+												: categories
+										}
+									/>
+								</td>
+							</tr>
+						);
+					})}
 				</tbody>
 			</table>
 		</div>

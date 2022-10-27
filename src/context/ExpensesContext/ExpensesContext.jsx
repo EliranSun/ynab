@@ -17,17 +17,21 @@ export const ExpensesContextProvider = ({ children }) => {
 	const [expenses, setExpenses] = useState(lastExpenses || []);
 	const [error, setError] = useState(null);
 
-	const handleExpense = ({ name, id, timestamp, totalAmounts }) => {
+	const handleExpense = ({ name, id, timestamp, amount }) => {
 		if (!name || !id) {
 			setError(`Missing name or id, name: ${name}, id: ${id}`);
 			return;
 		}
 
-		if (expenses.find((expense) => expense.name === name)) {
+		const isSameExpense = expenses.find((expense) => {
+			return expense.id === id;
+		});
+
+		if (isSameExpense) {
 			setExpenses((prevExpenses) => {
 				const newExpenses = prevExpenses
 					.filter((expense) => expense.name !== name)
-					.concat({ name, id, timestamp, totalAmounts });
+					.concat({ name, id, timestamp, amount });
 				localStorage.setItem("expenses", JSON.stringify(newExpenses));
 				return newExpenses;
 			});
@@ -39,7 +43,7 @@ export const ExpensesContextProvider = ({ children }) => {
 				name,
 				id,
 				timestamp,
-				totalAmounts,
+				amount,
 			});
 			localStorage.setItem("expenses", JSON.stringify(newExpenses));
 			return newExpenses;

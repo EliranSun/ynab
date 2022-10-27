@@ -184,6 +184,21 @@ export const CategoriesContextProvider = ({ children }) => {
 				},
 			],
 		},
+		{
+			id: 8,
+			name: "Income",
+			isIncome: true,
+			subCategories: [
+				{
+					id: 81,
+					name: "Salary",
+				},
+				{
+					id: 82,
+					name: "Other",
+				},
+			],
+		},
 	]);
 
 	return (

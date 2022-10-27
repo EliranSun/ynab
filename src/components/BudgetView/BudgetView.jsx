@@ -11,45 +11,42 @@ const getLastBudget = () => {
 	}
 };
 
-const getLastMonthExpenseById = (expenses = [], id) => {
-	return expenses.reduce((total, expense) => {
-		const lastMonth = new Date().getMonth();
-		const expenseMonth = new Date(expense.timestamp).getMonth();
-		const sameId = String(expense.id) === String(id);
-		const isLastMonth = lastMonth === expenseMonth;
-		const lastYear = new Date().getFullYear();
+// const getLastMonthExpenseById = (expenses = [], id) => {
+// 	return expenses.reduce((total, expense) => {
+// 		const lastMonth = new Date().getMonth();
+// 		const expenseMonth = new Date(expense.timestamp).getMonth();
+// 		const sameId = String(expense.id) === String(id);
+// 		const isLastMonth = lastMonth === expenseMonth;
+// 		const lastYear = new Date().getFullYear();
 
-		if (sameId && isLastMonth) {
-			console.debug("last month", expense);
-			return total + expense.totalAmounts[`${lastYear}-${lastMonth}`];
-		}
+// 		if (sameId && isLastMonth) {
+// 			console.debug("last month", expense);
+// 			return total + expense.totalAmounts[`${lastYear}-${lastMonth}`];
+// 		}
 
-		return total;
-	}, 0);
-};
+// 		return total;
+// 	}, 0);
+// };
 
-const getAverageExpenseAmountById = (expenses = [], id) => {
-	let totalAmount = 0;
-	let totalDates = [];
+// const getAverageExpenseAmountById = (expenses = [], id) => {
+// 	let totalAmount = 0;
+// 	let totalDates = [];
 
-	expenses.forEach((expense) => {
-		const isSameId = String(expense.id) === String(id);
-		if (isSameId) {
-			totalAmount += Object.values(expense.totalAmounts).reduce(
-				(total, amount) => total + amount
-			);
-			totalDates = uniq(totalDates.concat(Object.keys(expense.totalAmounts)));
-		}
+// 	expenses.forEach((expense) => {
+// 		const isSameId = String(expense.id) === String(id);
+// 		if (isSameId) {
+// 			totalAmount += Object.values(expense.totalAmounts).reduce(
+// 				(total, amount) => total + amount
+// 			);
 
-		if (String(expense.id) === "11" && isSameId) {
-			debugger;
-		}
-	});
+// 			totalDates = uniq(totalDates.concat(Object.keys(expense.totalAmounts)));
+// 		}
+// 	});
 
-	const averageAmount = totalAmount / totalDates.length;
+// 	const averageAmount = totalAmount / totalDates.length;
 
-	return averageAmount;
-};
+// 	return averageAmount;
+// };
 
 const BudgetView = () => {
 	const [budget, setBudget] = useState(getLastBudget());
@@ -76,14 +73,14 @@ const BudgetView = () => {
 						</tr>
 					</thead>
 					{category.subCategories.map((subcategory) => {
-						const lastExpense = getLastMonthExpenseById(
-							expenses,
-							subcategory.id
-						);
-						const averageAmount = getAverageExpenseAmountById(
-							expenses,
-							subcategory.id
-						);
+						// const lastExpense = getLastMonthExpenseById(
+						// 	expenses,
+						// 	subcategory.id
+						// );
+						// const averageAmount = getAverageExpenseAmountById(
+						// 	expenses,
+						// 	subcategory.id
+						// );
 
 						return (
 							<tbody key={subcategory.id}>
@@ -96,7 +93,7 @@ const BudgetView = () => {
 									<td>
 										<span>
 											Last month:{" "}
-											{<b>{lastExpense?.toFixed(2)}</b> || "Not enough data"}
+											{/* {<b>{lastExpense?.toFixed(2)}</b> || "Not enough data"} */}
 										</span>
 									</td>
 								</tr>
@@ -104,7 +101,7 @@ const BudgetView = () => {
 									<td>
 										<span>
 											Average:{" "}
-											{<b>{averageAmount.toFixed(2)}</b> || "Not enough data"}
+											{/* {<b>{averageAmount.toFixed(2)}</b> || "Not enough data"} */}
 										</span>
 									</td>
 								</tr>
