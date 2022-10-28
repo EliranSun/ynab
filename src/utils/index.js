@@ -12,6 +12,9 @@ export const aggregateTransactionsByName = (transactions) => {
   for (const transaction of transactions) {
     const { name, amount } = transaction;
     if (isThirdPartyTransaction(name)) {
+      debugger;
+      transaction.updateTransactionsCount &&
+        transaction.updateTransactionsCount();
       aggregatedTransactions.push(transaction);
       continue;
     }
@@ -22,7 +25,9 @@ export const aggregateTransactionsByName = (transactions) => {
 
     const hasTransactionName = transactionIndex !== -1;
     if (hasTransactionName) {
-      aggregatedTransactions.transactionsCount += 1;
+      debugger;
+      transaction.updateTransactionsCount &&
+        transaction.updateTransactionsCount();
       aggregatedTransactions[transactionIndex].amount += amount;
       continue;
     }

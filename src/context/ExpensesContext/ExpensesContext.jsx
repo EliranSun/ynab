@@ -7,15 +7,19 @@ export const ExpensesContext = createContext({
   setExpenses: noop,
 });
 
-let lastExpenses = {};
-try {
-  lastExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
-} catch (error) {
-  console.warn(error);
-}
+const getLastExpenses = () => {
+  let lastExpenses = {};
+  try {
+    lastExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
+    return lastExpenses.map((expense) => new Expense(expense));
+  } catch (error) {
+    console.warn(error);
+    return [];
+  }
+};
 
 export const ExpensesContextProvider = ({ children }) => {
-  const [expenses, setExpenses] = useState(lastExpenses || []);
+  const [expenses, setExpenses] = useState(getLastExpenses());
   const [error, setError] = useState(null);
 
   const handleExpense = ({ name, id, timestamp, amount, categoryId }) => {

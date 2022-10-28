@@ -99,12 +99,20 @@ const CategorySelection = () => {
         </thead>
         <tbody>
           {sortedTransactionsByDate.map(
-            ({ id, name, amount, timestamp, categoryId }) => {
+            ({
+              id,
+              name,
+              amount,
+              timestamp,
+              transactionsCount,
+              categoryId,
+            }) => {
               return (
                 <tr key={name}>
                   <td>
                     <span className="category-selection__item__name">
-                      {name.slice(0, 20)}
+                      {name.slice(0, 20)}{" "}
+                      {transactionsCount ? `(${transactionsCount})` : ""}
                     </span>
                   </td>
                   <td>
