@@ -1,73 +1,78 @@
 import { useState, createContext } from "react";
 import { noop, isArray } from "lodash";
+import { Expense } from "../../models";
 
 export const ExpensesContext = createContext({
-	expenses: {},
-	setExpenses: noop,
+  expenses: {},
+  setExpenses: noop,
 });
 
 let lastExpenses = {};
 try {
-	lastExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
+  lastExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
 } catch (error) {
-	console.warn(error);
+  console.warn(error);
 }
 
 export const ExpensesContextProvider = ({ children }) => {
-	const [expenses, setExpenses] = useState(lastExpenses || []);
-	const [error, setError] = useState(null);
+  const [expenses, setExpenses] = useState(lastExpenses || []);
+  const [error, setError] = useState(null);
 
-	const handleExpense = ({ name, id, timestamp, amount }) => {
-		if (!name || !id) {
-			setError(`Missing name or id, name: ${name}, id: ${id}`);
-			return;
-		}
+  const handleExpense = ({ name, id, timestamp, amount, categoryId }) => {
+    if (!name || !id) {
+      setError(`Missing name or id, name: ${name}, id: ${id}`);
+      return;
+    }
 
-		const isSameExpense = expenses.find((expense) => {
-			return expense.id === id;
-		});
+    const expense = expenses.find((expense) => {
+      return expense.id === id;
+    });
 
-		if (isSameExpense) {
-			setExpenses((prevExpenses) => {
-				const newExpenses = prevExpenses
-					.filter((expense) => expense.name !== name)
-					.concat({ name, id, timestamp, amount });
-				localStorage.setItem("expenses", JSON.stringify(newExpenses));
-				return newExpenses;
-			});
-			return;
-		}
+    if (expense) {
+      expense.setCategoryId(categoryId);
+      setExpenses((prevExpenses) => {
+        const newExpenses = prevExpenses
+          .filter((expense) => expense.id !== id)
+          .concat(expense);
 
-		setExpenses((prevExpenses) => {
-			const newExpenses = prevExpenses.concat({
-				name,
-				id,
-				timestamp,
-				amount,
-			});
-			localStorage.setItem("expenses", JSON.stringify(newExpenses));
-			return newExpenses;
-		});
-	};
+        localStorage.setItem("expenses", JSON.stringify(newExpenses));
+        return newExpenses;
+      });
+      return;
+    }
 
-	return (
-		<ExpensesContext.Provider
-			value={{
-				expenses,
-				setExpenses: (expenses) => {
-					setError("");
+    setExpenses((prevExpenses) => {
+      const newExpenses = prevExpenses.concat(
+        new Expense({
+          name,
+          timestamp,
+          amount,
+          categoryId,
+        })
+      );
 
-					if (isArray(expenses)) {
-						expenses.forEach((expense) => handleExpense(expense));
-						return;
-					}
+      localStorage.setItem("expenses", JSON.stringify(newExpenses));
+      return newExpenses;
+    });
+  };
 
-					handleExpense(expenses);
-				},
-			}}
-		>
-			{children}
-			<span className="error">{error}</span>
-		</ExpensesContext.Provider>
-	);
+  return (
+    <ExpensesContext.Provider
+      value={{
+        expenses,
+        setExpenses: (expenses) => {
+          setError("");
+
+          if (isArray(expenses)) {
+            expenses.forEach(handleExpense);
+            return;
+          }
+
+          handleExpense(expenses);
+        },
+      }}>
+      {children}
+      <span className="error">{error}</span>
+    </ExpensesContext.Provider>
+  );
 };
