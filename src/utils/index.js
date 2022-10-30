@@ -11,11 +11,9 @@ export const aggregateTransactionsByName = (transactions) => {
   const aggregatedTransactions = [];
 
   for (const transaction of transactions) {
-    const { name, amount, id } = transaction;
+    const { name, amount } = transaction;
 
     if (isThirdPartyTransaction(name)) {
-      transaction.updateTransactionsCount &&
-        transaction.updateTransactionsCount();
       aggregatedTransactions.push(transaction);
       continue;
     }
@@ -26,14 +24,7 @@ export const aggregateTransactionsByName = (transactions) => {
 
     const hasTransactionName = transactionIndex !== -1;
 
-    if (transaction?.name === "מזנון בריכת גורדון") {
-      console.log("transaction", transaction);
-    }
-
     if (hasTransactionName) {
-      transaction.updateTransactionsCount &&
-        transaction.updateTransactionsCount();
-      // console.log(aggregatedTransactions[transactionIndex]);
       aggregatedTransactions[transactionIndex].amount += amount;
       aggregatedTransactions[transactionIndex].transactions = [
         ...(aggregatedTransactions[transactionIndex].transactions || []),
@@ -42,7 +33,6 @@ export const aggregateTransactionsByName = (transactions) => {
       continue;
     }
 
-    // console.debug("transaction", transaction);
     aggregatedTransactions.push({
       ...transaction,
       transactions: [transaction],

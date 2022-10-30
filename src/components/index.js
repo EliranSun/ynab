@@ -1,4 +1,4 @@
 export * from "./SheetUpload";
-export * from "./PasteList";
+export * from "./PasteExpensesList";
 export * from "./CategorySelection";
 export * from "./BudgetView";

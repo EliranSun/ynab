@@ -1,8 +1,7 @@
 import { useState, useContext } from "react";
 import { CategoryContext } from "../../contexts";
 
-// TBD
-
+// TBD, unsued
 const CreateCategory = () => {
   return (
     <div>

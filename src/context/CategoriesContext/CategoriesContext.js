@@ -37,11 +37,43 @@ export const CategoriesContextProvider = ({ children }) => {
     <CategoriesContext.Provider
       value={{
         categories,
+        updateCategoryExpenseId: (categoryId, expenseId) => {
+          const newCategories = categories.map((category) => {
+            const shouldRemoveExpense =
+              category.id === categoryId &&
+              category.expensesIds.includes(expenseId);
+            const shouldAddExpense =
+              category.id === categoryId &&
+              !category.expensesIds.includes(expenseId);
+            if (shouldRemoveExpense) {
+              return {
+                ...category,
+                expensesIds: category.expensesIds.filter(
+                  (id) => id !== expenseId
+                ),
+              };
+            }
+
+            if (shouldAddExpense) {
+              return {
+                ...category,
+                expenses: [...category.expenses, expenseId],
+              };
+            }
+
+            return category;
+          });
+          setCategories(newCategories);
+        },
         setCategories,
         transactions,
         sortedAggregatedTransactions:
           memoTransactions.sortedAggregatedTransactions,
-        setTransactions,
+        setTransactions: (transactions) => {
+          setTransactions(transactions);
+          const previousTransactions = getLastTransactions();
+          localStorage.setItem("transactions", JSON.stringify(transactions));
+        },
       }}>
       {children}
     </CategoriesContext.Provider>

@@ -121,6 +121,23 @@ const Selection = ({
   );
 };
 
+const TransactionChildrenView = ({ transaction, isOpen }) => {
+  return (
+    isOpen &&
+    transaction.transactions.map((transaction) => (
+      <>
+        <hr />
+        <table>
+          <TransactionName name={transaction.name} count={1} /> <br />
+          <TransactionAmount amount={transaction.amount} />
+          <br />
+          <TransactionDate timestamp={transaction.timestamp} /> <br />
+        </table>
+      </>
+    ))
+  );
+};
+
 const CategorySelection = () => {
   const { sortedAggregatedTransactions } = useContext(CategoriesContext);
   const [aggregatedDetailsVisibleId, setAggregatedDetailsId] = useState(false);
@@ -147,36 +164,37 @@ const CategorySelection = () => {
         </thead>
         <tbody>
           {sortedAggregatedTransactions.map((transaction) => {
-            const { id, name, amount, timestamp, transactionsCount } =
-              transaction;
+            const {
+              id,
+              name,
+              amount,
+              timestamp,
+              transactionsCount,
+              transactions,
+            } = transaction;
             const isDetailedView = aggregatedDetailsVisibleId === id;
             return (
               <tr
                 key={id}
                 onClick={() => {
-                  if (!transaction.transactions?.length < 2) return;
-                  setAggregatedDetailsId(isDetailedView ? null : id);
+                  if (transaction.transactions?.length < 2) {
+                    return;
+                  }
+
+                  if (isDetailedView) {
+                    setAggregatedDetailsId(null);
+                    return;
+                  }
+
+                  setAggregatedDetailsId(id);
                 }}>
                 <td>
                   <TransactionName name={name} count={transactionsCount} />{" "}
-                  {transaction.transactionsCount > 1 &&
-                    `(${transaction.transactionsCount})`}
-                  {isDetailedView &&
-                    transaction.transactions.map((transaction) => (
-                      <>
-                        <hr />
-                        <table>
-                          <TransactionName name={transaction.name} count={1} />{" "}
-                          <br />
-                          <TransactionAmount amount={transaction.amount} />
-                          <br />
-                          <TransactionDate
-                            timestamp={transaction.timestamp}
-                          />{" "}
-                          <br />
-                        </table>
-                      </>
-                    ))}
+                  {transactions?.length > 1 && `(${transactions.length})`}
+                  <TransactionChildrenView
+                    transaction={transaction}
+                    isOpen={isDetailedView}
+                  />
                 </td>
                 <td>
                   <TransactionAmount amount={amount} />
