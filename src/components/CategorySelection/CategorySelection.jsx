@@ -1,7 +1,77 @@
-import { useState, useContext, Fragment, useMemo } from "react";
-import { noop, sortBy } from "lodash";
+import { useState, useContext, Fragment } from "react";
+import { noop } from "lodash";
 import { CategoriesContext, ExpensesContext } from "../../context";
-import { aggregateTransactionsByName } from "../../utils";
+
+// TODO: move to separate components
+const TransactionName = ({ name, count }) => {
+  return (
+    <span className="category-selection__item__name">
+      {name} {count ? `(${count})` : ""}
+    </span>
+  );
+};
+
+const TransactionAmount = ({ amount }) => {
+  return (
+    <span className="category-selection__item__name">{amount?.toFixed(2)}</span>
+  );
+};
+
+const SelectTransactionSubcategory = ({
+  transaction,
+  selectedSubcategoryId,
+  onSelect = noop,
+}) => {
+  const { categories } = useContext(CategoriesContext);
+  const { setExpenses, expenses } = useContext(ExpensesContext);
+  const { name, id, amount, timestamp } = transaction;
+
+  return (
+    <Selection
+      selectedCategoryId={
+        expenses
+          .map((expense) => {
+            if (expense.name === name) {
+              return expense.id;
+            }
+
+            return null;
+          })
+          .filter(Boolean)[0]
+      }
+      onSubcategorySelect={(categoryId) => {
+        setExpenses({
+          id,
+          name,
+          amount,
+          timestamp,
+          categoryId,
+        });
+        onSelect(id);
+      }}
+      options={
+        selectedSubcategoryId
+          ? categories.filter(
+              (category) =>
+                String(category.id) === String(selectedSubcategoryId)
+            )
+          : categories
+      }
+    />
+  );
+};
+
+const TransactionDate = ({ timestamp }) => {
+  return (
+    <span className="category-selection__item__name">
+      {new Date(timestamp).toLocaleDateString("en-gb", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      })}
+    </span>
+  );
+};
 
 const Selection = ({
   options = [],
@@ -63,21 +133,10 @@ const Selection = ({
 };
 
 const CategorySelection = () => {
-  // TODO: items is a horrible name for the list of transactions
-  const { categories, items } = useContext(CategoriesContext);
-  const { setExpenses, expenses } = useContext(ExpensesContext);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
-  const aggregatedTransactions = useMemo(
-    () => aggregateTransactionsByName(items),
-    [items]
-  );
-  const sortedTransactionsByDate = useMemo(
-    () =>
-      sortBy(aggregatedTransactions, ({ timestamp }) => timestamp).reverse(),
-    [aggregatedTransactions]
-  );
+  const { sortedAggregatedTransactions } = useContext(CategoriesContext);
 
-  if (!Object.keys(items).length) {
+  if (!Object.keys(sortedAggregatedTransactions).length) {
     return (
       <div className="category-selection">
         <p>Nothing parsed yet, paste/upload file above</p>
@@ -85,99 +144,48 @@ const CategorySelection = () => {
     );
   }
 
+  // on row click - highlight row
   return (
     <div className="category-selection">
-      <table>
+      <table border={1}>
         <thead>
           <tr>
             <th>Name</th>
             <th>Total</th>
             <th>Last Transaction</th>
-            <th>Category</th>
             <th>Subcategory</th>
           </tr>
         </thead>
         <tbody>
-          {sortedTransactionsByDate.map(
-            ({
-              id,
-              name,
-              amount,
-              timestamp,
-              transactionsCount,
-              categoryId,
-            }) => {
-              return (
-                <tr key={name}>
-                  <td>
-                    <span className="category-selection__item__name">
-                      {name.slice(0, 20)}{" "}
-                      {transactionsCount ? `(${transactionsCount})` : ""}
-                    </span>
-                  </td>
-                  <td>
-                    <span className="category-selection__item__name">
-                      {amount?.toFixed(2)}
-                    </span>
-                  </td>
-                  <td>
-                    <span className="category-selection__item__name">
-                      {new Date(timestamp).toLocaleDateString("en-gb", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </span>
-                  </td>
-                  <td>
-                    <Selection
-                      isDisabled
-                      isCategoryView
-                      options={categories}
-                      selectedCategoryId={selectedCategoryId}
-                    />
-                  </td>
-                  <td>
-                    <Selection
-                      selectedCategoryId={
-                        expenses
-                          .map((expense) => {
-                            if (expense.name === name) {
-                              return expense.id;
-                            }
-
-                            return null;
-                          })
-                          .filter(Boolean)[0]
-                      }
-                      onSubcategorySelect={(categoryId) => {
-                        setExpenses({
-                          id,
-                          name,
-                          amount,
-                          timestamp,
-                          categoryId,
-                        });
-                      }}
-                      options={
-                        selectedCategoryId
-                          ? categories.filter(
-                              (category) =>
-                                String(category.id) ===
-                                String(selectedCategoryId)
-                            )
-                          : categories
-                      }
-                    />
-                  </td>
-                </tr>
-              );
-            }
-          )}
+          {sortedAggregatedTransactions.map((transaction) => {
+            const { id, name, amount, timestamp, transactionsCount } =
+              transaction;
+            return (
+              <tr key={id}>
+                <td>
+                  <TransactionName name={name} count={transactionsCount} />
+                </td>
+                <td>
+                  <TransactionAmount amount={amount} />
+                </td>
+                <td>
+                  <TransactionDate timestamp={timestamp} />
+                </td>
+                <td>
+                  <SelectTransactionSubcategory
+                    transaction={transaction}
+                    selectedSubcategoryId={selectedCategoryId}
+                    onSelect={setSelectedCategoryId}
+                  />
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
   );
 };
 
+CategorySelection.whyDidYouRender = true;
 export default CategorySelection;

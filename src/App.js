@@ -8,7 +8,6 @@ function App() {
       <CategoriesContextProvider>
         <PasteList />
         <CategorySelection />
-        <hr />
         <BudgetView />
       </CategoriesContextProvider>
     </ExpensesContextProvider>
