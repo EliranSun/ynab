@@ -7,8 +7,18 @@ function App() {
     <ExpensesContextProvider>
       <CategoriesContextProvider>
         <PasteList />
-        <CategorySelection />
-        <BudgetView />
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <CategorySelection />
+              </td>
+              <td>
+                <BudgetView />
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </CategoriesContextProvider>
     </ExpensesContextProvider>
   );

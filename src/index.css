@@ -20,3 +20,8 @@ code {
 .flex {
 	display: flex;
 }
+
+table td,
+table td * {
+	vertical-align: top;
+}

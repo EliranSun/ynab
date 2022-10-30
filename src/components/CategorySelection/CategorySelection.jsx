@@ -17,11 +17,7 @@ const TransactionAmount = ({ amount }) => {
   );
 };
 
-const SelectTransactionSubcategory = ({
-  transaction,
-  selectedSubcategoryId,
-  onSelect = noop,
-}) => {
+const SelectTransactionSubcategory = ({ transaction, onSelect = noop }) => {
   const { categories } = useContext(CategoriesContext);
   const { setExpenses, expenses } = useContext(ExpensesContext);
   const { name, id, amount, timestamp } = transaction;
@@ -49,14 +45,7 @@ const SelectTransactionSubcategory = ({
         });
         onSelect(id);
       }}
-      options={
-        selectedSubcategoryId
-          ? categories.filter(
-              (category) =>
-                String(category.id) === String(selectedSubcategoryId)
-            )
-          : categories
-      }
+      options={categories}
     />
   );
 };
@@ -133,8 +122,8 @@ const Selection = ({
 };
 
 const CategorySelection = () => {
-  const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const { sortedAggregatedTransactions } = useContext(CategoriesContext);
+  const [aggregatedDetailsVisibleId, setAggregatedDetailsId] = useState(false);
 
   if (!Object.keys(sortedAggregatedTransactions).length) {
     return (
@@ -160,10 +149,34 @@ const CategorySelection = () => {
           {sortedAggregatedTransactions.map((transaction) => {
             const { id, name, amount, timestamp, transactionsCount } =
               transaction;
+            const isDetailedView = aggregatedDetailsVisibleId === id;
             return (
-              <tr key={id}>
+              <tr
+                key={id}
+                onClick={() => {
+                  if (!transaction.transactions?.length < 2) return;
+                  setAggregatedDetailsId(isDetailedView ? null : id);
+                }}>
                 <td>
-                  <TransactionName name={name} count={transactionsCount} />
+                  <TransactionName name={name} count={transactionsCount} />{" "}
+                  {transaction.transactionsCount > 1 &&
+                    `(${transaction.transactionsCount})`}
+                  {isDetailedView &&
+                    transaction.transactions.map((transaction) => (
+                      <>
+                        <hr />
+                        <table>
+                          <TransactionName name={transaction.name} count={1} />{" "}
+                          <br />
+                          <TransactionAmount amount={transaction.amount} />
+                          <br />
+                          <TransactionDate
+                            timestamp={transaction.timestamp}
+                          />{" "}
+                          <br />
+                        </table>
+                      </>
+                    ))}
                 </td>
                 <td>
                   <TransactionAmount amount={amount} />
@@ -172,11 +185,7 @@ const CategorySelection = () => {
                   <TransactionDate timestamp={timestamp} />
                 </td>
                 <td>
-                  <SelectTransactionSubcategory
-                    transaction={transaction}
-                    selectedSubcategoryId={selectedCategoryId}
-                    onSelect={setSelectedCategoryId}
-                  />
+                  <SelectTransactionSubcategory transaction={transaction} />
                 </td>
               </tr>
             );
