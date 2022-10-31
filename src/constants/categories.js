@@ -95,7 +95,7 @@ const Categories = [
 			},
 			{
 				id: 42,
-				name: "Gordon",
+				name: "Gym",
 			},
 			{
 				id: 43,
@@ -158,6 +158,14 @@ const Categories = [
 			{
 				id: 63,
 				name: "iOS",
+			},
+			{
+				id: 64,
+				name: "Programming",
+			},
+			{
+				id: 65,
+				name: "Entertainment",
 			},
 		],
 	},

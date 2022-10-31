@@ -21,6 +21,9 @@ code {
 	display: flex;
 }
 
+table {
+	max-width: 60vw;
+}
 table td,
 table td * {
 	vertical-align: top;
@@ -35,4 +38,37 @@ table td * {
 	background: #fff;
 	border: 1px solid #ccc;
 	overflow: auto;
+}
+
+.category-selection {
+	height: 90vh;
+	width: 100%;
+	overflow: auto;
+}
+
+.category-select {
+	display: flex;
+	flex-direction: row;
+}
+
+.category {
+	margin: 4px;
+	padding: 4px;
+	display: flex;
+	background-color: #fff;
+	border: 1px solid tomato;
+}
+
+.subcategory {
+	margin: 2px;
+	border-radius: 4px;
+	padding: 4px;
+	display: inline-block;
+	border: 1px solid tomato;
+	cursor: pointer;
+}
+
+.subcategory:hover {
+	background: tomato;
+	color: #fff;
 }

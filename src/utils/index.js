@@ -1,7 +1,4 @@
-const BIT = 'העברה ב BIT בנה"פ';
-const BIT_INCOME = "bit העברת כסף";
-const BANK = "העב' לאחר-נייד";
-const PAYBOX = "PAYBOX";
+import { BIT, BIT_INCOME, BANK, PAYBOX } from "../constants";
 
 export const isThirdPartyTransaction = (name) => {
 	return [BIT, BIT_INCOME, BANK, PAYBOX].includes(name);

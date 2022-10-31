@@ -6,9 +6,7 @@ import { Categories } from "../../constants";
 // TODO: move to separate components
 const TransactionName = ({ name, count }) => {
 	return (
-		<span className="category-selection__item__name">
-			{name} {count ? `(${count})` : ""}
-		</span>
+		<span className="category-selection__item__name">{name.slice(0, 20)}</span>
 	);
 };
 
@@ -62,59 +60,65 @@ const Selection = ({
 
 	if (isCategoryView) {
 		return (
-			<select
-				disabled={isDisabled}
-				value={id}
-				onChange={(event) => {
-					onCategorySelect(event.target.value);
-					setId(event.target.value);
-				}}
-			>
+			<div className="category-select">
 				{options.map((option) => {
 					return (
-						<option key={option.id} value={option.id}>
+						<span
+							key={option.id}
+							onClick={() => {
+								if (isDisabled) {
+									return;
+								}
+								onCategorySelect(option.id);
+								setId(option.id);
+							}}
+							value={option.id}
+							class="category"
+						>
 							{option.name}
-						</option>
+						</span>
 					);
 				})}
-			</select>
+			</div>
 		);
 	}
 
 	return (
-		<select
-			value={id}
-			disabled={isDisabled}
-			onChange={(event) => {
-				onSubcategorySelect(event.target.value);
-				setId(event.target.value);
-			}}
-		>
-			<option value="">Select a subcategory</option>
+		<div>
 			{options.map((option) => {
 				return (
-					<Fragment key={option.id}>
-						<option value={option.name} disabled>
-							===== {option.name} =====
-						</option>
+					<div key={option.id} className="category-select">
+						{option.name.slice(0, 2)}
 						{option.subCategories.map((sub) => {
 							return (
-								<option key={sub.id} value={sub.id}>
+								<span
+									style={id === sub.id ? { backgroundColor: "tomato" } : {}}
+									key={sub.id}
+									onClick={() => {
+										if (isDisabled) {
+											return;
+										}
+										onSubcategorySelect(sub.id);
+										setId(sub.id);
+									}}
+									value={sub.id}
+									className="subcategory"
+								>
 									{sub.name}
-								</option>
+								</span>
 							);
 						})}
-					</Fragment>
+					</div>
 				);
 			})}
-		</select>
+		</div>
 	);
 };
 
 const TransactionChildrenView = ({ transaction, isOpen }) => {
 	return (
 		isOpen &&
-		transaction.transactions.map((transaction) => (
+		transaction?.transactions?.map((transaction) => (
 			<>
 				<hr />
 				<table>
@@ -152,7 +156,7 @@ const CategorySelection = ({ expenses = [] }) => {
 					</tr>
 				</thead>
 				<tbody>
-					{expenses.map((transaction) => {
+					{expenses.map((transaction, index) => {
 						const {
 							id,
 							name,
@@ -163,23 +167,24 @@ const CategorySelection = ({ expenses = [] }) => {
 							categoryId,
 						} = transaction;
 						const isDetailedView = aggregatedDetailsVisibleId === id;
+						const backgroundColor = index % 2 === 0 ? "lightgrey" : "white";
+
 						return (
-							<tr
-								key={id}
-								onClick={() => {
-									if (transaction.transactions?.length < 2) {
-										return;
-									}
+							<tr style={{ backgroundColor }} key={id}>
+								<td
+									onClick={() => {
+										if (transaction.transactions?.length < 2) {
+											return;
+										}
 
-									if (isDetailedView) {
-										setAggregatedDetailsId(null);
-										return;
-									}
+										if (isDetailedView) {
+											setAggregatedDetailsId(null);
+											return;
+										}
 
-									setAggregatedDetailsId(id);
-								}}
-							>
-								<td>
+										setAggregatedDetailsId(id);
+									}}
+								>
 									<TransactionName name={name} count={transactionsCount} />{" "}
 									{transactions?.length > 1 && `(${transactions.length})`}
 									<TransactionChildrenView

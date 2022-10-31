@@ -1,3 +1,5 @@
+import { Expense } from "./../models";
+
 export const setExpenses = (expenses) => {
 	localStorage.setItem("expenses", JSON.stringify(expenses));
 };
@@ -12,7 +14,8 @@ export const getExpenses = () => {
 		return [];
 	}
 
-	return JSON.parse(lastParsedExpenses);
+	const parsed = JSON.parse(lastParsedExpenses);
+	return parsed.map((expense) => new Expense(expense));
 };
 
 export const getCategories = () => {
