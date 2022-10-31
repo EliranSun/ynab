@@ -25,3 +25,14 @@ table td,
 table td * {
 	vertical-align: top;
 }
+
+.info-box {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	width: 250px;
+	height: 250px;
+	background: #fff;
+	border: 1px solid #ccc;
+	overflow: auto;
+}

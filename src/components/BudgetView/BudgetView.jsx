@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useMemo, useContext } from "react";
 import { orderBy } from "lodash";
 import { ExpensesContext } from "./../../context";
 import { Categories } from "../../constants";
@@ -15,6 +15,7 @@ const getLastBudget = () => {
 
 const BudgetView = () => {
 	const [budget, setBudget] = useState(getLastBudget());
+	const [hoveredCategoryId, setHoveredCategoryId] = useState(null);
 	const { expenses } = useContext(ExpensesContext);
 
 	return (
@@ -34,74 +35,91 @@ const BudgetView = () => {
 						return (
 							<td>
 								{category.subCategories.map((subcategory) => {
-									const categoryExpenses = expenses.filter(
-										(expense) =>
+									const expensesInCategory = expenses.filter((expense) => {
+										// TODO: same type
+										return (
 											String(expense.categoryId) === String(subcategory.id)
-									);
-									const lastExpense = orderBy(
-										categoryExpenses,
-										["timestamp"],
-										["desc"]
-									)[0];
-									const totalAmount = categoryExpenses.reduce(
-										(total, expense) => total + expense.amount,
-										0
-									);
-									const averageAmount = totalAmount / categoryExpenses.length;
+										);
+									});
+									const lastExpenseAmount = 0;
+									const averageAmount = 0;
+									const budget = 0;
 
 									return (
-										<tbody key={subcategory.id}>
-											<tr>
-												<td>
-													<h3>{subcategory.name}</h3>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<span>
-														Last month:{" "}
-														{<b>{lastExpense?.amount?.toFixed(2)}</b> ||
-															"Not enough data"}
-													</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<span>
-														Average:{" "}
-														{<b>{averageAmount.toFixed(2)}</b> ||
-															"Not enough data"}
-													</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<span>
-														Budget:{" "}
-														{<b>{subcategory?.badget?.toFixed(2)}</b> ||
-															"Not enough data"}
-													</span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<input
-														type="number"
-														onChange={(event) => {
-															setBudget((prevState) => {
-																const newBudget = {
-																	...prevState,
-																	[subcategory.id]: event.target.value,
-																};
+										<>
+											{hoveredCategoryId === subcategory.id && (
+												<div className="info-box">
+													{orderBy(
+														expensesInCategory.map((expense) => {
+															console.debug({ expense });
+															return (
+																<div>
+																	<span>{expense.name}</span>
+																	{" | "}
+																	<span>{expense.amount}</span>
+																</div>
+															);
+														}),
+														"amount",
+														"desc"
+													)}
+												</div>
+											)}
+											<tbody
+												style={
+													expensesInCategory.length > 0
+														? { backgroundColor: "tomato" }
+														: {}
+												}
+												key={subcategory.id}
+												onClick={() => setHoveredCategoryId(subcategory.id)}
+											>
+												<tr>
+													<td>
+														<h3>{subcategory.name}</h3>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<span>
+															Last month: <b>{lastExpenseAmount?.toFixed(2)}</b>
+														</span>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<span>
+															Average: <b>{averageAmount.toFixed(2)}</b>
+														</span>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<span>
+															Budget: <b>{budget?.toFixed(2)}</b>
+														</span>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<input
+															type="number"
+															onChange={(event) => {
+																setBudget((prevState) => {
+																	const newBudget = {
+																		...prevState,
+																		[subcategory.id]: event.target.value,
+																	};
 
-																return newBudget;
-															});
-														}}
-														value={budget[subcategory.id] || 0}
-													/>
-												</td>
-											</tr>
-										</tbody>
+																	return newBudget;
+																});
+															}}
+															value={budget[subcategory.id] || 0}
+														/>
+													</td>
+												</tr>
+											</tbody>
+										</>
 									);
 								})}
 							</td>
