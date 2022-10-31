@@ -41,7 +41,12 @@ const BudgetView = () => {
 											String(expense.categoryId) === String(subcategory.id)
 										);
 									});
-									const lastExpenseAmount = 0;
+									const lastMonthAmount = expensesInCategory.reduce(
+										(acc, expense) => {
+											return acc + expense.amount;
+										},
+										0
+									);
 									const averageAmount = 0;
 									const budget = 0;
 
@@ -82,14 +87,15 @@ const BudgetView = () => {
 												<tr>
 													<td>
 														<span>
-															Last month: <b>{lastExpenseAmount?.toFixed(2)}</b>
+															Last month: <b>{lastMonthAmount?.toFixed(2)}</b>
 														</span>
 													</td>
 												</tr>
 												<tr>
 													<td>
 														<span>
-															Average: <b>{averageAmount.toFixed(2)}</b>
+															Average p. month:{" "}
+															<b>{averageAmount.toFixed(2)}</b>
 														</span>
 													</td>
 												</tr>
