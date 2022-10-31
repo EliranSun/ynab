@@ -4,42 +4,42 @@ const BANK = "העב' לאחר-נייד";
 const PAYBOX = "PAYBOX";
 
 export const isThirdPartyTransaction = (name) => {
-  return [BIT, BIT_INCOME, BANK, PAYBOX].includes(name);
+	return [BIT, BIT_INCOME, BANK, PAYBOX].includes(name);
 };
 
 export const aggregateTransactionsByName = (transactions) => {
-  const aggregatedTransactions = [];
+	const aggregatedTransactions = [];
 
-  for (const transaction of transactions) {
-    const { name, amount } = transaction;
+	for (const transaction of transactions) {
+		const { name, amount } = transaction;
 
-    if (isThirdPartyTransaction(name)) {
-      aggregatedTransactions.push(transaction);
-      continue;
-    }
+		if (isThirdPartyTransaction(name)) {
+			aggregatedTransactions.push(transaction);
+			continue;
+		}
 
-    const transactionIndex = aggregatedTransactions.findIndex(
-      (aggregatedTransaction) => aggregatedTransaction.name === name
-    );
+		const transactionIndex = aggregatedTransactions.findIndex(
+			(aggregatedTransaction) => aggregatedTransaction.name === name
+		);
 
-    const hasTransactionName = transactionIndex !== -1;
+		const hasTransactionName = transactionIndex !== -1;
 
-    if (hasTransactionName) {
-      aggregatedTransactions[transactionIndex].amount += amount;
-      aggregatedTransactions[transactionIndex].transactions = [
-        ...(aggregatedTransactions[transactionIndex].transactions || []),
-        transaction,
-      ];
-      continue;
-    }
+		if (hasTransactionName) {
+			aggregatedTransactions[transactionIndex].amount += amount;
+			aggregatedTransactions[transactionIndex].transactions = [
+				...(aggregatedTransactions[transactionIndex].transactions || []),
+				transaction,
+			];
+			continue;
+		}
 
-    aggregatedTransactions.push({
-      ...transaction,
-      transactions: [transaction],
-    });
-  }
+		aggregatedTransactions.push({
+			...transaction,
+			transactions: [transaction],
+		});
+	}
 
-  return aggregatedTransactions;
+	return aggregatedTransactions;
 };
 
 // TODO:
@@ -101,3 +101,5 @@ export const aggregateTransactionsByName = (transactions) => {
 //     const SelfCare = new Category({ name: "Self Care" });
 //   }
 // };
+
+export * from "./localStorage";

@@ -1,74 +1,100 @@
 import { useState, createContext } from "react";
-import { noop, isArray } from "lodash";
+import { noop } from "lodash";
 import { Expense } from "../../models";
+import { getExpenses, setExpenses as setStorageExpenses } from "../../utils";
 
 export const ExpensesContext = createContext({
-  expenses: {},
-  setExpenses: noop,
+	expenses: {},
+	changeExpenseCategoryByName: noop,
 });
 
-const getLastExpenses = () => {
-  let lastExpenses = {};
-  try {
-    lastExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
-    return lastExpenses.map((expense) => new Expense(expense));
-  } catch (error) {
-    console.warn(error);
-    return [];
-  }
-};
+// const getLastExpenses = () => {
+// 	let lastExpenses = {};
+// 	try {
+// 		lastExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
+// 		return lastExpenses.map((expense) => new Expense(expense));
+// 	} catch (error) {
+// 		console.warn(error);
+// 		return [];
+// 	}
+// };
 
-const updateExpenses = (expense, id) => (prevExpenses) => {
-  const newExpenses = prevExpenses
-    .filter((expense) => expense.id !== id)
-    .concat(expense);
+// const updateExpenses = (expense, id) => (prevExpenses) => {
+// 	const newExpenses = prevExpenses
+// 		.filter((expense) => expense.id !== id)
+// 		.concat(expense);
 
-  localStorage.setItem("expenses", JSON.stringify(newExpenses));
-  return newExpenses;
-};
+// 	return newExpenses;
+// };
 
 export const ExpensesContextProvider = ({ children }) => {
-  const [expenses, setExpenses] = useState(getLastExpenses());
-  const [error, setError] = useState(null);
+	const [expenses, setExpenses] = useState(getExpenses());
+	const [error, setError] = useState(null);
 
-  return (
-    <ExpensesContext.Provider
-      value={{
-        expenses,
-        setExpenses: (expenses) => {
-          setError("");
+	return (
+		<ExpensesContext.Provider
+			value={{
+				expenses,
+				changeExpenseCategoryByName: (name, categoryId) => {
+					setExpenses((prevExpenses) => {
+						const newExpenses = prevExpenses.map((expense) => {
+							if (expense.name === name) {
+								return {
+									...expense,
+									categoryId,
+								};
+							}
 
-          if (isArray(expenses)) {
-            expenses.forEach((newExpense) => {
-              const { name, id, timestamp } = newExpense;
-              if (!name || !id) {
-                setError(`Missing name or id, name: ${name}, id: ${id}`);
-                return;
-              }
+							return expense;
+						});
 
-              const isExpenseExists = expenses.find((expense) => {
-                return (
-                  expense.id === id ||
-                  (expense.name === name && expense.timestamp === timestamp)
-                );
-              });
+						setStorageExpenses(newExpenses);
+						return newExpenses;
+					});
+				},
+				// setExpenses: (newExpenses = []) => {
+				// 	setError("");
 
-              if (isExpenseExists) {
-                setExpenses(updateExpenses(newExpense, id));
-                return;
-              }
+				// 	if (!newExpenses.length) {
+				// 		return;
+				// 	}
 
-              setExpenses(updateExpenses(newExpense));
-            });
+				// 	const handledExpenses = newExpenses.map((newExpense) => {
+				// 		const { name, id, timestamp } = newExpense;
+				// 		if (!name || !id) {
+				// 			setError(`Missing name or id, name: ${name}, id: ${id}`);
+				// 			throw new Error(`Missing name or id, name: ${name}, id: ${id}`);
+				// 		}
 
-            return;
-          }
+				// 		const oldExpense = expenses.find((expense) => {
+				// 			return (
+				// 				expense.id === id ||
+				// 				(expense.name === name && expense.timestamp === timestamp)
+				// 			);
+				// 		});
 
-          setExpenses(updateExpenses(expenses));
-        },
-      }}>
-      {children}
-      <span className="error">{error}</span>
-    </ExpensesContext.Provider>
-  );
+				// 		if (oldExpense) {
+				// 			console.debug(
+				// 				"Switching categories from",
+				// 				oldExpense.categoryId,
+				// 				"to",
+				// 				newExpense.categoryId
+				// 			);
+				// 			return new Expense({
+				// 				...oldExpense,
+				// 				...newExpense,
+				// 			});
+				// 		}
+
+				// 		return new Expense(newExpense);
+				// 	});
+
+				// 	setExpenses(updateExpenses(expenses));
+				// },
+			}}
+		>
+			{children}
+			<span className="error">{error}</span>
+		</ExpensesContext.Provider>
+	);
 };
