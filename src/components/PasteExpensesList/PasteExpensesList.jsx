@@ -7,10 +7,16 @@ import {
   setExpenses,
 } from "../../utils";
 
-const isNewExpense = (name, timestamp, expenses) => {
-  return expenses.find((expense) => {
-    return expense.name !== name || expense.timestamp !== timestamp;
+const isExistingExpense = (newExpense, expenses) => {
+  const expenseFound = expenses.find((expense) => {
+    return (
+      expense.name === newExpense.name &&
+      expense.timestamp === newExpense.timestamp &&
+      newExpense.amount === expense.amount
+    );
   });
+
+  return expenseFound;
 };
 
 const PasteExpensesList = () => {
@@ -26,58 +32,67 @@ const PasteExpensesList = () => {
       <textarea ref={textAreaRef} />
       <button
         onClick={() => {
+          const previousExpenses = getExpenses();
+
           if (!textAreaRef.current) {
             return;
           }
 
           const rows = textAreaRef.current.value.split("\n");
-          const expenses = rows
+          const newExpenses = rows
             .map((row) => {
               const cells = row.split("\t");
-              return {
-                name: cells[0],
-                date: cells[1],
-                creditCardNumber: cells[2],
-                amount: cells[4],
-                note: cells[5],
-              };
-            })
-            .filter((row) => row.amount);
 
-          const newExpenses = expenses
-            .map((transaction) => {
-              let name = transaction.name;
-              if (!name || !transaction.amount || !transaction.date) {
+              const name = cells[0];
+              const amount = cells[4];
+              const dateParts = cells[1]?.split("/");
+              const year = dateParts && `20${dateParts[2]}`;
+              const month = dateParts && Number(dateParts[1]) - 1;
+              const day = dateParts && dateParts[0];
+              const timestamp = new Date(Date.UTC(year, month, day)).getTime();
+              const parsedAmount =
+                amount &&
+                parseFloat(amount.replace(",", "").replace("₪", "").trim());
+
+              if (!name || !parsedAmount || !timestamp) {
                 return {};
               }
 
-              const dateParts = transaction.date.split("/");
-              const year = `20${dateParts[2]}`;
-              const month = Number(dateParts[1]) - 1;
-              const day = dateParts[0];
-              const date = new Date(Date.UTC(year, month, day)).getTime();
-
-              const parsedAmount = parseFloat(
-                transaction.amount.replace(",", "").replace("₪", "").trim()
-              );
-
               return new Expense({
-                name,
-                timestamp: date,
+                name: name,
+                timestamp: timestamp,
                 amount: parsedAmount,
+                note: cells[5],
               });
             })
-            .filter((expense) => {
-              return isNewExpense(expense.name, expense.timestamp, expenses);
+            .filter((row) => {
+              if (isExistingExpense(row, previousExpenses)) {
+                return false;
+              }
+
+              return row.name && row.amount && row.timestamp;
             });
 
-          setParsedExpenses(newExpenses);
-          setExpenses(newExpenses);
+          if (newExpenses.length === 0) {
+            console.info("No new expenses found in this paste");
+            return;
+          } else {
+            console.info(
+              "Found new expenses in this paste",
+              newExpenses.length
+            );
+          }
+
+          setParsedExpenses([...previousExpenses, ...newExpenses]);
+          setExpenses([...previousExpenses, ...newExpenses]);
         }}>
         Parse
       </button>
       <hr />
-      <CategorySelection expenses={aggregatedExpenses} />
+      <CategorySelection
+        aggregatedExpenses={aggregatedExpenses}
+        totalExpensesCount={parsedExpenses.length}
+      />
     </div>
   );
 };

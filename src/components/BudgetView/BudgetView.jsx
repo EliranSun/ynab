@@ -18,12 +18,15 @@ const getLastBudget = () => {
 const BudgetView = () => {
   const [budget, setBudget] = useState(getLastBudget());
   const [hoveredCategoryId, setHoveredCategoryId] = useState(null);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(
+    new Date(new Date().getTime() - ONE_MONTH_MS)
+  );
   const { expenses } = useContext(ExpensesContext);
 
   return (
     <div>
-      <h2>
+      <h1>Plan (Budget View)</h1>
+      <div>
         <button
           onClick={() => setDate(new Date(date.getTime() - ONE_MONTH_MS))}>
           Previous Month
@@ -35,7 +38,7 @@ const BudgetView = () => {
           disabled={date.getMonth() + 1 > new Date().getMonth()}>
           Next Month
         </button>
-      </h2>
+      </div>
       <table>
         <thead>
           <tr>
@@ -53,6 +56,10 @@ const BudgetView = () => {
                 {category.subCategories.map((subcategory) => {
                   const expensesInCategory = expenses.filter((expense) => {
                     // TODO: same type
+
+                    if (expense.name === "בריכת גורדון-מוסדות") {
+                      debugger;
+                    }
                     return (
                       String(expense.categoryId) === String(subcategory.id)
                     );
@@ -60,7 +67,10 @@ const BudgetView = () => {
                   const thisMonthExpenses = expensesInCategory.filter(
                     (expense) => {
                       const expenseDate = new Date(expense.timestamp);
-                      return expenseDate.getMonth() === date.getMonth();
+                      return (
+                        expenseDate.getMonth() === date.getMonth() &&
+                        expenseDate.getFullYear() === date.getFullYear()
+                      );
                     }
                   );
                   const thisMonthAmount = thisMonthExpenses.reduce(
@@ -93,11 +103,6 @@ const BudgetView = () => {
                         </div>
                       )}
                       <tbody
-                        style={
-                          expensesInCategory.length > 0
-                            ? { backgroundColor: "tomato" }
-                            : {}
-                        }
                         key={subcategory.id}
                         onClick={() => setHoveredCategoryId(subcategory.id)}>
                         <tr>
@@ -122,26 +127,22 @@ const BudgetView = () => {
                         <tr>
                           <td>
                             <span>
-                              Budget: <b>{budget?.toFixed(2)}</b>
-                            </span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <input
-                              type="number"
-                              onChange={(event) => {
-                                setBudget((prevState) => {
-                                  const newBudget = {
-                                    ...prevState,
-                                    [subcategory.id]: event.target.value,
-                                  };
+                              Budget:
+                              <input
+                                type="number"
+                                onChange={(event) => {
+                                  setBudget((prevState) => {
+                                    const newBudget = {
+                                      ...prevState,
+                                      [subcategory.id]: event.target.value,
+                                    };
 
-                                  return newBudget;
-                                });
-                              }}
-                              value={budget[subcategory.id] || 0}
-                            />
+                                    return newBudget;
+                                  });
+                                }}
+                                value={budget[subcategory.id] || 0}
+                              />
+                            </span>
                           </td>
                         </tr>
                       </tbody>

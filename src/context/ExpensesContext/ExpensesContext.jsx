@@ -15,17 +15,31 @@ export const ExpensesContextProvider = ({ children }) => {
     <ExpensesContext.Provider
       value={{
         expenses,
-        changeExpenseCategoryByName: (name, categoryId) => {
+        changeExpenseCategoryByName: (expense, categoryId) => {
           setExpenses((prevExpenses) => {
-            const newExpenses = prevExpenses.map((expense) => {
-              if (expense.name === name) {
+            const newExpenses = prevExpenses.map((previousExpense) => {
+              if (expense.isThirdParty) {
+                if (expense.name === previousExpense.name) {
+                  debugger;
+                }
+                if (expense.id === previousExpense.id) {
+                  return {
+                    ...previousExpense,
+                    categoryId,
+                  };
+                }
+
+                return previousExpense;
+              }
+
+              if (expense.name === previousExpense.name) {
                 return {
-                  ...expense,
+                  ...previousExpense,
                   categoryId,
                 };
               }
 
-              return expense;
+              return previousExpense;
             });
 
             setStorageExpenses(newExpenses);
