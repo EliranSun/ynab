@@ -21,7 +21,7 @@ const getExpenseCategoryName = (expense) => {
 };
 
 const ExpenseView = () => {
-  const { expenses } = useContext(ExpensesContext);
+  const { expenses, setExpenseAsRecurring } = useContext(ExpensesContext);
   const [searchValue, setSearchValue] = useState("בריכת גורדון-מוסדות");
 
   return (
@@ -45,15 +45,28 @@ const ExpenseView = () => {
               .includes(searchValue.toLowerCase());
           })
           .map((expense) => {
+            console.info(expense);
             return (
-              <div className="expense-box">
+              <div className="expense-box" key={expense.id}>
                 <span>{expense.name}</span>
                 <div>{expense.amount} NIS</div>
                 <div>
-                  {new Date(expense.timestamp).toLocaleString("default", {
-                    month: "long",
-                    year: "numeric",
-                  })}
+                  <span>
+                    {new Date(expense.timestamp).toLocaleString("default", {
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </span>
+                </div>
+                <div>
+                  <label>Is recurring?</label>
+                  <input
+                    checked={expense.isRecurring}
+                    type="checkbox"
+                    onChange={() => {
+                      setExpenseAsRecurring(expense.id, !expense.isRecurring);
+                    }}
+                  />
                 </div>
                 <div>{getExpenseCategoryName(expense)}</div>
               </div>

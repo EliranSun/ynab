@@ -172,7 +172,7 @@ const Categories = [
     subCategories: [
       {
         id: 310,
-        name: "Netflix",
+        name: "TV",
         icon: "📺",
       },
       {

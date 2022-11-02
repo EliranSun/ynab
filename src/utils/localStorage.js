@@ -4,8 +4,8 @@ export const setExpenses = (expenses) => {
   localStorage.setItem("expenses", JSON.stringify(expenses));
 };
 
-export const setCategories = (categories) => {
-  localStorage.setItem("categories", JSON.stringify(categories));
+export const setBudget = (categories) => {
+  localStorage.setItem("budget", JSON.stringify(categories));
 };
 
 export const getExpenses = () => {
@@ -17,8 +17,8 @@ export const getExpenses = () => {
   return JSON.parse(lastParsedExpenses);
 };
 
-export const getCategories = () => {
-  const lastParsedCategories = localStorage.getItem("categories");
+export const getBudget = () => {
+  const lastParsedCategories = localStorage.getItem("budget");
   if (!lastParsedCategories) {
     return [];
   }

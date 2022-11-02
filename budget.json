@@ -1,0 +1,138 @@
+{
+  "11": {
+    "amount": "1000",
+    "isIncome": false
+  },
+  "12": {
+    "amount": "2000",
+    "isIncome": false
+  },
+  "13": {
+    "amount": "1500",
+    "isIncome": false
+  },
+  "14": {
+    "amount": "400",
+    "isIncome": false
+  },
+  "21": {
+    "amount": "100",
+    "isIncome": false
+  },
+  "22": {
+    "amount": "100",
+    "isIncome": false
+  },
+  "23": {
+    "amount": "500",
+    "isIncome": false
+  },
+  "31": {
+    "amount": "7500",
+    "isIncome": false
+  },
+  "32": {
+    "amount": "147",
+    "isIncome": false
+  },
+  "33": {
+    "amount": "200",
+    "isIncome": false
+  },
+  "34": {
+    "amount": "148",
+    "isIncome": false
+  },
+  "36": {
+    "amount": "200",
+    "isIncome": false
+  },
+  "37": {
+    "amount": "1000",
+    "isIncome": false
+  },
+  "39": {
+    "amount": "100",
+    "isIncome": false
+  },
+  "41": {
+    "amount": "800",
+    "isIncome": false
+  },
+  "42": {
+    "amount": "300",
+    "isIncome": false
+  },
+  "43": {
+    "amount": "78",
+    "isIncome": false
+  },
+  "44": {
+    "amount": "100",
+    "isIncome": false
+  },
+  "45": {
+    "amount": "100",
+    "isIncome": false
+  },
+  "47": {
+    "amount": "100",
+    "isIncome": false
+  },
+  "51": {
+    "amount": "500",
+    "isIncome": false
+  },
+  "52": {
+    "amount": "500",
+    "isIncome": false
+  },
+  "54": {
+    "amount": "100",
+    "isIncome": false
+  },
+  "61": {
+    "amount": "10",
+    "isIncome": false
+  },
+  "62": {
+    "amount": "35",
+    "isIncome": false
+  },
+  "63": {
+    "amount": "50",
+    "isIncome": false
+  },
+  "64": {
+    "amount": "50",
+    "isIncome": false
+  },
+  "65": {
+    "amount": "50",
+    "isIncome": false
+  },
+  "71": {
+    "amount": "200",
+    "isIncome": false
+  },
+  "72": {
+    "amount": "50",
+    "isIncome": false
+  },
+  "81": {
+    "amount": "18000",
+    "isIncome": true
+  },
+  "82": {
+    "amount": "3500",
+    "isIncome": true
+  },
+  "310": {
+    "amount": "70",
+    "isIncome": false
+  },
+  "311": {
+    "amount": "30",
+    "isIncome": false
+  }
+}

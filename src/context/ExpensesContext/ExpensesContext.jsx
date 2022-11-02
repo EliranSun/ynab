@@ -15,6 +15,16 @@ export const ExpensesContextProvider = ({ children }) => {
     <ExpensesContext.Provider
       value={{
         expenses,
+        setExpenseAsRecurring: (expenseId, isRecurring) => {
+          const newExpenses = expenses.map((expense) => {
+            if (expense.id === expenseId) {
+              return { ...expense, isRecurring };
+            }
+            return expense;
+          });
+          setExpenses(newExpenses);
+          setStorageExpenses(newExpenses);
+        },
         changeExpenseCategoryByName: (expense, categoryId) => {
           setExpenses((prevExpenses) => {
             const newExpenses = prevExpenses.map((previousExpense) => {
