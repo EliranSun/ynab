@@ -4,6 +4,8 @@ import { ExpensesContext } from "./../../context";
 import { Categories } from "../../constants";
 import { getCategories, setCategories } from "../../utils";
 
+const ONE_MONTH_MS = 1000 * 60 * 60 * 24 * 30;
+
 const getLastBudget = () => {
   try {
     const lastBudget = localStorage.getItem("budget");
@@ -22,9 +24,15 @@ const BudgetView = () => {
   return (
     <div>
       <h2>
-        <button>Previous Month</button>
-        Showing Month: {date.toLocaleString("default", { month: "long" })}
-        <button disabled={date.getMonth() + 1 > new Date().getMonth()}>
+        <button
+          onClick={() => setDate(new Date(date.getTime() - ONE_MONTH_MS))}>
+          Previous Month
+        </button>
+        Showing{" "}
+        {date.toLocaleString("default", { month: "long", year: "numeric" })}
+        <button
+          onClick={() => setDate(new Date(date.getTime() + ONE_MONTH_MS))}
+          disabled={date.getMonth() + 1 > new Date().getMonth()}>
           Next Month
         </button>
       </h2>
@@ -52,8 +60,7 @@ const BudgetView = () => {
                   const thisMonthExpenses = expensesInCategory.filter(
                     (expense) => {
                       const expenseDate = new Date(expense.timestamp);
-                      const now = new Date();
-                      return expenseDate.getMonth() === now.getMonth();
+                      return expenseDate.getMonth() === date.getMonth();
                     }
                   );
                   const thisMonthAmount = thisMonthExpenses.reduce(
