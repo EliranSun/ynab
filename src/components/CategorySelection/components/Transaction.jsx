@@ -7,7 +7,11 @@ import TransactionChildrenView from "./TransactionChildrenView";
 import SelectTransactionSubcategory from "./SelectTransactionSubcategory";
 import { Categories } from "../../../constants";
 
-const Transaction = ({ transaction, onSelect = noop, isListView = false }) => {
+const Transaction = ({
+	transaction = {},
+	onSelect = noop,
+	isListView = false,
+}) => {
 	const {
 		id,
 		name,

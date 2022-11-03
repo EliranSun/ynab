@@ -1,0 +1,1276 @@
+[
+	{
+		"id": "0c6c1381-3ba6-4965-ab81-47a34e9f6c72",
+		"name": "ESSAY.APP",
+		"amount": 21.88,
+		"timestamp": 1667001600000,
+		"categoryId": 61,
+		"transactionsCount": 0
+	},
+	{
+		"id": "595f6938-6677-4c9f-9c1f-78b3b3a36c5d",
+		"name": "PAYPAL *DIGITALRIVE",
+		"amount": 35,
+		"timestamp": 1666915200000,
+		"categoryId": 62,
+		"transactionsCount": 0
+	},
+	{
+		"id": "c61266c7-b2d9-4e95-9974-14d8c56ca73f",
+		"name": "BIRD* RIDE",
+		"amount": 30,
+		"timestamp": 1666915200000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "b8267653-c67f-417d-a17a-81281645ac09",
+		"name": "LIM*RIDE COST",
+		"amount": 23,
+		"timestamp": 1666915200000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "8d835da8-d84f-4a81-a57c-beaece7d3d69",
+		"name": "LIM*RIDE COST",
+		"amount": 14.8,
+		"timestamp": 1666915200000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "60ae4861-d72c-4743-9739-4549b091a39a",
+		"name": "LIM*RIDE COST",
+		"amount": 12.4,
+		"timestamp": 1666915200000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "8314fa03-5f95-45bc-bd82-8f788aaec2bb",
+		"name": "APPLE.COM/BILL",
+		"amount": 163.7,
+		"timestamp": 1666828800000,
+		"categoryId": 63,
+		"transactionsCount": 0
+	},
+	{
+		"id": "ce6a6c8e-38a0-461c-9b4d-5eb8e55de330",
+		"name": "LIM*RIDE COST",
+		"amount": 14,
+		"timestamp": 1666656000000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "54110395-c225-4eb3-9f16-3ee16f134946",
+		"name": "טו גיב",
+		"amount": 440,
+		"timestamp": 1666569600000,
+		"categoryId": 53,
+		"transactionsCount": 0
+	},
+	{
+		"id": "6af9db45-80c1-4b04-8c99-4339a29ace03",
+		"name": "PAYPAL *NETFLIX COM",
+		"amount": 69.9,
+		"timestamp": 1666483200000,
+		"categoryId": 310,
+		"transactionsCount": 0
+	},
+	{
+		"id": "b6fc109c-e2c6-4713-aacc-63aaf645c2a7",
+		"name": "LIM*RIDE COST",
+		"amount": 13.1,
+		"timestamp": 1666483200000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "1dde4477-6900-4624-a8e6-642ece4bc12c",
+		"name": "לייזר סטריט רעננה",
+		"amount": 100,
+		"timestamp": 1666483200000,
+		"categoryId": 52,
+		"transactionsCount": 0
+	},
+	{
+		"id": "0d997870-ae4a-4eaf-b0ef-6fe866a2d325",
+		"name": "APPLE.COM/DE",
+		"amount": 895.16,
+		"timestamp": 1666396800000,
+		"categoryId": 52,
+		"transactionsCount": 0
+	},
+	{
+		"id": "b354087c-8e16-4af7-b985-7cfb224f2581",
+		"name": "GITHUB",
+		"amount": 36.63,
+		"timestamp": 1666310400000,
+		"categoryId": 64,
+		"transactionsCount": 0
+	},
+	{
+		"id": "26eb85dd-8413-41f6-bc62-b66424a77507",
+		"name": "LIM*RIDE COST",
+		"amount": 26.6,
+		"timestamp": 1666310400000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "93bab8bc-fd57-4bd2-96c5-c1f0628aa1d8",
+		"name": "LIM*RIDE COST",
+		"amount": 11.44,
+		"timestamp": 1666137600000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "66520fc6-c3b0-4bdf-b8d6-9a38144f29b6",
+		"name": "LIM*RIDE COST",
+		"amount": 27.08,
+		"timestamp": 1666051200000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "d110895c-f826-4a29-a403-01115c9da2ab",
+		"name": "ADOBE STOCK",
+		"amount": 175,
+		"timestamp": 1666051200000,
+		"categoryId": 62,
+		"transactionsCount": 0
+	},
+	{
+		"id": "c9dbdcad-393d-46e0-aebd-ace30c90777d",
+		"name": "LIM*RIDE COST",
+		"amount": 20.64,
+		"timestamp": 1666051200000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "d9fa9c33-6a72-4753-a2e0-6d920077adff",
+		"name": "ADOBE IL CREATIVE CL",
+		"amount": 109,
+		"timestamp": 1665964800000,
+		"categoryId": 62,
+		"transactionsCount": 0
+	},
+	{
+		"id": "712b9142-7091-42bd-bceb-a461e1fb56b6",
+		"name": "LIM*RIDE COST",
+		"amount": 12.36,
+		"timestamp": 1665878400000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "7d9b5cc6-55be-4df9-806f-b907c0fa6420",
+		"name": "NOTION LABS, INC.",
+		"amount": 18.24,
+		"timestamp": 1665792000000,
+		"categoryId": 61,
+		"transactionsCount": 0
+	},
+	{
+		"id": "da1f558e-bab2-4886-a5b0-2a3021f1db14",
+		"name": "APPLE.COM/BILL",
+		"amount": 17.9,
+		"timestamp": 1665792000000,
+		"categoryId": 63,
+		"transactionsCount": 0
+	},
+	{
+		"id": "8098c893-aeaf-4e56-8069-fd03c0f80e17",
+		"name": "LIM*RIDE COST",
+		"amount": 13.1,
+		"timestamp": 1665532800000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "5bca12d9-880e-4616-ae1f-f2a68471e61f",
+		"name": "LIM*RIDE COST",
+		"amount": 26.6,
+		"timestamp": 1665532800000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "ec522196-a9b0-4206-8327-d7ea02fdc32f",
+		"name": "PAYPAL *ALAXON",
+		"amount": 25,
+		"timestamp": 1665532800000,
+		"categoryId": 61,
+		"transactionsCount": 0
+	},
+	{
+		"id": "6484fb94-b3db-4c50-93d4-952d9e0246b2",
+		"name": "HUMBLEBUNDLE.COM",
+		"amount": 73.33,
+		"timestamp": 1665446400000,
+		"categoryId": 45,
+		"transactionsCount": 0
+	},
+	{
+		"id": "96247a75-684f-4334-9a83-0aedcc4725e1",
+		"name": "רשות הטבע והגנים חוף",
+		"amount": 36,
+		"timestamp": 1665014400000,
+		"categoryId": 23,
+		"transactionsCount": 0
+	},
+	{
+		"id": "6f380749-fbbe-4c3a-b0f4-81475993d875",
+		"name": "BIRD* RIDE",
+		"amount": 30,
+		"timestamp": 1665014400000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "2a704606-ef14-4fd2-b70c-697383f9456d",
+		"name": "LIM*RIDE COST",
+		"amount": 27.5,
+		"timestamp": 1665014400000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "54680ea1-6b8f-4217-82e2-3cdc75958f22",
+		"name": "PADDLE.NET*WALLABY.J",
+		"amount": 440,
+		"timestamp": 1664841600000,
+		"categoryId": 64,
+		"transactionsCount": 0
+	},
+	{
+		"id": "02272e5e-de4f-4ccd-a275-7c11b123cc6f",
+		"name": "LIM*RIDE COST",
+		"amount": 25.7,
+		"timestamp": 1664841600000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "0ee5c5fe-2af0-4881-8afd-572c3fad1bd4",
+		"name": "TIER IL 10-7323",
+		"amount": 15.5,
+		"timestamp": 1664755200000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "92592fcc-d3c6-4d8d-8ed4-7ea3229d3bf2",
+		"name": "APPLE.COM/BILL",
+		"amount": 45.8,
+		"timestamp": 1664668800000,
+		"categoryId": 63,
+		"transactionsCount": 0
+	},
+	{
+		"id": "1a20ebff-0921-418a-b79e-153359327c89",
+		"name": "LIM*RIDE COST",
+		"amount": 14,
+		"timestamp": 1664582400000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "57636b9f-1a15-49c0-b715-88d459d967fe",
+		"name": "LIM*RIDE COST",
+		"amount": 12.2,
+		"timestamp": 1664582400000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "cf6596c7-f496-4e17-9ea2-e07f04c3549b",
+		"name": "מוזס שופ מידטאון",
+		"amount": 84,
+		"timestamp": 1666656000000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "182ad3d3-acb2-4835-a612-113c10687d6f",
+		"name": "מזנון בריכת גורדון",
+		"amount": 13,
+		"timestamp": 1666656000000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "5e8691ba-2a84-4d2a-a259-38803ce47623",
+		"name": "WOLT",
+		"amount": 141,
+		"timestamp": 1666396800000,
+		"categoryId": 11,
+		"transactionsCount": 0
+	},
+	{
+		"id": "d3550620-03de-495c-aa18-6512e07cb6e5",
+		"name": "הקוסם",
+		"amount": 138,
+		"timestamp": 1666310400000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "e6f82f82-9997-4dd7-9d95-20c97be6313b",
+		"name": "שרונה ביר גארדן",
+		"amount": 135,
+		"timestamp": 1666224000000,
+		"categoryId": 14,
+		"transactionsCount": 0
+	},
+	{
+		"id": "1ad6b84e-d6d5-4660-ad00-61e9d4783b16",
+		"name": "מזנון בריכת גורדון",
+		"amount": 16,
+		"timestamp": 1666051200000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "b567442e-4018-419f-be25-009efda85563",
+		"name": "קפה עלית - רכבת השלו",
+		"amount": 15,
+		"timestamp": 1666051200000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "2686e62d-de89-47a8-9b8f-0a4fa8c8a56b",
+		"name": "מזנון בריכת גורדון",
+		"amount": 16,
+		"timestamp": 1665878400000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "ec54b5d0-f2f4-441f-b433-76da7e2343f0",
+		"name": "דואלי מכונות אוטומטי",
+		"amount": 15,
+		"timestamp": 1665792000000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "44bcaeab-afa7-4157-a536-020c0cab8b4f",
+		"name": "קפה זוריק",
+		"amount": 111,
+		"timestamp": 1665705600000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "a76bb851-7d06-4eda-8c54-9edab0b0ea02",
+		"name": "מוזס שופ מידטאון",
+		"amount": 83,
+		"timestamp": 1665619200000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "50504661-eda7-41a0-b211-0b9fbf39fb56",
+		"name": "בוקה חמניה בע\"מ",
+		"amount": 90,
+		"timestamp": 1665360000000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "b2180f22-4607-481f-96ef-7bc212850055",
+		"name": "מגדלור",
+		"amount": 41,
+		"timestamp": 1665360000000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "07aa6c88-929a-4d29-b427-8236b55c2934",
+		"name": "סיבוס סודקסו",
+		"amount": 1222.3,
+		"timestamp": 1665360000000,
+		"categoryId": 11,
+		"transactionsCount": 0
+	},
+	{
+		"id": "1ed28074-38f9-49ce-be62-1577f8c060c4",
+		"name": "חלום עולמי אטרקציות",
+		"amount": 50,
+		"timestamp": 1665273600000,
+		"categoryId": 52,
+		"transactionsCount": 0
+	},
+	{
+		"id": "ab7b5f54-68d4-48a2-baa9-e771bc4928dd",
+		"name": "חומוס פול אבו קאסם",
+		"amount": 88,
+		"timestamp": 1665014400000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "0473f342-8b2a-4f86-a7eb-b66c0f5d47dd",
+		"name": "חומוס פול אבו קאסם",
+		"amount": 10,
+		"timestamp": 1665014400000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "7da40daf-0331-49d6-b724-3cb93c7e1b38",
+		"name": "בורקס פנסן",
+		"amount": 32,
+		"timestamp": 1664841600000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "4382a3fa-3d95-4455-880c-21d752ebd090",
+		"name": "מצפה כוכבים ברקת",
+		"amount": 280,
+		"timestamp": 1666051200000,
+		"categoryId": 44,
+		"transactionsCount": 0
+	},
+	{
+		"id": "cf1e4a52-4d71-49c0-b322-11cb96d4f408",
+		"name": "PM AM הקסטל.",
+		"amount": 12.9,
+		"timestamp": 1666828800000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "35935d7c-e30a-4d1b-934b-ccebed2430fe",
+		"name": "PM AM הקסטל.",
+		"amount": 44.8,
+		"timestamp": 1666742400000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "de5565d8-7c2b-4e0c-be1f-1c9de30c661f",
+		"name": "גרעיני עפולה תל אבי",
+		"amount": 75.2,
+		"timestamp": 1666656000000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "c39e8147-f087-4c96-bdcd-4fa6889b9fa6",
+		"name": "מרקטו באזל",
+		"amount": 349.9,
+		"timestamp": 1666483200000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "e0967eac-bc60-4473-9143-751e2c024916",
+		"name": "בוטיק סנטרל",
+		"amount": 171.2,
+		"timestamp": 1666310400000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "01c36ce4-db21-4c74-a6eb-cdf44ca14b80",
+		"name": "הפי סאן דרינקס",
+		"amount": 159,
+		"timestamp": 1666310400000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "1b3243b5-0c8f-4188-80ee-7c7e83f09522",
+		"name": "ויקטורי אינטרנט",
+		"amount": 143.2,
+		"timestamp": 1666137600000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "712ba6cd-029c-466d-bce5-7addf4d53dad",
+		"name": "PM AM הקסטל.",
+		"amount": 76.8,
+		"timestamp": 1665964800000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "af9cfcc0-4791-46d0-b372-b269bf07c633",
+		"name": "PM AM הקסטל.",
+		"amount": 50.1,
+		"timestamp": 1665705600000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "99e75161-29f0-4005-b175-0bb42795112c",
+		"name": "PM AM הקסטל.",
+		"amount": 53.3,
+		"timestamp": 1665360000000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "d37f1adb-de6b-425b-b5ae-3d76420df93a",
+		"name": "PM AM הקסטל.",
+		"amount": 25.8,
+		"timestamp": 1665273600000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "89f5cc65-b810-4d4c-b947-9171fd4db08e",
+		"name": "מרקטו באזל",
+		"amount": 206.19,
+		"timestamp": 1665100800000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "5d87c7b5-99fc-44eb-9d1d-cc2dfe4a10a7",
+		"name": "PM AM הקסטל.",
+		"amount": 73.6,
+		"timestamp": 1664928000000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "da2638ef-d8f0-473c-b624-e15ebf6af1aa",
+		"name": "מרקטו באזל",
+		"amount": 374.14,
+		"timestamp": 1664841600000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "ab5ea58a-3d73-4043-a14a-20e2ca07d3f3",
+		"name": "הפי סאן דרינקס",
+		"amount": 162,
+		"timestamp": 1664755200000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "083073ec-bbd3-4067-be10-229b372408a1",
+		"name": "כרם אמפורה בעמ",
+		"amount": 236,
+		"timestamp": 1664582400000,
+		"categoryId": 51,
+		"transactionsCount": 0
+	},
+	{
+		"id": "bc1b41d3-984f-4152-ba82-46b2bbc72820",
+		"name": "T SHIRT KING GEORGE",
+		"amount": 100,
+		"timestamp": 1666310400000,
+		"categoryId": 47,
+		"transactionsCount": 0
+	},
+	{
+		"id": "06ee325d-9673-4d77-81b0-f1c2ef706de1",
+		"name": "שרותי בריאות כללית",
+		"amount": 34.08,
+		"timestamp": 1666656000000,
+		"categoryId": 71,
+		"transactionsCount": 0
+	},
+	{
+		"id": "f36de714-c514-4379-8501-adaf689b4bfd",
+		"name": "גלעד ודניאל וטרנריה",
+		"amount": 611,
+		"timestamp": 1666483200000,
+		"categoryId": 37,
+		"transactionsCount": 0
+	},
+	{
+		"id": "1ecfd269-9ddd-431b-9298-abe38bc64a51",
+		"name": "SMOOVE/אי טי פי לוגי",
+		"amount": 69.03,
+		"timestamp": 1666656000000,
+		"categoryId": 64,
+		"transactionsCount": 0
+	},
+	{
+		"id": "bb5870fa-5b25-4a8a-b2e4-6c045430fc76",
+		"name": "WECOM",
+		"amount": 29.68,
+		"timestamp": 1665619200000,
+		"categoryId": 39,
+		"transactionsCount": 0
+	},
+	{
+		"id": "06ea3a23-01f2-4dbd-afc3-b644bc61d630",
+		"name": "DARIMPO תשלום לבניין",
+		"amount": 147,
+		"timestamp": 1664755200000,
+		"categoryId": 32,
+		"transactionsCount": 0
+	},
+	{
+		"id": "6776a7e3-d51a-4a7b-9ad7-bf806d133fec",
+		"name": "מי עדן בר שרות מחלקה",
+		"amount": 154.72,
+		"timestamp": 1666828800000,
+		"categoryId": 34,
+		"transactionsCount": 0
+	},
+	{
+		"id": "701f8eea-320a-4f77-b732-ee3beca02b08",
+		"name": "ג'ונגל",
+		"amount": 469.5,
+		"timestamp": 1666483200000,
+		"categoryId": 37,
+		"transactionsCount": 0
+	},
+	{
+		"id": "75cc7f54-338e-4e99-ab07-fb1b898fd3a0",
+		"name": "תאטרון הסימטה",
+		"amount": 10,
+		"timestamp": 1665532800000,
+		"categoryId": 52,
+		"transactionsCount": 0
+	},
+	{
+		"id": "011a5a54-0982-4904-afc5-c843ab0e73b5",
+		"name": "בריכת גורדון-מוסדות",
+		"amount": 284,
+		"timestamp": 1651795200000,
+		"categoryId": 42,
+		"transactionsCount": 0
+	},
+	{
+		"id": "ba22e8a5-eb46-4058-bad2-51fc7e0b6e49",
+		"name": "כלל ביטוח חיים",
+		"amount": 30.76,
+		"timestamp": 1666828800000,
+		"categoryId": 71,
+		"transactionsCount": 0
+	},
+	{
+		"id": "8df3d6b0-e8ac-4ac6-b40a-303cccd822b1",
+		"name": "מנורה -ביטוח חיים",
+		"amount": 45.06,
+		"timestamp": 1666742400000,
+		"categoryId": 71,
+		"transactionsCount": 0
+	},
+	{
+		"id": "68d20d63-5d10-4d4f-8901-d6a29e2ecd3f",
+		"name": "כלל ביטוח חובה מקוון",
+		"amount": 101,
+		"timestamp": 1647216000000,
+		"categoryId": 23,
+		"transactionsCount": 0
+	},
+	{
+		"id": "3cd2c5c7-3023-489c-b2d2-315e5134235e",
+		"name": "פנגו חשבונית חודשית",
+		"amount": 12.98,
+		"timestamp": 1666742400000,
+		"categoryId": 23,
+		"transactionsCount": 0
+	},
+	{
+		"id": "e039845e-11aa-4647-b680-7513f62a0589",
+		"name": "PINK PARK",
+		"amount": 45,
+		"timestamp": 1666483200000,
+		"categoryId": 23,
+		"transactionsCount": 0
+	},
+	{
+		"id": "2059ba85-604e-4f85-9d2d-c87ee5504ddf",
+		"name": "רחיצה מגה ראש",
+		"amount": 80,
+		"timestamp": 1666310400000,
+		"categoryId": 23,
+		"transactionsCount": 0
+	},
+	{
+		"id": "be04eff3-d4e7-4a96-a414-86e549d62e0c",
+		"name": "רכבת ישראל - מודיעין",
+		"amount": 18,
+		"timestamp": 1666051200000,
+		"categoryId": 22,
+		"transactionsCount": 0
+	},
+	{
+		"id": "4bfcfeae-6d2b-41f7-9359-48bf252db607",
+		"name": "סונול הרצל רמלה",
+		"amount": 179.32,
+		"timestamp": 1665792000000,
+		"categoryId": 23,
+		"transactionsCount": 0
+	},
+	{
+		"id": "a6630ed2-5e46-4dca-a211-e78dec49192a",
+		"name": "פנגו-אחוזות החוף",
+		"amount": 6,
+		"timestamp": 1665792000000,
+		"categoryId": 23,
+		"transactionsCount": 0
+	},
+	{
+		"id": "4cddf9e5-8f89-4bca-babc-f95cc63b99a8",
+		"name": "דור אלון בית השיטה",
+		"amount": 148.36,
+		"timestamp": 1665187200000,
+		"categoryId": 23,
+		"transactionsCount": 0
+	},
+	{
+		"id": "d8b52266-625b-484d-a176-75849be1e144",
+		"name": "דלק קמעונאות בת שלמ",
+		"amount": 73.9,
+		"timestamp": 1665100800000,
+		"categoryId": 23,
+		"transactionsCount": 0
+	},
+	{
+		"id": "0ab6ca6e-e32b-4147-bdd1-a89a430e4025",
+		"name": "דלק מנטה קמעונאות דר",
+		"amount": 176.67,
+		"timestamp": 1665014400000,
+		"categoryId": 23,
+		"transactionsCount": 0
+	},
+	{
+		"id": "e88703c7-ae98-45a8-a8bd-05f40461b4b5",
+		"name": "רכבת ישראל - תל אביב",
+		"amount": 24,
+		"timestamp": 1665014400000,
+		"categoryId": 22,
+		"transactionsCount": 0
+	},
+	{
+		"id": "f785d8b2-9d12-49a4-bb2b-2085dd3fe2a7",
+		"name": "PINK PARK",
+		"amount": 45,
+		"timestamp": 1664841600000,
+		"categoryId": 23,
+		"transactionsCount": 0
+	},
+	{
+		"id": "8000af80-4754-4053-9fb3-b9d4c1ac1f0b",
+		"name": "דלק שלום מזכרת בתיה",
+		"amount": 13,
+		"timestamp": 1664841600000,
+		"categoryId": 23,
+		"transactionsCount": 0
+	},
+	{
+		"id": "c1befbef-2d94-48f2-bf66-1f4fa092e2e4",
+		"name": "PINK PARK",
+		"amount": 45,
+		"timestamp": 1664668800000,
+		"categoryId": 23,
+		"transactionsCount": 0
+	},
+	{
+		"id": "e9bea68a-8bec-4680-87ce-5fb588e8ca5c",
+		"name": "דלק מנטה מחלף זיכרון",
+		"amount": 194.7,
+		"timestamp": 1664582400000,
+		"categoryId": 23,
+		"transactionsCount": 0
+	},
+	{
+		"id": "e1b2d397-c99a-43a4-84af-96291c352142",
+		"name": "NEXT TV BY HOT",
+		"amount": 32.36,
+		"timestamp": 1666656000000,
+		"categoryId": 310,
+		"transactionsCount": 0
+	},
+	{
+		"id": "15ea582c-2e01-40fb-9ded-36712eda89d2",
+		"name": "ע.מפעולות-ישיר",
+		"amount": 36.75,
+		"timestamp": 1665014400000,
+		"categoryId": 72,
+		"transactionsCount": 0
+	},
+	{
+		"id": "5b56a1dc-220c-4836-80c5-2824ed3db8d1",
+		"name": "עמ'הקצאת אשראי",
+		"amount": 12,
+		"timestamp": 1665014400000,
+		"categoryId": 72,
+		"transactionsCount": 0
+	},
+	{
+		"id": "5ffdfa77-a6ab-490f-8585-206620baade6",
+		"name": "נחלת הספר",
+		"amount": 18,
+		"timestamp": 1666742400000,
+		"categoryId": 52,
+		"transactionsCount": 0
+	},
+	{
+		"id": "76a86414-1116-4bd6-bf02-b16611aa35d9",
+		"name": "מ.תחבורה ? רב-פס",
+		"amount": 72,
+		"timestamp": 1666656000000,
+		"categoryId": 22,
+		"transactionsCount": 0
+	},
+	{
+		"id": "936d923b-a9bf-47eb-bd15-11dee7543392",
+		"name": "7 אקספרס",
+		"amount": 13,
+		"timestamp": 1666656000000,
+		"categoryId": 22,
+		"transactionsCount": 0
+	},
+	{
+		"id": "8ec7ab4c-96ef-4e4d-804c-df003add1668",
+		"name": "בר הבלבוי",
+		"amount": 187,
+		"timestamp": 1666569600000,
+		"categoryId": 14,
+		"transactionsCount": 0
+	},
+	{
+		"id": "e4fd915a-6972-4abe-abbe-7915a3e9f4f1",
+		"name": "פיצוחי חממה",
+		"amount": 70,
+		"timestamp": 1666310400000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "07d9e81d-9082-490f-a2d8-71a441277fd0",
+		"name": "בר המזג",
+		"amount": 69,
+		"timestamp": 1665792000000,
+		"categoryId": 14,
+		"transactionsCount": 0
+	},
+	{
+		"id": "b768985f-c365-4626-b0b6-dec2c96637b4",
+		"name": "קסבה",
+		"amount": 82,
+		"timestamp": 1665792000000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "31354cbd-6f88-47ed-90c4-e66f95874466",
+		"name": "Harimon",
+		"amount": 17.22,
+		"timestamp": 1665619200000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "5c81092f-484c-4b6a-8254-50698a39563b",
+		"name": "עיגול לטובה אור ירוק",
+		"amount": 46.93,
+		"timestamp": 1665273600000,
+		"categoryId": 46,
+		"transactionsCount": 0
+	},
+	{
+		"id": "5b2d208d-843b-4845-8ca5-87d65a9d1b60",
+		"name": "שר המשקאות דיזינגוף",
+		"amount": 184,
+		"timestamp": 1665273600000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "86c02b8d-73d7-484a-8772-a6cdcf3b3e94",
+		"name": "החנווניה",
+		"amount": 30,
+		"timestamp": 1665273600000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "985d8bd6-2d6e-46a3-8322-f7f91487fc46",
+		"name": "מסעדת עזבה",
+		"amount": 221,
+		"timestamp": 1665187200000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "a90ee337-ec49-42ac-8f86-11a4b70b7fd4",
+		"name": "כביש 90",
+		"amount": 169,
+		"timestamp": 1665100800000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "19f76daf-e39c-4cb7-9e0b-f00b7b34eb4c",
+		"name": "אניפט - חנות חיות",
+		"amount": 168.8,
+		"timestamp": 1665100800000,
+		"categoryId": 37,
+		"transactionsCount": 0
+	},
+	{
+		"id": "3efc11ec-1e85-46a3-be07-efe626dca1d4",
+		"name": "אנ דנ דינו",
+		"amount": 10,
+		"timestamp": 1665100800000,
+		"categoryId": 52,
+		"transactionsCount": 0
+	},
+	{
+		"id": "e8a12a11-a320-4df6-9776-f8fa604600d8",
+		"name": "LIOR",
+		"amount": 11.5,
+		"timestamp": 1665014400000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "ce8ac52f-74a9-4541-9cc8-9003f7485be1",
+		"name": "דינצי קפה",
+		"amount": 15,
+		"timestamp": 1664841600000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "97121967-e71b-4596-a6fb-35fc433154ab",
+		"name": "דינצי קפה",
+		"amount": 15,
+		"timestamp": 1664841600000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "85e7c111-247d-48da-bb38-f69df782bfb0",
+		"name": "PAYBOX 97470dd8-365c-4851-832b-7196ed7ee988",
+		"amount": 400,
+		"timestamp": 1664755200000,
+		"categoryId": 41,
+		"transactionsCount": 0
+	},
+	{
+		"id": "1410bf59-c4b2-4243-a522-1d94a12a55c9",
+		"name": "PAYBOX b8b5401d-b00e-4b47-adbc-45996fbdd357",
+		"amount": 80,
+		"timestamp": 1664755200000,
+		"categoryId": 43,
+		"transactionsCount": 0
+	},
+	{
+		"id": "e30ad6c9-75d4-4cd1-9654-ac287403ecd9",
+		"name": "דינצי קפה",
+		"amount": 30,
+		"timestamp": 1664755200000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "87d46851-0660-41a9-9c73-4ae61bc10aff",
+		"name": "דינצי קפה",
+		"amount": 30,
+		"timestamp": 1664668800000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "53fbfbcc-fe31-4ae3-a63f-17c21471fa5f",
+		"name": "בזק הוראת קבע",
+		"amount": 151.38,
+		"timestamp": 1664323200000,
+		"categoryId": 39,
+		"transactionsCount": 0
+	},
+	{
+		"id": "206885bd-2bf4-4102-a355-144ea18b2f0b",
+		"name": "PAYPAL *NINTENDO",
+		"amount": 14.59,
+		"timestamp": 1665964800000,
+		"categoryId": 45,
+		"transactionsCount": 0
+	},
+	{
+		"id": "6fe62e69-d20d-4b69-893c-1fc916c71509",
+		"name": "ALIEXPRESS",
+		"isThirdParty": false,
+		"amount": 41.17,
+		"timestamp": 1667088000000,
+		"categoryId": 37,
+		"transactionsCount": 0
+	},
+	{
+		"id": "fe85b4b1-a565-45fe-9fd6-e4efc69963db",
+		"name": "ALIEXPRESS.COM",
+		"isThirdParty": false,
+		"amount": 183.9,
+		"timestamp": 1667088000000,
+		"categoryId": 37,
+		"transactionsCount": 0
+	},
+	{
+		"id": "3606c81c-dab5-4562-a1fc-1ea2644f4abf",
+		"name": "ALIEXPRESS",
+		"isThirdParty": false,
+		"amount": 15.51,
+		"timestamp": 1667088000000,
+		"categoryId": 37,
+		"transactionsCount": 0
+	},
+	{
+		"id": "8b716cbf-9c4c-487e-9ff4-68c98f0b8583",
+		"name": "LIM*RIDE COST",
+		"isThirdParty": false,
+		"amount": 12.2,
+		"timestamp": 1667001600000,
+		"categoryId": 21,
+		"transactionsCount": 0
+	},
+	{
+		"id": "60258a38-5abd-407a-b4a8-6a35e414ec6b",
+		"name": "טל ים שיט בעמ",
+		"isThirdParty": false,
+		"amount": 1710,
+		"timestamp": 1666915200000,
+		"categoryId": 52,
+		"transactionsCount": 0
+	},
+	{
+		"id": "c90f6422-4b67-42b2-a196-56ca07ecf784",
+		"name": "בלאק זכרון",
+		"isThirdParty": false,
+		"amount": 80,
+		"timestamp": 1667001600000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "2446ac43-7754-4ea5-8ee2-19b3357e5cc4",
+		"name": "ארמון סהרה",
+		"isThirdParty": false,
+		"amount": 200,
+		"timestamp": 1666915200000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "324088d3-abc2-41f1-81ec-267247d64e26",
+		"name": "סיקיליה",
+		"isThirdParty": false,
+		"amount": 10,
+		"timestamp": 1666915200000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "3a4fd5c2-0dd9-4d2a-9d40-53e8835bdd13",
+		"name": "UIK סופרמרקט אונליין",
+		"isThirdParty": false,
+		"amount": 217.1,
+		"timestamp": 1667088000000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "64ca80f8-1ee2-4525-89a0-00312ec22be3",
+		"name": "גולדה בחצר",
+		"isThirdParty": false,
+		"amount": 90,
+		"timestamp": 1667001600000,
+		"categoryId": 13,
+		"transactionsCount": 0
+	},
+	{
+		"id": "5d5f5013-f111-46bc-a1dc-cb386984d145",
+		"name": "שופרסל שלי נורדאו",
+		"isThirdParty": false,
+		"amount": 93.7,
+		"timestamp": 1666915200000,
+		"categoryId": 12,
+		"transactionsCount": 0
+	},
+	{
+		"id": "d0a47fa6-edcd-44a9-af24-d6ebbc62b3a3",
+		"name": "גלעד ודניאל וטרנריה",
+		"isThirdParty": false,
+		"amount": 34,
+		"timestamp": 1667088000000,
+		"categoryId": 37,
+		"transactionsCount": 0
+	},
+	{
+		"id": "c3836220-6e8a-4a64-b194-4fc68069e4ac",
+		"name": "זו סנטר",
+		"isThirdParty": false,
+		"amount": 233.9,
+		"timestamp": 1667088000000,
+		"categoryId": 37,
+		"transactionsCount": 0
+	},
+	{
+		"id": "a2f6b87e-6a84-4a7c-aad5-a6662106b27c",
+		"name": "פניקס חיים ובריאות",
+		"isThirdParty": false,
+		"amount": 147.69,
+		"timestamp": 1666915200000,
+		"categoryId": 71,
+		"transactionsCount": 0
+	},
+	{
+		"id": "427dede8-be88-4385-9e2d-c742e7dca56f",
+		"name": "סונול (אברך) צומת רע",
+		"isThirdParty": false,
+		"amount": 147.15,
+		"timestamp": 1666915200000,
+		"categoryId": 23,
+		"transactionsCount": 0
+	},
+	{
+		"id": "e86148ef-c9a8-466b-8e3b-711124660b0f",
+		"name": "פז YELLOW קדימה -",
+		"isThirdParty": false,
+		"amount": 28.9,
+		"timestamp": 1666915200000,
+		"categoryId": 23,
+		"transactionsCount": 0
+	},
+	{
+		"id": "68aa9cf5-be9a-42bf-837d-2a5a131f42aa",
+		"name": "PAYBOX",
+		"isThirdParty": true,
+		"amount": 80,
+		"timestamp": 1664582400000,
+		"categoryId": 43,
+		"transactionsCount": 0
+	},
+	{
+		"id": "d86ffaf3-4d01-4203-adfc-1927a05a72e0",
+		"name": "העברה ב BIT בנה\"פ",
+		"isThirdParty": true,
+		"amount": 440,
+		"timestamp": 1666656000000,
+		"categoryId": 33,
+		"transactionsCount": 0
+	},
+	{
+		"id": "37eb1c9f-f201-4ab9-9dc1-9561cf0d56bc",
+		"name": "העברה ב BIT בנה\"פ",
+		"isThirdParty": true,
+		"amount": 227,
+		"timestamp": 1666569600000,
+		"categoryId": 51,
+		"transactionsCount": 0
+	},
+	{
+		"id": "46598426-3cfd-4600-a2a1-260967ee9a09",
+		"name": "העברה ב BIT בנה\"פ",
+		"isThirdParty": true,
+		"amount": 700,
+		"timestamp": 1665964800000,
+		"categoryId": 44,
+		"transactionsCount": 0
+	},
+	{
+		"id": "fb8854d4-31f7-4873-bbe6-8faa5c76e3a8",
+		"name": "העברה ב BIT בנה\"פ",
+		"isThirdParty": true,
+		"amount": 130,
+		"timestamp": 1665792000000,
+		"categoryId": 46,
+		"transactionsCount": 0
+	},
+	{
+		"id": "4497b56d-b11f-437b-bc5a-68d682d980d4",
+		"name": "העב' לאחר-נייד",
+		"isThirdParty": true,
+		"amount": 5383,
+		"timestamp": 1665446400000,
+		"categoryId": 54,
+		"transactionsCount": 0
+	},
+	{
+		"id": "5707157f-d9f4-45f1-84b7-64f52dffd740",
+		"name": "PAYBOX",
+		"isThirdParty": true,
+		"amount": 2750,
+		"timestamp": 1665273600000,
+		"categoryId": 53,
+		"transactionsCount": 0
+	},
+	{
+		"id": "7d2b5ab8-6f9f-4298-a6f2-e53ffc5d721c",
+		"name": "PAYBOX",
+		"isThirdParty": true,
+		"amount": 400,
+		"timestamp": 1664755200000,
+		"categoryId": 41,
+		"transactionsCount": 0
+	},
+	{
+		"id": "c79885cb-e762-4045-aa44-96da81775edd",
+		"name": "PAYBOX",
+		"isThirdParty": true,
+		"amount": 80,
+		"timestamp": 1664755200000,
+		"categoryId": 43,
+		"transactionsCount": 0
+	},
+	{
+		"id": "e4854f00-ea9b-4b8d-a1d9-2e281f752fed",
+		"name": "העב' לאחר-נייד",
+		"isThirdParty": true,
+		"amount": 7500,
+		"timestamp": 1664668800000,
+		"categoryId": 31,
+		"transactionsCount": 0
+	},
+	{
+		"id": "d0a20bc3-f98d-492a-a3a6-bfa4d5a8a13f",
+		"name": "משכורת",
+		"isThirdParty": false,
+		"amount": 17712,
+		"note": "",
+		"timestamp": 1664668800000,
+		"categoryId": 81,
+		"transactionsCount": 0
+	},
+	{
+		"id": "2f995bdd-9cdb-4db5-83ad-173c7f4ba12f",
+		"name": "bit העברת כסף",
+		"isThirdParty": true,
+		"amount": 2700,
+		"note": "",
+		"timestamp": 1665446400000,
+		"categoryId": 82,
+		"transactionsCount": 0
+	},
+	{
+		"id": "f3c332d6-dee7-4fa0-908b-1f0ca6f6c2c6",
+		"name": "bit העברת כסף",
+		"isThirdParty": true,
+		"amount": 280,
+		"note": "",
+		"timestamp": 1665014400000,
+		"categoryId": 82,
+		"transactionsCount": 0
+	},
+	{
+		"id": "ab704248-0896-4099-90d7-1adb89ef4e90",
+		"name": "bit העברת כסף",
+		"isThirdParty": true,
+		"amount": 3500,
+		"note": "",
+		"timestamp": 1664755200000,
+		"categoryId": 82,
+		"transactionsCount": 0
+	}
+]

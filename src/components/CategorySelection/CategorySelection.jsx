@@ -101,7 +101,7 @@ const CategorySelection = ({
 							transaction={aggregatedExpenses[transactionIndex]}
 						/>
 					) : (
-						<TransactionList />
+						<TransactionList transactions={aggregatedExpenses} />
 					)}
 				</tbody>
 			</table>
