@@ -3,6 +3,7 @@ import { orderBy } from "lodash";
 import { ExpensesContext } from "./../../context";
 import { Categories } from "../../constants";
 import { getBudget, setBudget as storeBudget } from "../../utils";
+import { FutureInsight } from "../FutureInsight";
 
 const ONE_MONTH_MS = 1000 * 60 * 60 * 24 * 30;
 
@@ -90,6 +91,7 @@ const BudgetView = () => {
           Next Month
         </button>
       </div>
+      <FutureInsight budget={budget} />
       <div>
         <input type="number" placeholder="Started the month with" />
       </div>
@@ -182,11 +184,6 @@ const BudgetView = () => {
                     );
 
                     const averageAmount = 0;
-                    console.info({
-                      name: subcategory.name,
-                      thisMonthAmount,
-                      budget: budget[subcategory.id]?.amount,
-                    });
 
                     return (
                       <div
@@ -201,7 +198,6 @@ const BudgetView = () => {
                           <div className="info-box">
                             {orderBy(
                               expensesInCategory.map((expense) => {
-                                console.debug({ expense });
                                 return (
                                   <div>
                                     <span>{expense.name.slice(0, 20)}</span>

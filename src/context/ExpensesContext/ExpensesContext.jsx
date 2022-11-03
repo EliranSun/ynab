@@ -1,4 +1,4 @@
-import { useState, createContext } from "react";
+import { useState, createContext, useMemo } from "react";
 import { noop } from "lodash";
 import { getExpenses, setExpenses as setStorageExpenses } from "../../utils";
 
@@ -11,10 +11,29 @@ export const ExpensesContextProvider = ({ children }) => {
   const [expenses, setExpenses] = useState(getExpenses());
   const [error, setError] = useState(null);
 
+  const memoMonthlyExpenses = useMemo(() => {
+    const monthlyExpenses = {};
+    expenses.forEach((expense) => {
+      const { timestamp } = expense;
+      const date = new Date(timestamp);
+      const month = date.toLocaleString("default", { month: "long" });
+      const year = date.getFullYear();
+      const key = `${month}-${year}`;
+      if (!monthlyExpenses[key]) {
+        monthlyExpenses[key] = [expense];
+      } else {
+        monthlyExpenses[key].push(expense);
+      }
+    });
+
+    return monthlyExpenses;
+  }, [expenses]);
+
   return (
     <ExpensesContext.Provider
       value={{
         expenses,
+        monthlyExpenses: memoMonthlyExpenses,
         setExpenseAsRecurring: (expenseId, isRecurring) => {
           const newExpenses = expenses.map((expense) => {
             if (expense.id === expenseId) {
