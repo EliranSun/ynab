@@ -44,13 +44,20 @@ export const ExpensesContextProvider = ({ children }) => {
           setExpenses(newExpenses);
           setStorageExpenses(newExpenses);
         },
+        setExpenseAsIncome: (expenseId, isIncome) => {
+          const newExpenses = expenses.map((expense) => {
+            if (expense.id === expenseId) {
+              return { ...expense, isIncome };
+            }
+            return expense;
+          });
+          setExpenses(newExpenses);
+          setStorageExpenses(newExpenses);
+        },
         changeExpenseCategoryByName: (expense, categoryId) => {
           setExpenses((prevExpenses) => {
             const newExpenses = prevExpenses.map((previousExpense) => {
               if (expense.isThirdParty) {
-                if (expense.name === previousExpense.name) {
-                  debugger;
-                }
                 if (expense.id === previousExpense.id) {
                   return {
                     ...previousExpense,

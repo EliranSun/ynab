@@ -91,7 +91,7 @@ const BudgetView = () => {
           Next Month
         </button>
       </div>
-      <FutureInsight budget={budget} />
+      <FutureInsight budget={budget} initialAmount={-3880.05} />
       <div>
         <input type="number" placeholder="Started the month with" />
       </div>

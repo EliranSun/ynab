@@ -21,7 +21,8 @@ const getExpenseCategoryName = (expense) => {
 };
 
 const ExpenseView = () => {
-  const { expenses, setExpenseAsRecurring } = useContext(ExpensesContext);
+  const { expenses, setExpenseAsRecurring, setExpenseAsIncome } =
+    useContext(ExpensesContext);
   const [searchValue, setSearchValue] = useState("בריכת גורדון-מוסדות");
 
   return (
@@ -65,6 +66,16 @@ const ExpenseView = () => {
                     type="checkbox"
                     onChange={() => {
                       setExpenseAsRecurring(expense.id, !expense.isRecurring);
+                    }}
+                  />
+                </div>
+                <div>
+                  <label>Is income?</label>
+                  <input
+                    checked={expense.isIncome}
+                    type="checkbox"
+                    onChange={() => {
+                      setExpenseAsIncome(expense.id, !expense.isIncome);
                     }}
                   />
                 </div>
