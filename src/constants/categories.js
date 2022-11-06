@@ -235,6 +235,11 @@ const Categories = [
         name: "Other",
         icon: "💵",
       },
+      {
+        id: 83,
+        name: "Rent",
+        icon: "🏠",
+      },
     ],
   },
 ];

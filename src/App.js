@@ -17,6 +17,7 @@ const Pages = {
 };
 
 function App() {
+  const [categoryId, setCategoryId] = useState(null);
   const [page, setPage] = useState(Pages.CATEGORY_SELECTION);
 
   return (
@@ -34,8 +35,17 @@ function App() {
       <div className="layout">
         {page === Pages.CATEGORY_SELECTION && <PasteExpensesList />}
         {page === Pages.BUDGET_VIEW && <BudgetView />}
-        {page === Pages.CATEGORY_VIEW && <CategoryView />}
-        {page === Pages.EXPENSE_VIEW && <ExpenseView />}
+        {page === Pages.CATEGORY_VIEW && (
+          <CategoryView categoryId={categoryId} />
+        )}
+        {page === Pages.EXPENSE_VIEW && (
+          <ExpenseView
+            onCategoryClick={(categoryId) => {
+              setCategoryId(categoryId);
+              setPage(Pages.CATEGORY_VIEW);
+            }}
+          />
+        )}
       </div>
     </ExpensesContextProvider>
   );
