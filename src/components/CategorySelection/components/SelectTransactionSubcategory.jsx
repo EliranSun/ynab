@@ -23,7 +23,7 @@ const SelectTransactionSubcategory = ({
 				{categories.map((category) => (
 					<>
 						<option value={category.id}>======{category.name}======</option>
-						{category.subCategories.map((subcategory) => (
+						{category?.subCategories?.map((subcategory) => (
 							<option value={subcategory.id}>
 								{subcategory.icon} {subcategory.name}
 							</option>
