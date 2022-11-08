@@ -66,3 +66,26 @@ Before we get started, keep in mind:
 [info] 
 [info] i  deploying storage, firestore, hosting 
 [debug] [2022-11-08T08:42:25.268Z] >>> [apiv2][query] GET https://appengine.googleapis.com/v1/apps/ynab-47641 [none]
+[debug] [2022-11-08T08:42:25.871Z] <<< [apiv2][status] GET https://appengine.googleapis.com/v1/apps/ynab-47641 200
+[debug] [2022-11-08T08:42:25.871Z] <<< [apiv2][body] GET https://appengine.googleapis.com/v1/apps/ynab-47641 {"name":"apps/ynab-47641","id":"ynab-47641","authDomain":"gmail.com","locationId":"europe-west","codeBucket":"staging.ynab-47641.appspot.com","servingStatus":"SERVING","defaultHostname":"ynab-47641.ew.r.appspot.com","defaultBucket":"ynab-47641.appspot.com","serviceAccount":"ynab-47641@appspot.gserviceaccount.com","gcrDomain":"eu.gcr.io","databaseType":"CLOUD_FIRESTORE","featureSettings":{"splitHealthChecks":true,"useContainerOptimizedOs":true}}
+[info] i  firebase.storage: checking storage.rules for compilation errors... 
+[debug] [2022-11-08T08:42:25.872Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/ynab-47641:test [none]
+[debug] [2022-11-08T08:42:25.872Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/ynab-47641:test [omitted]
+[debug] [2022-11-08T08:42:26.225Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/ynab-47641:test 200
+[debug] [2022-11-08T08:42:26.225Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/ynab-47641:test {}
+[info] +  firebase.storage: rules file storage.rules compiled successfully 
+[info] i  firestore: reading indexes from firestore.indexes.json... 
+[info] i  cloud.firestore: checking firestore.rules for compilation errors... 
+[debug] [2022-11-08T08:42:26.228Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/ynab-47641:test [none]
+[debug] [2022-11-08T08:42:26.228Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/ynab-47641:test [omitted]
+[debug] [2022-11-08T08:42:26.499Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/ynab-47641:test 200
+[debug] [2022-11-08T08:42:26.500Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/ynab-47641:test {}
+[info] +  cloud.firestore: rules file firestore.rules compiled successfully 
+[debug] [2022-11-08T08:42:26.505Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/ynab-47641/versions [none]
+[debug] [2022-11-08T08:42:26.506Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/ynab-47641/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2022-11-08T08:42:27.866Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/ynab-47641/versions 200
+[debug] [2022-11-08T08:42:27.866Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/ynab-47641/versions {"name":"projects/166507618318/sites/ynab-47641/versions/db2b08842e149579","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2022-11-08T08:42:27.867Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/ynab-47641/releases pageSize=10&pageToken=
+[debug] [2022-11-08T08:42:28.631Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/ynab-47641/releases 200
+[debug] [2022-11-08T08:42:28.632Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/ynab-47641/releases {"releases":[{"name":"projects/ynab-47641/releases/cloud.firestore","rulesetName":"projects/ynab-47641/rulesets/5d89fe98-6d8e-4873-b75c-9d0437693207","createTime":"2022-11-08T08:11:56.973813Z","updateTime":"2022-11-08T08:39:32.694936Z"},{"name":"projects/ynab-47641/releases/firebase.storage/ynab-47641.appspot.com","rulesetName":"projects/ynab-47641/rulesets/b25c5e09-e48f-4f97-8283-115b8bcc31ed","createTime":"2022-11-08T08:39:32.229176Z","updateTime":"2022-11-08T08:39:32.229176Z"}]}
+[debug] [2022-11-08T08:42:28.642Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/ynab-47641/rulesets/b25c5e09-e48f-4f97-8283-115b8bcc31ed [none]
