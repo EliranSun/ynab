@@ -17,29 +17,8 @@ const Pages = {
 };
 
 function App() {
-	const [categoryId, setCategoryId] = useState(null);
+	const [categoryId, setCategoryId] = useState(1);
 	const [page, setPage] = useState(Pages.CATEGORY_SELECTION);
-
-	useEffect(() => {
-		fetch("https://data.mongodb-api.com/app/data-egchn/endpoint/data/v1", {
-			method: "POST",
-			mode: "cors",
-			headers: {
-				"Content-Type": "application/json",
-				"api-key":
-					"gQvlLdyZWkUMYM3jK5YfqIiTeN6BQIvUwz9xaHag2lEbQVDxaqMpfoI7IXtRr6sm",
-			},
-			body: JSON.stringify({
-				dataSource: "Cluster0",
-				database: "expenses",
-				collection: "expenses",
-				document: {
-					name: "John Sample",
-					age: 42,
-				},
-			}),
-		});
-	}, []);
 
 	return (
 		<ExpensesContextProvider>

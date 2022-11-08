@@ -2,13 +2,16 @@ import { useContext, useMemo } from "react";
 import { ExpensesContext } from "../../context/";
 import { Categories } from "../../constants";
 
-const CategoryView = ({ categoryId }) => {
+const CategoryView = ({ categoryId = 1 }) => {
 	const { expenses, changeExpenseCategoryByName } = useContext(ExpensesContext);
+
 	const category = useMemo(() => {
 		return Categories.find((category) => {
-			return category.id === categoryId;
+			console.debug("CategoryView: useMemo", { category, categoryId });
+			return String(category.id) === String(categoryId);
 		});
 	}, [categoryId]);
+
 	const subcategoriesIds = useMemo(() => {
 		return category?.subCategories?.map((subcategory) => subcategory.id);
 	}, [category]);
@@ -16,7 +19,7 @@ const CategoryView = ({ categoryId }) => {
 	const totalAmountInCategory = useMemo(
 		() =>
 			expenses.reduce((total, expense) => {
-				if (subcategoriesIds.includes(expense.categoryId)) {
+				if (subcategoriesIds?.includes(expense.categoryId)) {
 					return total + expense.amount;
 				}
 				return total;
