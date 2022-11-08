@@ -2,6 +2,7 @@
 	"name": "ynab",
 	"version": "0.1.0",
 	"private": true,
+	"homepage": "https://ynab-47641.web.app/",
 	"dependencies": {
 		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/react": "^13.4.0",
@@ -26,7 +27,7 @@
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"deploy": "firebase deploy --except functions"
+		"deploy": "npm run build && firebase deploy --except functions"
 	},
 	"eslintConfig": {
 		"extends": [

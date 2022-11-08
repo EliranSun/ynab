@@ -21,7 +21,8 @@ code {
 	display: flex;
 }
 
-.layout {}
+.layout {
+}
 
 table {
 	width: 100%;
@@ -104,4 +105,17 @@ table td * {
 	background: #fff;
 	border: 1px solid #ccc;
 	overflow: auto;
+}
+
+.float {
+	position: fixed;
+	background-color: white;
+}
+
+.top {
+	top: 10px;
+}
+
+.right {
+	right: 10px;
 }

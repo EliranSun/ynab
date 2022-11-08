@@ -101,7 +101,8 @@
 		"amount": 895.16,
 		"timestamp": 1666396800000,
 		"categoryId": 52,
-		"transactionsCount": 0
+		"transactionsCount": 0,
+		"note": "גיפט קארד יומולדת לסהר"
 	},
 	{
 		"id": "b354087c-8e16-4af7-b985-7cfb224f2581",
@@ -245,7 +246,8 @@
 		"amount": 440,
 		"timestamp": 1664841600000,
 		"categoryId": 64,
-		"transactionsCount": 0
+		"transactionsCount": 0,
+		"note": "שיט יומולדת לנופר"
 	},
 	{
 		"id": "02272e5e-de4f-4ccd-a275-7c11b123cc6f",
@@ -952,22 +954,6 @@
 		"transactionsCount": 0
 	},
 	{
-		"id": "85e7c111-247d-48da-bb38-f69df782bfb0",
-		"name": "PAYBOX 97470dd8-365c-4851-832b-7196ed7ee988",
-		"amount": 400,
-		"timestamp": 1664755200000,
-		"categoryId": 41,
-		"transactionsCount": 0
-	},
-	{
-		"id": "1410bf59-c4b2-4243-a522-1d94a12a55c9",
-		"name": "PAYBOX b8b5401d-b00e-4b47-adbc-45996fbdd357",
-		"amount": 80,
-		"timestamp": 1664755200000,
-		"categoryId": 43,
-		"transactionsCount": 0
-	},
-	{
 		"id": "e30ad6c9-75d4-4cd1-9654-ac287403ecd9",
 		"name": "דינצי קפה",
 		"amount": 30,
@@ -1042,7 +1028,8 @@
 		"amount": 1710,
 		"timestamp": 1666915200000,
 		"categoryId": 52,
-		"transactionsCount": 0
+		"transactionsCount": 0,
+		"note": "שייט יומולדת לאופק"
 	},
 	{
 		"id": "c90f6422-4b67-42b2-a196-56ca07ecf784",
@@ -1147,6 +1134,7 @@
 		"id": "68aa9cf5-be9a-42bf-837d-2a5a131f42aa",
 		"name": "PAYBOX",
 		"isThirdParty": true,
+		"isIncome": true,
 		"amount": 80,
 		"timestamp": 1664582400000,
 		"categoryId": 43,
@@ -1177,7 +1165,8 @@
 		"amount": 700,
 		"timestamp": 1665964800000,
 		"categoryId": 44,
-		"transactionsCount": 0
+		"transactionsCount": 0,
+		"note": "טלסקופ"
 	},
 	{
 		"id": "fb8854d4-31f7-4873-bbe6-8faa5c76e3a8",
@@ -1195,7 +1184,8 @@
 		"amount": 5383,
 		"timestamp": 1665446400000,
 		"categoryId": 54,
-		"transactionsCount": 0
+		"transactionsCount": 0,
+		"note": "כרטיסי טיסה ליפן"
 	},
 	{
 		"id": "5707157f-d9f4-45f1-84b7-64f52dffd740",
@@ -1204,7 +1194,8 @@
 		"amount": 2750,
 		"timestamp": 1665273600000,
 		"categoryId": 53,
-		"transactionsCount": 0
+		"transactionsCount": 0,
+		"note": "צימר יומולדת לנופר"
 	},
 	{
 		"id": "7d2b5ab8-6f9f-4298-a6f2-e53ffc5d721c",
@@ -1231,12 +1222,14 @@
 		"amount": 7500,
 		"timestamp": 1664668800000,
 		"categoryId": 31,
-		"transactionsCount": 0
+		"transactionsCount": 0,
+		"note": "שכר דירה"
 	},
 	{
 		"id": "d0a20bc3-f98d-492a-a3a6-bfa4d5a8a13f",
 		"name": "משכורת",
 		"isThirdParty": false,
+		"isIncome": true,
 		"amount": 17712,
 		"note": "",
 		"timestamp": 1664668800000,
@@ -1247,6 +1240,7 @@
 		"id": "2f995bdd-9cdb-4db5-83ad-173c7f4ba12f",
 		"name": "bit העברת כסף",
 		"isThirdParty": true,
+		"isIncome": true,
 		"amount": 2700,
 		"note": "",
 		"timestamp": 1665446400000,
@@ -1256,6 +1250,7 @@
 	{
 		"id": "f3c332d6-dee7-4fa0-908b-1f0ca6f6c2c6",
 		"name": "bit העברת כסף",
+		"isIncome": true,
 		"isThirdParty": true,
 		"amount": 280,
 		"note": "",
@@ -1267,6 +1262,7 @@
 		"id": "ab704248-0896-4099-90d7-1adb89ef4e90",
 		"name": "bit העברת כסף",
 		"isThirdParty": true,
+		"isIncome": true,
 		"amount": 3500,
 		"note": "",
 		"timestamp": 1664755200000,
