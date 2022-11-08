@@ -1,108 +1,117 @@
-import { useState, createContext, useMemo } from "react";
+import { useState, createContext, useMemo, useEffect } from "react";
 import { noop } from "lodash";
-import { getExpenses, setExpenses as setStorageExpenses } from "../../utils";
+import {
+	getExpenses,
+	setExpenses as setStorageExpenses,
+	addTestDoc,
+} from "../../utils";
 
 export const ExpensesContext = createContext({
-  expenses: {},
-  changeExpenseCategoryByName: noop,
+	expenses: {},
+	changeExpenseCategoryByName: noop,
 });
 
 export const ExpensesContextProvider = ({ children }) => {
-  const [expenses, setExpenses] = useState(getExpenses());
-  const [error, setError] = useState(null);
+	const [expenses, setExpenses] = useState(getExpenses());
+	const [error, setError] = useState(null);
 
-  const memoMonthlyExpenses = useMemo(() => {
-    const monthlyExpenses = {};
-    expenses.forEach((expense) => {
-      const { timestamp } = expense;
-      const date = new Date(timestamp);
-      const month = date.toLocaleString("default", { month: "long" });
-      const year = date.getFullYear();
-      const key = `${month}-${year}`;
-      if (!monthlyExpenses[key]) {
-        monthlyExpenses[key] = [expense];
-      } else {
-        monthlyExpenses[key].push(expense);
-      }
-    });
+	useEffect(() => {
+		addTestDoc();
+	}, []);
 
-    return monthlyExpenses;
-  }, [expenses]);
+	const memoMonthlyExpenses = useMemo(() => {
+		const monthlyExpenses = {};
+		expenses.forEach((expense) => {
+			const { timestamp } = expense;
+			const date = new Date(timestamp);
+			const month = date.toLocaleString("default", { month: "long" });
+			const year = date.getFullYear();
+			const key = `${month}-${year}`;
+			if (!monthlyExpenses[key]) {
+				monthlyExpenses[key] = [expense];
+			} else {
+				monthlyExpenses[key].push(expense);
+			}
+		});
 
-  const setExpenseAsRecurring = (expenseId, isRecurring) => {
-    const newExpenses = expenses.map((expense) => {
-      if (expense.id === expenseId) {
-        return { ...expense, isRecurring };
-      }
-      return expense;
-    });
-    setExpenses(newExpenses);
-    setStorageExpenses(newExpenses);
-  };
+		return monthlyExpenses;
+	}, [expenses]);
 
-  const setExpenseAsIncome = (expenseId, isIncome) => {
-    const newExpenses = expenses.map((expense) => {
-      if (expense.id === expenseId) {
-        return { ...expense, isIncome };
-      }
-      return expense;
-    });
-    setExpenses(newExpenses);
-    setStorageExpenses(newExpenses);
-  };
+	const setExpenseAsRecurring = (expenseId, isRecurring) => {
+		const newExpenses = expenses.map((expense) => {
+			if (expense.id === expenseId) {
+				return { ...expense, isRecurring };
+			}
+			return expense;
+		});
+		setExpenses(newExpenses);
+		setStorageExpenses(newExpenses);
+	};
 
-  const changeExpenseCategoryByName = (expense, categoryId) => {
-    setExpenses((prevExpenses) => {
-      const newExpenses = prevExpenses.map((previousExpense) => {
-        if (expense.isThirdParty) {
-          if (expense.id === previousExpense.id) {
-            return {
-              ...previousExpense,
-              categoryId,
-            };
-          }
+	const setExpenseAsIncome = (expenseId, isIncome) => {
+		const newExpenses = expenses.map((expense) => {
+			if (expense.id === expenseId) {
+				return { ...expense, isIncome };
+			}
+			return expense;
+		});
+		setExpenses(newExpenses);
+		setStorageExpenses(newExpenses);
+	};
 
-          return previousExpense;
-        }
+	const changeExpenseCategoryByName = (expense, categoryId) => {
+		setExpenses((prevExpenses) => {
+			const newExpenses = prevExpenses.map((previousExpense) => {
+				if (expense.isThirdParty) {
+					if (expense.id === previousExpense.id) {
+						return {
+							...previousExpense,
+							categoryId,
+						};
+					}
 
-        if (expense.name === previousExpense.name) {
-          return {
-            ...previousExpense,
-            categoryId,
-          };
-        }
+					return previousExpense;
+				}
 
-        return previousExpense;
-      });
+				if (expense.name === previousExpense.name) {
+					return {
+						...previousExpense,
+						categoryId,
+					};
+				}
 
-      setStorageExpenses(newExpenses);
-      return newExpenses;
-    });
-  };
+				return previousExpense;
+			});
 
-  const setExpenseNote = (expenseId, note) => {
-    const newExpenses = expenses.map((expense) => {
-      if (expense.id === expenseId) {
-        return { ...expense, note };
-      }
-      return expense;
-    });
-    setExpenses(newExpenses);
-    setStorageExpenses(newExpenses);
-  };
+			setStorageExpenses(newExpenses);
+			return newExpenses;
+		});
+	};
 
-  return (
-    <ExpensesContext.Provider
-      value={{
-        expenses,
-        monthlyExpenses: memoMonthlyExpenses,
-        setExpenseAsRecurring,
-        setExpenseAsIncome,
-        changeExpenseCategoryByName,
-        setExpenseNote,
-      }}>
-      {children}
-      <span className="error">{error}</span>
-    </ExpensesContext.Provider>
-  );
+	const setExpenseNote = (expenseId, note) => {
+		const newExpenses = expenses.map((expense) => {
+			if (expense.id === expenseId) {
+				return { ...expense, note };
+			}
+			return expense;
+		});
+		setExpenses(newExpenses);
+		setStorageExpenses(newExpenses);
+	};
+
+	return (
+		<ExpensesContext.Provider
+			value={{
+				expenses,
+				monthlyExpenses: memoMonthlyExpenses,
+				setExpenseAsRecurring,
+				setExpenseAsIncome,
+				changeExpenseCategoryByName,
+				setExpenseNote,
+			}}
+		>
+			{children}
+			<span className="error">{error}</span>
+		</ExpensesContext.Provider>
+	);
 };
