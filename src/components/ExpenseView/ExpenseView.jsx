@@ -49,6 +49,7 @@ const Expense = ({
 
 	return (
 		<div
+			id={expense.id}
 			className={classNames("expense-box", { [styles.isListView]: isListView })}
 			key={expense.id}
 		>

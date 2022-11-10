@@ -57,6 +57,25 @@ export const ExpensesContextProvider = ({ children }) => {
 	};
 
 	const changeExpenseCategory = (expenseId, categoryId) => {
+		const expense = expenses[expenseId];
+		const allExpensesWithTheSameName = expensesArray.filter(
+			({ name }) => name === expense.name
+		);
+		if (!expense.isThirdParty) {
+			allExpensesWithTheSameName.forEach((expense) => {
+				updateExpense(expense.id, { categoryId });
+				setExpenses({
+					...expenses,
+					[expense.id]: {
+						...expenses[expense.id],
+						categoryId,
+					},
+				});
+			});
+
+			return;
+		}
+
 		updateExpense(expenseId, { categoryId });
 		setExpenses({
 			...expenses,

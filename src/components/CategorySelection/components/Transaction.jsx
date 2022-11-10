@@ -22,6 +22,8 @@ const Transaction = ({
 		categoryId,
 	} = transaction;
 
+	console.debug("Transaction", transaction);
+
 	const [aggregatedDetailsVisibleId, setAggregatedDetailsId] = useState(false);
 	const isDetailedView = aggregatedDetailsVisibleId === id;
 
