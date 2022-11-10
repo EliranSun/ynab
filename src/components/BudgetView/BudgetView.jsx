@@ -1,16 +1,15 @@
 import { useState, useContext, useEffect } from "react";
 import { orderBy } from "lodash";
-import { ExpensesContext } from "./../../context";
+import { ExpensesContext, BudgetContext } from "./../../context";
 import { Categories } from "../../constants";
-import { getBudget, setBudget as storeBudget } from "../../utils";
 import { FutureInsight } from "../FutureInsight";
 
 const ONE_MONTH_MS = 1000 * 60 * 60 * 24 * 30;
 
 const BudgetView = () => {
 	const { expensesArray: expenses } = useContext(ExpensesContext);
+	const { setBudget, budget } = useContext(BudgetContext);
 	const [hoveredCategoryId, setHoveredCategoryId] = useState(null);
-	const [budget, setBudget] = useState(getBudget());
 	const [date, setDate] = useState(
 		new Date(new Date().getTime() - ONE_MONTH_MS)
 	);
@@ -73,7 +72,7 @@ const BudgetView = () => {
 	const budgetBottomLine = budgetIncome - budgetExpenses;
 
 	useEffect(() => {
-		storeBudget(budget);
+		setBudget(budget);
 	}, [budget]);
 
 	return (

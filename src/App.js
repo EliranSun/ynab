@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ExpensesContextProvider } from "./context";
+import { ExpensesContextProvider, BudgetContextProvider } from "./context";
 import {
 	PasteExpensesList,
 	BudgetView,
@@ -21,7 +21,7 @@ function App() {
 	const [page, setPage] = useState(Pages.CATEGORY_SELECTION);
 
 	return (
-		<ExpensesContextProvider>
+		<>
 			<nav className="menu">
 				<span onClick={() => setPage(Pages.CATEGORY_SELECTION)}>
 					Transaction Category Selection |{" "}
@@ -33,21 +33,25 @@ function App() {
 				<span onClick={() => setPage(Pages.EXPENSE_VIEW)}>Expense View</span>
 			</nav>
 			<div className="layout">
-				{page === Pages.CATEGORY_SELECTION && <PasteExpensesList />}
-				{page === Pages.BUDGET_VIEW && <BudgetView />}
-				{page === Pages.CATEGORY_VIEW && (
-					<CategoryView categoryId={categoryId} />
-				)}
-				{page === Pages.EXPENSE_VIEW && (
-					<ExpenseView
-						onCategoryClick={(categoryId) => {
-							setCategoryId(categoryId);
-							setPage(Pages.CATEGORY_VIEW);
-						}}
-					/>
-				)}
+				<ExpensesContextProvider>
+					<BudgetContextProvider>
+						{page === Pages.CATEGORY_SELECTION && <PasteExpensesList />}
+						{page === Pages.BUDGET_VIEW && <BudgetView />}
+						{page === Pages.CATEGORY_VIEW && (
+							<CategoryView categoryId={categoryId} />
+						)}
+						{page === Pages.EXPENSE_VIEW && (
+							<ExpenseView
+								onCategoryClick={(categoryId) => {
+									setCategoryId(categoryId);
+									setPage(Pages.CATEGORY_VIEW);
+								}}
+							/>
+						)}
+					</BudgetContextProvider>
+				</ExpensesContextProvider>
 			</div>
-		</ExpensesContextProvider>
+		</>
 	);
 }
 
