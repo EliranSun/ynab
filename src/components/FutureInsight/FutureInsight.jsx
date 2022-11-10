@@ -129,7 +129,7 @@ const FutureInsight = ({
 	lookaheadInMonths = 10,
 }) => {
 	const canvasRef = useRef(null);
-	const { monthlyExpenses, expenses } = useContext(ExpensesContext);
+	const { expensesArray: expenses } = useContext(ExpensesContext);
 	const expensesData = useMemo(() => {
 		let startingPoint = initialAmount;
 		return expenses.map((expense) => {
@@ -154,14 +154,13 @@ const FutureInsight = ({
 				x: expense.timestamp,
 			};
 		});
-	}, [monthlyExpenses]);
+	}, [expenses, initialAmount]);
 
 	useEffect(() => {
 		if (!canvasRef.current) {
 			return;
 		}
 
-		console.info({ expensesData });
 		const chart = createNewChart({ data: expensesData.reverse() });
 
 		return () => {

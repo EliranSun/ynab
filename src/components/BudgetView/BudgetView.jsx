@@ -8,12 +8,13 @@ import { FutureInsight } from "../FutureInsight";
 const ONE_MONTH_MS = 1000 * 60 * 60 * 24 * 30;
 
 const BudgetView = () => {
+	const { expensesArray: expenses } = useContext(ExpensesContext);
 	const [hoveredCategoryId, setHoveredCategoryId] = useState(null);
 	const [budget, setBudget] = useState(getBudget());
 	const [date, setDate] = useState(
 		new Date(new Date().getTime() - ONE_MONTH_MS)
 	);
-	const { expenses } = useContext(ExpensesContext);
+
 	const categoriesWithAmounts = Categories.map((category) => {
 		let expensesInCategorySum = 0;
 		category.subCategories.forEach((subcategory) => {

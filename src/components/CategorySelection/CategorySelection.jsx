@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { aggregateTransactionsByName } from "../../utils";
 import { Transaction, TransactionList } from "./components";
 
 const CategorySelectionViewModes = {
@@ -6,11 +7,12 @@ const CategorySelectionViewModes = {
 	LIST: "LIST",
 };
 
-const CategorySelection = ({
-	aggregatedExpenses = [],
-	totalExpensesCount = 0,
-}) => {
+const CategorySelection = ({ expenses = [] }) => {
 	const [viewMode, setViewMode] = useState(CategorySelectionViewModes.SLIDES);
+	const aggregatedExpenses = useMemo(
+		() => aggregateTransactionsByName(expenses),
+		[expenses]
+	);
 	const firstUncategorizedTransactionIndex = aggregatedExpenses.findIndex(
 		(expense) => !expense.categoryId
 	);
@@ -34,7 +36,7 @@ const CategorySelection = ({
 		<div className="category-selection">
 			<h1>Organize (Transactions Category Selection)</h1>
 			<h4>Grouped Expenses count: {aggregatedExpenses.length}</h4>
-			<h4>Total Expenses count: {totalExpensesCount}</h4>
+			<h4>Total Expenses count: {expenses.length}</h4>
 			<div>
 				<fieldset>
 					<legend>Categories Selection View</legend>
@@ -44,7 +46,6 @@ const CategorySelection = ({
 							type="radio"
 							name="category-selection-view"
 							onClick={() => setViewMode(CategorySelectionViewModes.SLIDES)}
-							checked
 						/>
 						<label htmlFor="slides">
 							Slides (good for choosing category for transaction batches)
@@ -65,10 +66,7 @@ const CategorySelection = ({
 			</div>
 			<button
 				disabled={transactionIndex === 0}
-				onClick={() => {
-					console.info(aggregatedExpenses[transactionIndex - 1]);
-					setTransactionIndex(transactionIndex - 1);
-				}}
+				onClick={() => setTransactionIndex(transactionIndex - 1)}
 			>
 				Previous Transaction
 			</button>
@@ -77,10 +75,7 @@ const CategorySelection = ({
 				{transactionIndex + 1} / {aggregatedExpenses.length}{" "}
 			</span>
 			<button
-				onClick={() => {
-					console.info(aggregatedExpenses[transactionIndex + 1]);
-					setTransactionIndex(transactionIndex + 1);
-				}}
+				onClick={() => setTransactionIndex(transactionIndex + 1)}
 				disabled={transactionIndex === aggregatedExpenses.length + 1}
 			>
 				Next Transaction

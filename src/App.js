@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ExpensesContextProvider } from "./context";
 import {
 	PasteExpensesList,
@@ -22,7 +22,7 @@ function App() {
 
 	return (
 		<ExpensesContextProvider>
-			<nav class="menu">
+			<nav className="menu">
 				<span onClick={() => setPage(Pages.CATEGORY_SELECTION)}>
 					Transaction Category Selection |{" "}
 				</span>

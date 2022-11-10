@@ -9,14 +9,14 @@ const SelectTransactionSubcategory = ({
 	categories = [],
 	isListView = false,
 }) => {
-	const { changeExpenseCategoryByName } = useContext(ExpensesContext);
+	const { changeExpenseCategory } = useContext(ExpensesContext);
 
 	if (isListView) {
 		return (
 			<select
 				value={categoryId}
 				onChange={(e) => {
-					changeExpenseCategoryByName(transaction, e.target.value);
+					changeExpenseCategory(transaction.id, e.target.value);
 					onSelect(e.target.value);
 				}}
 			>
@@ -52,7 +52,7 @@ const SelectTransactionSubcategory = ({
 											: {}
 									}
 									onClick={() => {
-										changeExpenseCategoryByName(transaction, sub.id);
+										changeExpenseCategory(transaction.id, sub.id);
 										onSelect();
 									}}
 									className="subcategory"

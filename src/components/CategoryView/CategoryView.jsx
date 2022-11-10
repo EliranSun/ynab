@@ -3,7 +3,7 @@ import { ExpensesContext } from "../../context/";
 import { Categories } from "../../constants";
 
 const CategoryView = ({ categoryId = 1 }) => {
-	const { expenses, changeExpenseCategoryByName } = useContext(ExpensesContext);
+	const { expensesArray: expenses } = useContext(ExpensesContext);
 
 	const category = useMemo(() => {
 		return Categories.find((category) => {

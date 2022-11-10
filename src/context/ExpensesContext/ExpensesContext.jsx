@@ -2,8 +2,9 @@ import { useState, createContext, useMemo, useEffect } from "react";
 import { noop } from "lodash";
 import {
 	getExpenses,
-	setExpenses as setStorageExpenses,
-	addTestDoc,
+	// arrageExpensesByMonth,
+	updateExpense,
+	addExpenses,
 } from "../../utils";
 
 export const ExpensesContext = createContext({
@@ -12,106 +13,81 @@ export const ExpensesContext = createContext({
 });
 
 export const ExpensesContextProvider = ({ children }) => {
-	const [expenses, setExpenses] = useState(getExpenses());
-	const [error, setError] = useState(null);
+	const [expenses, setExpenses] = useState({});
+	const expensesArray = useMemo(() => Object.values(expenses), [expenses]);
 
 	useEffect(() => {
-		addTestDoc();
+		(async () => {
+			const expenses = await getExpenses();
+			setExpenses(expenses);
+		})();
 	}, []);
 
-	const memoMonthlyExpenses = useMemo(() => {
-		const monthlyExpenses = {};
-		expenses.forEach((expense) => {
-			const { timestamp } = expense;
-			const date = new Date(timestamp);
-			const month = date.toLocaleString("default", { month: "long" });
-			const year = date.getFullYear();
-			const key = `${month}-${year}`;
-			if (!monthlyExpenses[key]) {
-				monthlyExpenses[key] = [expense];
-			} else {
-				monthlyExpenses[key].push(expense);
-			}
-		});
-
-		return monthlyExpenses;
-	}, [expenses]);
-
 	const setExpenseAsRecurring = (expenseId, isRecurring) => {
-		const newExpenses = expenses.map((expense) => {
-			if (expense.id === expenseId) {
-				return { ...expense, isRecurring };
-			}
-			return expense;
+		updateExpense(expenseId, { isRecurring });
+		setExpenses({
+			...expenses,
+			[expenseId]: {
+				...expenses[expenseId],
+				isRecurring,
+			},
 		});
-		setExpenses(newExpenses);
-		setStorageExpenses(newExpenses);
 	};
 
 	const setExpenseAsIncome = (expenseId, isIncome) => {
-		const newExpenses = expenses.map((expense) => {
-			if (expense.id === expenseId) {
-				return { ...expense, isIncome };
-			}
-			return expense;
-		});
-		setExpenses(newExpenses);
-		setStorageExpenses(newExpenses);
-	};
-
-	const changeExpenseCategoryByName = (expense, categoryId) => {
-		setExpenses((prevExpenses) => {
-			const newExpenses = prevExpenses.map((previousExpense) => {
-				if (expense.isThirdParty) {
-					if (expense.id === previousExpense.id) {
-						return {
-							...previousExpense,
-							categoryId,
-						};
-					}
-
-					return previousExpense;
-				}
-
-				if (expense.name === previousExpense.name) {
-					return {
-						...previousExpense,
-						categoryId,
-					};
-				}
-
-				return previousExpense;
-			});
-
-			setStorageExpenses(newExpenses);
-			return newExpenses;
+		updateExpense(expenseId, { isIncome });
+		setExpenses({
+			...expenses,
+			[expenseId]: {
+				...expenses[expenseId],
+				isIncome,
+			},
 		});
 	};
 
 	const setExpenseNote = (expenseId, note) => {
-		const newExpenses = expenses.map((expense) => {
-			if (expense.id === expenseId) {
-				return { ...expense, note };
-			}
-			return expense;
+		updateExpense(expenseId, { note });
+		setExpenses({
+			...expenses,
+			[expenseId]: {
+				...expenses[expenseId],
+				note,
+			},
 		});
-		setExpenses(newExpenses);
-		setStorageExpenses(newExpenses);
+	};
+
+	const changeExpenseCategory = (expenseId, categoryId) => {
+		updateExpense(expenseId, { categoryId });
+		setExpenses({
+			...expenses,
+			[expenseId]: {
+				...expenses[expenseId],
+				categoryId,
+			},
+		});
 	};
 
 	return (
 		<ExpensesContext.Provider
 			value={{
 				expenses,
-				monthlyExpenses: memoMonthlyExpenses,
 				setExpenseAsRecurring,
 				setExpenseAsIncome,
-				changeExpenseCategoryByName,
+				changeExpenseCategory,
 				setExpenseNote,
+				expensesArray,
+				setExpenses: (newExpenses = []) => {
+					const expensesObject = newExpenses.reduce(
+						(acc, curr) => (acc[curr.id] = curr),
+						{}
+					);
+
+					addExpenses(newExpenses);
+					setExpenses(expensesObject);
+				},
 			}}
 		>
 			{children}
-			<span className="error">{error}</span>
 		</ExpensesContext.Provider>
 	);
 };

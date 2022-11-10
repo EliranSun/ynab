@@ -112,7 +112,7 @@ const Expense = ({
 };
 const ExpenseView = ({ onCategoryClick = noop }) => {
 	const {
-		expenses,
+		expensesArray: expenses,
 		setExpenseAsRecurring,
 		setExpenseAsIncome,
 		setExpenseNote,
