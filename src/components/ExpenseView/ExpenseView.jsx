@@ -133,6 +133,27 @@ const ExpenseView = ({ onCategoryClick = noop }) => {
 		);
 	}, [expenses, timestamp, sort]);
 
+	const renderUnder100Sum = () => {
+		let count = 0;
+		const totalAmount = orderedExpenses
+			.reduce((acc, curr) => {
+				if (curr.amount < 100) {
+					count++;
+					return acc + curr.amount;
+				}
+				return acc;
+			}, 0)
+			.toFixed(2);
+
+		return (
+			<>
+				<span>{totalAmount} NIS </span>
+				<span>({count} Items)</span>
+				<div>TODO: a pie chart here</div>
+			</>
+		);
+	};
+
 	return (
 		<div>
 			<h1>Understand (Expense View)</h1>
@@ -194,10 +215,7 @@ const ExpenseView = ({ onCategoryClick = noop }) => {
 				</h3>
 				<h3>
 					Sum of all expenses under 100:{" "}
-					{orderedExpenses.reduce(
-						(acc, curr) => acc + (curr.amount < 100 ? curr.amount : 0),
-						0
-					)}
+					{renderUnder100Sum(orderedExpenses, sum, setSum)}
 				</h3>
 				{orderedExpenses.map((expense) => (
 					<Expense
