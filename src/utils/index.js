@@ -6,8 +6,6 @@ export const isThirdPartyTransaction = (name) => {
 
 export const aggregateTransactionsByName = (transactions) => {
 	const aggregatedTransactions = [];
-
-	debugger;
 	for (const transaction of transactions) {
 		const { name, amount } = transaction;
 
@@ -48,25 +46,6 @@ export const isExpenseInMonth = (expenseTimestamp, timestamp) => {
 
 	return expenseMonth === month && expenseYear === year;
 };
-
-// export const arrageExpensesByMonth = (expenses) => {
-// 	const monthlyExpenses = {};
-// 	expenses.forEach((expense) => {
-// 		const { timestamp } = expense;
-// 		const date = new Date(timestamp);
-// 		const month = date.toLocaleString("default", { month: "long" });
-// 		const year = date.getFullYear();
-// 		const key = `${month}-${year}`;
-
-// 		if (!monthlyExpenses[key]) {
-// 			monthlyExpenses[key] = [expense];
-// 		} else {
-// 			monthlyExpenses[key].push(expense);
-// 		}
-// 	});
-
-// 	return monthlyExpenses;
-// };
 
 export * from "./localStorage";
 export * from "./firebase";

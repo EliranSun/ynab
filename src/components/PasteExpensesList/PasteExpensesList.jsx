@@ -1,7 +1,7 @@
-import { useRef, useContext } from "react";
-import CategorySelection from "./../CategorySelection/CategorySelection";
+import { useState, useRef, useContext } from "react";
 import { Expense } from "../../models";
 import { ExpensesContext } from "../../context";
+import { CategorySelection } from "../CategorySelection";
 
 const isExistingExpense = (newExpense, expenses) => {
 	const expenseFound = expenses.find((expense) => {
@@ -18,6 +18,7 @@ const isExistingExpense = (newExpense, expenses) => {
 const PasteExpensesList = () => {
 	const textAreaRef = useRef(null);
 	const { expensesArray: expenses, setExpenses } = useContext(ExpensesContext);
+	const [message, setMessage] = useState("");
 
 	return (
 		<div>
@@ -64,22 +65,28 @@ const PasteExpensesList = () => {
 						});
 
 					if (newExpenses.length === 0) {
-						console.info("No new expenses found in this paste");
+						setMessage("No new expenses found in this paste");
 						return;
-					} else {
-						console.info(
-							"Found new expenses in this paste",
-							newExpenses.length
-						);
 					}
 
+					// setParsedExpenses(newExpenses);
 					setExpenses([...expenses, ...newExpenses]);
 				}}
 			>
 				Parse
 			</button>
 			<hr />
-			<CategorySelection expenses={expenses} />
+			{/* <ExpenseConflictResolver
+				prevExpenses={expenses}
+				newExpenses={parsedExpenses}
+				onResolve={(resolvedExpenses) => {
+					setExpenses(resolvedExpenses);
+				}}
+			/> */}
+			<h2>{message}</h2>
+			<CategorySelection
+				expenses={expenses.filter((expense) => !Boolean(expense.categoryId))}
+			/>
 		</div>
 	);
 };

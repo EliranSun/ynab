@@ -1,11 +1,6 @@
 import { useState, createContext, useMemo, useEffect } from "react";
 import { noop } from "lodash";
-import {
-	getExpenses,
-	// arrageExpensesByMonth,
-	updateExpense,
-	addExpenses,
-} from "../../utils";
+import { getExpenses, updateExpense, addExpenses } from "../../utils";
 
 export const ExpensesContext = createContext({
 	expenses: {},
@@ -14,7 +9,10 @@ export const ExpensesContext = createContext({
 
 export const ExpensesContextProvider = ({ children }) => {
 	const [expenses, setExpenses] = useState({});
-	const expensesArray = useMemo(() => Object.values(expenses), [expenses]);
+	const expensesArray = useMemo(() => {
+		debugger;
+		return Object.values(expenses);
+	}, [expenses]);
 
 	useEffect(() => {
 		(async () => {
@@ -96,10 +94,10 @@ export const ExpensesContextProvider = ({ children }) => {
 				setExpenseNote,
 				expensesArray,
 				setExpenses: (newExpenses = []) => {
-					const expensesObject = newExpenses.reduce(
-						(acc, curr) => (acc[curr.id] = curr),
-						{}
-					);
+					const expensesObject = {};
+					newExpenses.forEach((expense) => {
+						expensesObject[expense.id] = expense;
+					});
 
 					addExpenses(newExpenses);
 					setExpenses(expensesObject);
