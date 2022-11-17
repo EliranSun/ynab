@@ -137,7 +137,28 @@ const ExpenseView = ({ onCategoryClick = noop }) => {
 		let count = 0;
 		const totalAmount = orderedExpenses
 			.reduce((acc, curr) => {
-				if (curr.amount < 100) {
+				if (curr.amount < 100 && !curr.isIncome) {
+					count++;
+					return acc + curr.amount;
+				}
+				return acc;
+			}, 0)
+			.toFixed(2);
+
+		return (
+			<>
+				<span>{totalAmount} NIS </span>
+				<span>({count} Items)</span>
+				<div>TODO: a pie chart here</div>
+			</>
+		);
+	};
+
+	const renderAbove100Sum = () => {
+		let count = 0;
+		const totalAmount = orderedExpenses
+			.reduce((acc, curr) => {
+				if (curr.amount > 100 && !curr.isIncome) {
 					count++;
 					return acc + curr.amount;
 				}
@@ -212,6 +233,10 @@ const ExpenseView = ({ onCategoryClick = noop }) => {
 				</h2>
 				<h3 className="float top right">
 					Subtotal: {Object.values(sum).reduce((acc, curr) => acc + curr, 0)}
+				</h3>
+				<h3>
+					Sum of all expenses above 100:{" "}
+					{renderAbove100Sum(orderedExpenses, sum, setSum)}
 				</h3>
 				<h3>
 					Sum of all expenses under 100:{" "}

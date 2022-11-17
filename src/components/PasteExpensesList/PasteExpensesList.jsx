@@ -18,6 +18,7 @@ const isExistingExpense = (newExpense, expenses) => {
 const PasteExpensesList = () => {
 	const textAreaRef = useRef(null);
 	const { expensesArray: expenses, setExpenses } = useContext(ExpensesContext);
+	const [isUncategorizedView, setIsUncategorizedView] = useState(true);
 	const [message, setMessage] = useState("");
 
 	return (
@@ -84,8 +85,17 @@ const PasteExpensesList = () => {
 				}}
 			/> */}
 			<h2>{message}</h2>
+
+			<div>
+				<button onClick={() => setIsUncategorizedView(!isUncategorizedView)}>
+					{isUncategorizedView ? "Show All" : "Show Uncategorized"}
+				</button>
+			</div>
 			<CategorySelection
-				expenses={expenses.filter((expense) => !Boolean(expense.categoryId))}
+				isUncategorizedView={isUncategorizedView}
+				expenses={expenses.filter((expense) =>
+					isUncategorizedView ? !Boolean(expense.categoryId) : true
+				)}
 			/>
 		</div>
 	);

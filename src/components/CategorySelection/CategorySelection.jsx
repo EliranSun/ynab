@@ -7,15 +7,20 @@ const CategorySelectionViewModes = {
 	LIST: "LIST",
 };
 
-const CategorySelection = ({ expenses = [] }) => {
+const CategorySelection = ({ expenses = [], isUncategorizedView = true }) => {
 	const [viewMode, setViewMode] = useState(CategorySelectionViewModes.SLIDES);
 	const aggregatedExpenses = useMemo(
 		() => aggregateTransactionsByName(expenses),
 		[expenses]
 	);
-	const firstUncategorizedTransactionIndex = aggregatedExpenses.findIndex(
-		(expense) => !expense.categoryId
+	const firstUncategorizedTransactionIndex = useMemo(
+		() =>
+			aggregatedExpenses.findIndex((expense) =>
+				isUncategorizedView ? !expense.categoryId : true
+			),
+		[aggregatedExpenses, isUncategorizedView]
 	);
+
 	const [transactionIndex, setTransactionIndex] = useState(
 		firstUncategorizedTransactionIndex === -1
 			? 0
@@ -96,7 +101,10 @@ const CategorySelection = ({ expenses = [] }) => {
 							transaction={aggregatedExpenses[transactionIndex]}
 						/>
 					) : (
-						<TransactionList transactions={aggregatedExpenses} />
+						<TransactionList
+							transactions={aggregatedExpenses}
+							isUncategorizedView={isUncategorizedView}
+						/>
 					)}
 				</tbody>
 			</table>

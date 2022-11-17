@@ -10,7 +10,6 @@ export const ExpensesContext = createContext({
 export const ExpensesContextProvider = ({ children }) => {
 	const [expenses, setExpenses] = useState({});
 	const expensesArray = useMemo(() => {
-		debugger;
 		return Object.values(expenses);
 	}, [expenses]);
 

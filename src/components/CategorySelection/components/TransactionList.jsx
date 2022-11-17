@@ -1,7 +1,11 @@
 import Transaction from "./Transaction";
 import { noop } from "lodash";
 
-const TransactionList = ({ transactions = [], onSelect = noop }) => {
+const TransactionList = ({
+	transactions = [],
+	isUncategorizedView = true,
+	onSelect = noop,
+}) => {
 	return (
 		<div>
 			{transactions.map((expense) => (
