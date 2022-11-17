@@ -75,6 +75,8 @@ const BudgetView = () => {
 		setBudget(budget);
 	}, [budget]);
 
+	// FIXME: income category does not count as income - have to mark it in expense view
+	// FIXME: null category selection when reaching end of expenses from paste
 	return (
 		<div>
 			<h1>Plan (Budget View)</h1>
@@ -93,7 +95,14 @@ const BudgetView = () => {
 					Next Month
 				</button>
 			</div>
-			<FutureInsight budget={budget} initialAmount={-3880.05} />
+			<FutureInsight
+				budget={budget}
+				initialAmount={
+					// TODO: support date for this, so it will be your grounding point
+					// ...Or go back until the openning of the bank account
+					-1282.03 // From around 16/09/2022
+				}
+			/>
 			<div>
 				<input type="number" placeholder="Started the month with" />
 			</div>

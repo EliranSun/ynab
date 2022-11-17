@@ -5,11 +5,8 @@ import { ExpensesContext } from "../../context";
 
 const IncomeIds = [81, 82];
 let singleton = null;
-const createNewChart = ({ data = {} }) => {
-	if (Object.keys(data).length === 0) {
-		return;
-	}
 
+const createNewChart = ({ data = [] }) => {
 	if (singleton) {
 		console.info("returning singleton", singleton);
 		return singleton;
@@ -20,22 +17,18 @@ const createNewChart = ({ data = {} }) => {
 	const ctx = document.getElementById("myChart").getContext("2d");
 	let myChart = new Chart(ctx, {
 		type: "line",
-		height: "100",
 		data: {
-			labels: data.map(
-				(expense) =>
-					// new Date(expense.timestamp).toLocaleDateString("en-gb", {
-					//   month: "short",
-					//   year: "numeric",
-					//   day: "numeric",
-					// })
-					expense.timestamp
-			),
+			labels: data.map((expense) => {
+				return new Date(expense.date).toLocaleString("en-gb", {
+					day: "numeric",
+					month: "short",
+				});
+			}),
 			// labels: data.map((expense) => expense.name),
 			datasets: [
 				{
 					label: "Income + Expenses",
-					data,
+					data: data,
 					backgroundColor: [
 						"rgba(255, 99, 132, 0.2)",
 						"rgba(54, 162, 235, 0.2)",
@@ -58,31 +51,31 @@ const createNewChart = ({ data = {} }) => {
 		},
 		options: {
 			maintainAspectRatio: false,
-			scales: {
-				min: data[0].timestamp,
-				max: data[data.length - 1].timestamp,
-				x: {
-					type: "time",
-					time: {
-						unit: "month",
-					},
-					//   offset: true,
-					//   ticks: {
-					//     major: {
-					//       enabled: true,
-					//     },
-					//     fontStyle: (context) => (context.tick.major ? "bold" : undefined),
-					//     source: "data",
-					//     maxRotation: 0,
-					//     autoSkip: true,
-					//     autoSkipPadding: 75,
-					//     sampleSize: 100,
-					//   },
-				},
-				y: {
-					type: "linear",
-				},
-			},
+			// scales: {
+			// 	min: data[0].timestamp,
+			// 	max: data[data.length - 1].timestamp,
+			// 	x: {
+			// 		type: "time",
+			// 		time: {
+			// 			unit: "month",
+			// 		},
+			// 		//   offset: true,
+			// 		//   ticks: {
+			// 		//     major: {
+			// 		//       enabled: true,
+			// 		//     },
+			// 		//     fontStyle: (context) => (context.tick.major ? "bold" : undefined),
+			// 		//     source: "data",
+			// 		//     maxRotation: 0,
+			// 		//     autoSkip: true,
+			// 		//     autoSkipPadding: 75,
+			// 		//     sampleSize: 100,
+			// 		//   },
+			// 	},
+			// 	y: {
+			// 		type: "linear",
+			// 	},
+			// },
 			plugins: {
 				tooltip: {
 					callbacks: {
@@ -123,6 +116,65 @@ const createNewChart = ({ data = {} }) => {
 	return myChart;
 };
 
+const calc = (initAmount, expenses) => {
+	let tempAmount = initAmount + 0;
+	const data = [];
+
+	for (let i = 0; i < expenses.length; i++) {
+		const expense = expenses[i];
+		tempAmount = expense.isIncome
+			? tempAmount + expense.amount
+			: tempAmount - expense.amount;
+		data.push({
+			name: expense.name,
+			amount: expense.amount,
+			date: expense.timestamp,
+			y: tempAmount,
+			x: expense.timestamp,
+		});
+	}
+	// return expenses
+	// 	.sort((a, b) => {
+	// 		return a.date - b.date;
+	// 	})
+	// 	.slice(0, 10)
+	// 	.map((expense) => {
+	// 		// TODO: recurring expenses
+	// 		if (expense.isIncome) {
+	// 			// initAmount += expense.amount;
+	// 			debugger;
+
+	// 			const data = {
+	// 				name: expense.name,
+	// 				amount: expense.amount,
+	// 				date: expense.timestamp,
+	// 				y: tempAmount + expense.amount,
+	// 				x: expense.timestamp,
+	// 			};
+
+	// 			tempAmount += expense.amount;
+	// 			// return data;
+	// 			return tempAmount;
+	// 		}
+
+	// 		// initAmount -= expense.amount;
+	// 		debugger;
+	// 		const data = {
+	// 			name: expense.name,
+	// 			amount: expense.amount,
+	// 			date: expense.timestamp,
+	// 			y: tempAmount - expense.amount,
+	// 			x: expense.timestamp,
+	// 		};
+
+	// 		tempAmount -= expense.amount;
+	// 		// return data;
+	// 		return tempAmount;
+	// 	});
+
+	return data;
+};
+
 const FutureInsight = ({
 	budget = {},
 	initialAmount = 0,
@@ -130,38 +182,23 @@ const FutureInsight = ({
 }) => {
 	const canvasRef = useRef(null);
 	const { expensesArray: expenses } = useContext(ExpensesContext);
-	const expensesData = useMemo(() => {
-		let startingPoint = initialAmount;
-		return expenses.map((expense) => {
-			// TODO: recurring expenses
-			if (expense.isIncome) {
-				startingPoint += expense.amount;
-				return {
-					name: expense.name,
-					amount: expense.amount,
-					date: expense.timestamp,
-					y: startingPoint + expense.amount,
-					x: expense.timestamp,
-				};
-			}
+	const expensesData = useMemo(
+		() =>
+			calc(
+				initialAmount,
+				expenses.sort((a, b) => a.timestamp - b.timestamp)
+			),
+		[expenses, initialAmount]
+	);
 
-			startingPoint -= expense.amount;
-			return {
-				name: expense.name,
-				amount: expense.amount,
-				date: expense.timestamp,
-				y: startingPoint - expense.amount,
-				x: expense.timestamp,
-			};
-		});
-	}, [expenses, initialAmount]);
+	console.log({ expensesData });
 
 	useEffect(() => {
 		if (!canvasRef.current) {
 			return;
 		}
 
-		const chart = createNewChart({ data: expensesData.reverse() });
+		const chart = createNewChart({ data: expensesData });
 
 		return () => {
 			chart && chart.destroy();
