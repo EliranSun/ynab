@@ -62,9 +62,6 @@ const CategoryView = ({ categoryId = 1 }) => {
 
 							const totalInPreviousMonth = expenses.reduce((total, expense) => {
 								const isInPreviousMonth = isPreviousMonth(expense.timestamp);
-								if (isInPreviousMonth) {
-									debugger;
-								}
 								if (
 									subcategory.id === expense.categoryId &&
 									isInPreviousMonth
@@ -84,11 +81,12 @@ const CategoryView = ({ categoryId = 1 }) => {
 									<span>{subcategory.name}</span>:{" "}
 									<div>
 										<b color={comparison.isBigger ? "tomato" : "green"}>
-											{totalAmountInSubcategoryThisMonth} NIS
+											{totalAmountInSubcategoryThisMonth.toFixed(2)} NIS
 										</b>{" "}
 										{comparison.character}
 										<div>
-											{totalInPreviousMonth} NIS ({previousMonthString})
+											{totalInPreviousMonth.toFixed(2)} NIS (
+											{previousMonthString})
 										</div>
 									</div>
 								</h3>
