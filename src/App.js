@@ -8,6 +8,7 @@ import {
 } from "./components";
 
 import "./App.css";
+import { DateChanger } from "./components/DateChanger";
 
 const Pages = {
 	CATEGORY_SELECTION: "CATEGORY_SELECTION",
@@ -34,21 +35,30 @@ function App() {
 			</nav>
 			<div className="layout">
 				<ExpensesContextProvider>
+					{page === Pages.CATEGORY_SELECTION && <PasteExpensesList />}
 					<BudgetContextProvider>
-						{page === Pages.CATEGORY_SELECTION && <PasteExpensesList />}
-						{page === Pages.BUDGET_VIEW && <BudgetView />}
-						{page === Pages.CATEGORY_VIEW && (
-							<CategoryView categoryId={categoryId} />
-						)}
-						{page === Pages.EXPENSE_VIEW && (
-							<ExpenseView
-								onCategoryClick={(categoryId) => {
-									setCategoryId(categoryId);
-									setPage(Pages.CATEGORY_VIEW);
-								}}
-							/>
+						{page === Pages.BUDGET_VIEW && (
+							<DateChanger>
+								{({ isPreviousMonth, currentTimestamp }) => (
+									<BudgetView
+										isPreviousMonth={isPreviousMonth}
+										timestamp={currentTimestamp}
+									/>
+								)}
+							</DateChanger>
 						)}
 					</BudgetContextProvider>
+					{page === Pages.CATEGORY_VIEW && (
+						<CategoryView categoryId={categoryId} />
+					)}
+					{page === Pages.EXPENSE_VIEW && (
+						<ExpenseView
+							onCategoryClick={(categoryId) => {
+								setCategoryId(categoryId);
+								setPage(Pages.CATEGORY_VIEW);
+							}}
+						/>
+					)}
 				</ExpensesContextProvider>
 			</div>
 		</>

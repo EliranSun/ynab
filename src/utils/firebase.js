@@ -3,6 +3,7 @@ import { getAnalytics } from "firebase/analytics";
 import {
 	getFirestore,
 	doc,
+	setDoc,
 	updateDoc,
 	getDocs,
 	collection,
@@ -48,21 +49,6 @@ export const getExpenses = async () => {
 	}
 };
 
-export const getBudget = async () => {
-	try {
-		const budget = [];
-		const querySnapshot = await getDocs(collection(db, BUDGET_COLLECTION));
-		querySnapshot.forEach((doc) => {
-			budget.push(doc.data());
-		});
-
-		return budget;
-	} catch (error) {
-		console.error("Error getting document:", error);
-		return [];
-	}
-};
-
 export const updateExpense = async (expenseId, props) => {
 	const expensesRef = doc(db, EXPENSES_COLLECTION, expenseId);
 	return await updateDoc(expensesRef, props);
@@ -77,4 +63,45 @@ export const addExpenses = async (expenses) => {
 	});
 
 	await batch.commit();
+};
+
+export const getBudget = async () => {
+	try {
+		let budget = {};
+		const querySnapshot = await getDocs(collection(db, BUDGET_COLLECTION));
+		querySnapshot.forEach((doc) => {
+			budget = {
+				...budget,
+				[doc.id]: doc.data(),
+			};
+		});
+
+		return budget;
+	} catch (error) {
+		console.error("Error getting document:", error);
+		return [];
+	}
+};
+
+export const addBudget = async ({ dateKey, categoryId, amount }) => {
+	console.info("Adding budget to DB", { dateKey, categoryId, amount });
+	const budget = await getBudget();
+	const isExist = budget[dateKey];
+
+	if (isExist) {
+		const docRef = doc(db, BUDGET_COLLECTION, String(dateKey));
+		return await updateDoc(docRef, {
+			[String(categoryId)]: Number(amount),
+		});
+	}
+
+	const docRef = doc(db, BUDGET_COLLECTION, String(dateKey));
+	return await setDoc(docRef, {
+		[String(categoryId)]: Number(amount),
+	});
+};
+
+export const updateBudget = async (budgetId, props) => {
+	const budgetRef = doc(db, BUDGET_COLLECTION, budgetId);
+	return await updateDoc(budgetRef, props);
 };

@@ -12,6 +12,30 @@ export const ExpensesContextProvider = ({ children }) => {
 	const expensesArray = useMemo(() => {
 		return Object.values(expenses);
 	}, [expenses]);
+	const expensesPerMonthPerCategory = useMemo(() => {
+		const expensesPerMonthPerCategory = {};
+
+		expensesArray.forEach((expense) => {
+			const { categoryId } = expense;
+			// TODO: util
+			const dateKey = new Date(expense.timestamp).toLocaleString("he-IL", {
+				month: "numeric",
+				year: "numeric",
+			});
+
+			if (!expensesPerMonthPerCategory[categoryId]) {
+				expensesPerMonthPerCategory[categoryId] = {
+					[dateKey]: expense.amount,
+				};
+			} else if (!expensesPerMonthPerCategory[categoryId][dateKey]) {
+				expensesPerMonthPerCategory[categoryId][dateKey] = expense.amount;
+			} else {
+				expensesPerMonthPerCategory[categoryId][dateKey] += expense.amount;
+			}
+		});
+
+		return expensesPerMonthPerCategory;
+	}, [expensesArray]);
 
 	useEffect(() => {
 		(async () => {
@@ -87,6 +111,7 @@ export const ExpensesContextProvider = ({ children }) => {
 		<ExpensesContext.Provider
 			value={{
 				expenses,
+				expensesPerMonthPerCategory,
 				setExpenseAsRecurring,
 				setExpenseAsIncome,
 				changeExpenseCategory,

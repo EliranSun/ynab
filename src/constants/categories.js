@@ -136,6 +136,8 @@ const Categories = [
 				icon: "💊",
 			},
 			{
+				// TODO: elliminate these categories. they hide a lot of things and
+				// is a recipe for leaks/untracked expenses
 				id: 46,
 				name: "Other",
 				icon: "․․․",
@@ -235,6 +237,8 @@ const Categories = [
 				icon: "💰",
 			},
 			{
+				// TODO: elliminate these categories. they hide a lot of things and
+				// is a recipe for leaks/untracked expenses
 				id: 82,
 				name: "Other",
 				icon: "💵",

@@ -6,7 +6,7 @@ import { ExpensesContext } from "../../context";
 const IncomeIds = [81, 82];
 let singleton = null;
 
-const createNewChart = ({ data = [] }) => {
+const createNewChart = ({ data = [], startDate }) => {
 	if (singleton) {
 		console.info("returning singleton", singleton);
 		return singleton;
@@ -51,6 +51,19 @@ const createNewChart = ({ data = [] }) => {
 		},
 		options: {
 			maintainAspectRatio: false,
+			scales: {
+				x: {
+					// min: "2021-11-07 00:00:00",
+					min: startDate,
+					type: "time",
+					time: {
+						unit: "month",
+					},
+
+					// type: "logarithmic",
+					bounds: "ticks",
+				},
+			},
 			// scales: {
 			// 	min: data[0].timestamp,
 			// 	max: data[data.length - 1].timestamp,
@@ -133,52 +146,17 @@ const calc = (initAmount, expenses) => {
 			x: expense.timestamp,
 		});
 	}
-	// return expenses
-	// 	.sort((a, b) => {
-	// 		return a.date - b.date;
-	// 	})
-	// 	.slice(0, 10)
-	// 	.map((expense) => {
-	// 		// TODO: recurring expenses
-	// 		if (expense.isIncome) {
-	// 			// initAmount += expense.amount;
-	// 			debugger;
-
-	// 			const data = {
-	// 				name: expense.name,
-	// 				amount: expense.amount,
-	// 				date: expense.timestamp,
-	// 				y: tempAmount + expense.amount,
-	// 				x: expense.timestamp,
-	// 			};
-
-	// 			tempAmount += expense.amount;
-	// 			// return data;
-	// 			return tempAmount;
-	// 		}
-
-	// 		// initAmount -= expense.amount;
-	// 		debugger;
-	// 		const data = {
-	// 			name: expense.name,
-	// 			amount: expense.amount,
-	// 			date: expense.timestamp,
-	// 			y: tempAmount - expense.amount,
-	// 			x: expense.timestamp,
-	// 		};
-
-	// 		tempAmount -= expense.amount;
-	// 		// return data;
-	// 		return tempAmount;
-	// 	});
 
 	return data;
 };
+
+const ONE_MONTH_MS = 1000 * 60 * 60 * 24 * 30;
 
 const FutureInsight = ({
 	budget = {},
 	initialAmount = 0,
 	lookaheadInMonths = 10,
+	startDate = new Date(new Date().getTime() - ONE_MONTH_MS * 3),
 }) => {
 	const canvasRef = useRef(null);
 	const { expensesArray: expenses } = useContext(ExpensesContext);
@@ -191,14 +169,12 @@ const FutureInsight = ({
 		[expenses, initialAmount]
 	);
 
-	console.log({ expensesData });
-
 	useEffect(() => {
 		if (!canvasRef.current) {
 			return;
 		}
 
-		const chart = createNewChart({ data: expensesData });
+		const chart = createNewChart({ data: expensesData, startDate });
 
 		return () => {
 			chart && chart.destroy();

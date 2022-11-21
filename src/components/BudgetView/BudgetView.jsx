@@ -1,18 +1,14 @@
-import { useState, useContext, useEffect } from "react";
-import { orderBy } from "lodash";
+import { useState, useContext } from "react";
+import { orderBy, noop } from "lodash";
 import { ExpensesContext, BudgetContext } from "./../../context";
 import { Categories } from "../../constants";
 import { FutureInsight } from "../FutureInsight";
 
-const ONE_MONTH_MS = 1000 * 60 * 60 * 24 * 30;
-
-const BudgetView = () => {
-	const { expensesArray: expenses } = useContext(ExpensesContext);
+const BudgetView = ({ timestamp, isPreviousMonth = noop }) => {
+	const { expensesArray: expenses, expensesPerMonthPerCategory } =
+		useContext(ExpensesContext);
 	const { setBudget, budget } = useContext(BudgetContext);
 	const [hoveredCategoryId, setHoveredCategoryId] = useState(null);
-	const [date, setDate] = useState(
-		new Date(new Date().getTime() - ONE_MONTH_MS)
-	);
 
 	const categoriesWithAmounts = Categories.map((category) => {
 		let expensesInCategorySum = 0;
@@ -23,6 +19,7 @@ const BudgetView = () => {
 			});
 
 			const thisMonthExpenses = expensesInCategory.filter((expense) => {
+				const date = new Date(timestamp);
 				const expenseDate = new Date(expense.timestamp);
 				if (expense.isRecurring) {
 					return expenseDate.getFullYear() === date.getFullYear();
@@ -71,30 +68,47 @@ const BudgetView = () => {
 
 	const budgetBottomLine = budgetIncome - budgetExpenses;
 
-	useEffect(() => {
-		setBudget(budget);
-	}, [budget]);
+	const handleBudgetChange = (value, subcategoryId, date) => {
+		setBudget(value, subcategoryId, date);
+	};
 
+	const renderCategories = () => {
+		/* TODO: category model? will make things simpler here, but did complicated you last time */
+		return categoriesWithAmounts.map((category) => (
+			<td>
+				<h2>{category.name}</h2>
+				<h3>Total: {category.totalAmount} NIS</h3>
+				<h3>
+					Budget:{" "}
+					{category.subCategories.reduce((acc, curr) => {
+						if (!budget[curr.id]?.amount) return acc;
+						return acc + Number(budget[curr.id]?.amount);
+					}, 0)}{" "}
+					NIS
+				</h3>
+			</td>
+		));
+	};
+
+	const getAverageAmount = (id) => {
+		if (!expensesPerMonthPerCategory[id]) return 0;
+
+		return (
+			Object.values(expensesPerMonthPerCategory[id]).reduce(
+				(acc, curr) => acc + curr,
+				0
+			) / Object.values(expensesPerMonthPerCategory[id]).length
+		);
+	};
+
+	// TODO: break into smaller components
 	// FIXME: income category does not count as income - have to mark it in expense view
 	// FIXME: null category selection when reaching end of expenses from paste
+	// TODO: auto recognition of income as income
+	// TODO: suggest categorization based on previous expenses
 	return (
 		<div>
 			<h1>Plan (Budget View)</h1>
-			<div>
-				<button
-					onClick={() => setDate(new Date(date.getTime() - ONE_MONTH_MS))}
-				>
-					Previous Month
-				</button>
-				Showing{" "}
-				{date.toLocaleString("default", { month: "long", year: "numeric" })}
-				<button
-					onClick={() => setDate(new Date(date.getTime() + ONE_MONTH_MS))}
-					disabled={date.getMonth() + 1 > new Date().getMonth()}
-				>
-					Next Month
-				</button>
-			</div>
 			<FutureInsight
 				budget={budget}
 				initialAmount={
@@ -142,26 +156,16 @@ const BudgetView = () => {
 			</table>
 			<table>
 				<thead>
-					<tr>
-						{/* TODO: category model? will make things simpler here, but did complicated you last time */}
-						{categoriesWithAmounts.map((category) => (
-							<td>
-								<h2>{category.name}</h2>
-								<h3>Total: {category.totalAmount} NIS</h3>
-								<h3>
-									Budget:{" "}
-									{category.subCategories.reduce((acc, curr) => {
-										if (!budget[curr.id]?.amount) return acc;
-										return acc + Number(budget[curr.id]?.amount);
-									}, 0)}{" "}
-									NIS
-								</h3>
-							</td>
-						))}
-					</tr>
+					<tr>{renderCategories()}</tr>
 				</thead>
 				<tbody>
 					{Categories.map((category) => {
+						const dateKey = new Date(timestamp).toLocaleString("he-IL", {
+							month: "numeric",
+							year: "numeric",
+						});
+
+						console.debug({ budget, dateKey });
 						return (
 							<>
 								<td>
@@ -174,6 +178,7 @@ const BudgetView = () => {
 										});
 										const thisMonthExpenses = expensesInCategory.filter(
 											(expense) => {
+												const date = new Date(timestamp);
 												const expenseDate = new Date(expense.timestamp);
 												if (expense.isRecurring) {
 													return (
@@ -194,7 +199,22 @@ const BudgetView = () => {
 											0
 										);
 
-										const averageAmount = 0;
+										const totalInPreviousMonth = expenses.reduce(
+											(total, expense) => {
+												if (
+													subcategory.id === expense.categoryId &&
+													isPreviousMonth(expense.timestamp)
+												) {
+													return total + expense.amount;
+												}
+												return total;
+											},
+											0
+										);
+
+										const averageAmount = getAverageAmount(
+											String(subcategory.id)
+										);
 
 										return (
 											<div
@@ -238,7 +258,15 @@ const BudgetView = () => {
 													<tr>
 														<td>
 															<span>
-																Last: <b>{thisMonthAmount?.toFixed(2)}</b>
+																Current: <b>{thisMonthAmount?.toFixed(2)}</b>
+															</span>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<span>
+																Previous:{" "}
+																<b>{totalInPreviousMonth?.toFixed(2)}</b>
 															</span>
 														</td>
 													</tr>
@@ -255,22 +283,17 @@ const BudgetView = () => {
 																Budget:
 																<input
 																	type="number"
-																	onChange={(event) => {
-																		setBudget((prevState) => {
-																			const newBudget = {
-																				...prevState,
-																				[subcategory.id]: {
-																					amount: event.target.value,
-																					isIncome: [81, 82].includes(
-																						subcategory.id
-																					),
-																				},
-																			};
-
-																			return newBudget;
-																		});
-																	}}
-																	value={budget[subcategory.id]?.amount}
+																	onChange={(event) =>
+																		handleBudgetChange(
+																			event.target.value,
+																			subcategory.id,
+																			timestamp
+																		)
+																	}
+																	value={
+																		budget[dateKey] &&
+																		budget[dateKey][String(subcategory.id)]
+																	}
 																/>
 															</span>
 														</td>
