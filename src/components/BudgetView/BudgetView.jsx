@@ -4,7 +4,7 @@ import { ExpensesContext, BudgetContext } from "./../../context";
 import { Categories } from "../../constants";
 import { FutureInsight } from "../FutureInsight";
 
-const IncomeIds = ["81", "82"];
+const IncomeIds = ["81", "82", "83"];
 
 const BudgetView = ({
 	timestamp,
@@ -65,7 +65,10 @@ const BudgetView = ({
 	const budgetExpenses = Object.entries(budget["11.2022"]).reduce(
 		(acc, curr) => {
 			const [categoryId, amount] = curr;
-			if (!IncomeIds.includes(String(categoryId))) return acc;
+			const isIncome = IncomeIds.includes(String(categoryId));
+			if (isIncome) {
+				return acc;
+			}
 			return acc + Number(amount);
 		},
 		0
@@ -73,7 +76,10 @@ const BudgetView = ({
 
 	const budgetIncome = Object.entries(budget["11.2022"]).reduce((acc, curr) => {
 		const [categoryId, amount] = curr;
-		if (IncomeIds.includes(String(categoryId))) return acc;
+		const isIncome = IncomeIds.includes(String(categoryId));
+		if (!isIncome) {
+			return acc;
+		}
 		return acc + Number(amount);
 	}, 0);
 
@@ -131,40 +137,16 @@ const BudgetView = ({
 			<div>
 				<input type="number" placeholder="Started the month with" />
 			</div>
-			<table>
-				<tr>
-					<td>
-						<h1>Total Expenses this month</h1>
-					</td>
-					<td>{totalExpenses}</td>
-					<td>
-						<h1>Budget for Expenses this month</h1>
-					</td>
-					<td>{budgetExpenses}</td>
-				</tr>
-				<tr>
-					<td>
-						<h1>Total Income this month</h1>
-					</td>
-					<td>{budgetIncome}</td>
-					<td>
-						<h1>Expected Income this month</h1>
-					</td>
-					<td>{budgetIncome}</td>
-				</tr>
-				<tr>
-					<td>
-						<h1 style={{ color: bottomLine < 0 ? "tomato" : "olive" }}>
-							Bottom Line
-						</h1>
-					</td>
-					<td>{bottomLine}</td>
-					<td>
-						<h1>Expected Bottom Line</h1>
-					</td>
-					<td>{budgetBottomLine}</td>
-				</tr>
-			</table>
+			<div>
+				<h2>Expenses this month: {totalExpenses}</h2>
+				<h2>Income this month: {totalIncome}</h2>
+				<h2>Bottom Line: {bottomLine}</h2>
+				<hr />
+				<h2>Budget this month: {budgetExpenses}</h2>
+				<h2>Income Budget this month: {budgetIncome}</h2>
+				<h2>Bottom Line: {budgetBottomLine}</h2>
+			</div>
+
 			<table>
 				<thead>
 					<tr>{renderCategories()}</tr>

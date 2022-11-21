@@ -7,7 +7,7 @@ import { Categories } from "../../constants";
 const ONE_DAY_MS = 1000 * 60 * 60 * 24;
 const ONE_MONTH_MS = 1000 * 60 * 60 * 24 * 30;
 let singleton = null;
-const IncomeIds = ["81", "82"];
+const IncomeIds = ["81", "82", "83"];
 
 const createNewChart = ({ data = [], startDate, budget = {} }) => {
 	if (singleton) {
@@ -182,7 +182,7 @@ const calcBudget = (budget, initAmount = 0, lookAhead = 3) => {
 
 const FutureInsight = ({
 	initialAmount = 0,
-	lookaheadInMonths = 3,
+	lookaheadInMonths = 10,
 	startDate = new Date(new Date().getTime() - ONE_MONTH_MS * 3),
 }) => {
 	const canvasRef = useRef(null);
