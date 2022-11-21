@@ -43,8 +43,9 @@ const DateChanger = ({ children }) => {
 						new Date(currentTimestamp - ONE_MONTH_MS)
 					);
 				},
-				isSameDate: (timestamp) =>
-					isSameDate(new Date(currentTimestamp), new Date(timestamp)),
+				isSameDate: (
+					timestamp // TODO: rename to isCurrentMonth
+				) => isSameDate(new Date(currentTimestamp), new Date(timestamp)),
 			})}
 		</div>
 	);

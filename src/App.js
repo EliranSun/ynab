@@ -39,8 +39,9 @@ function App() {
 					<BudgetContextProvider>
 						{page === Pages.BUDGET_VIEW && (
 							<DateChanger>
-								{({ isPreviousMonth, currentTimestamp }) => (
+								{({ isPreviousMonth, currentTimestamp, isSameDate }) => (
 									<BudgetView
+										isSameDate={isSameDate}
 										isPreviousMonth={isPreviousMonth}
 										timestamp={currentTimestamp}
 									/>

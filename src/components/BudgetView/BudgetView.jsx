@@ -4,7 +4,13 @@ import { ExpensesContext, BudgetContext } from "./../../context";
 import { Categories } from "../../constants";
 import { FutureInsight } from "../FutureInsight";
 
-const BudgetView = ({ timestamp, isPreviousMonth = noop }) => {
+const IncomeIds = ["81", "82"];
+
+const BudgetView = ({
+	timestamp,
+	isPreviousMonth = noop,
+	isSameDate = noop,
+}) => {
 	const { expensesArray: expenses, expensesPerMonthPerCategory } =
 		useContext(ExpensesContext);
 	const { setBudget, budget } = useContext(BudgetContext);
@@ -56,14 +62,19 @@ const BudgetView = ({ timestamp, isPreviousMonth = noop }) => {
 		.toFixed(2);
 	const bottomLine = (totalIncome - totalExpenses).toFixed(2);
 
-	const budgetExpenses = Object.values(budget).reduce((acc, curr) => {
-		if (curr.isIncome) return acc;
-		return acc + Number(curr.amount);
-	}, 0);
+	const budgetExpenses = Object.entries(budget["11.2022"]).reduce(
+		(acc, curr) => {
+			const [categoryId, amount] = curr;
+			if (!IncomeIds.includes(String(categoryId))) return acc;
+			return acc + Number(amount);
+		},
+		0
+	);
 
-	const budgetIncome = Object.values(budget).reduce((acc, curr) => {
-		if (!curr.isIncome) return acc;
-		return acc + Number(curr.amount);
+	const budgetIncome = Object.entries(budget["11.2022"]).reduce((acc, curr) => {
+		const [categoryId, amount] = curr;
+		if (IncomeIds.includes(String(categoryId))) return acc;
+		return acc + Number(amount);
 	}, 0);
 
 	const budgetBottomLine = budgetIncome - budgetExpenses;
@@ -135,7 +146,7 @@ const BudgetView = ({ timestamp, isPreviousMonth = noop }) => {
 					<td>
 						<h1>Total Income this month</h1>
 					</td>
-					<td>{totalIncome}</td>
+					<td>{budgetIncome}</td>
 					<td>
 						<h1>Expected Income this month</h1>
 					</td>
@@ -228,16 +239,21 @@ const BudgetView = ({ timestamp, isPreviousMonth = noop }) => {
 											>
 												{hoveredCategoryId === subcategory.id && (
 													<div className="info-box">
+														<h3>This month</h3>
 														{orderBy(
-															expensesInCategory.map((expense) => {
-																return (
-																	<div>
-																		<span>{expense.name.slice(0, 20)}</span>
-																		{" | "}
-																		<span>{expense.amount}</span>
-																	</div>
-																);
-															}),
+															expensesInCategory
+																.filter((expense) =>
+																	isSameDate(expense.timestamp)
+																)
+																.map((expense) => {
+																	return (
+																		<div>
+																			<span>{expense.name.slice(0, 20)}</span>
+																			{" | "}
+																			<span>{expense.amount}</span>
+																		</div>
+																	);
+																}),
 															"amount",
 															"desc"
 														)}

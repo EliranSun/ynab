@@ -1,12 +1,15 @@
 import "chartjs-adapter-date-fns";
 import { useRef, useEffect, useMemo, useContext } from "react";
 import { Chart, registerables } from "chart.js";
-import { ExpensesContext } from "../../context";
+import { BudgetContext, ExpensesContext } from "../../context";
+import { Categories } from "../../constants";
 
-const IncomeIds = [81, 82];
+const ONE_DAY_MS = 1000 * 60 * 60 * 24;
+const ONE_MONTH_MS = 1000 * 60 * 60 * 24 * 30;
 let singleton = null;
+const IncomeIds = ["81", "82"];
 
-const createNewChart = ({ data = [], startDate }) => {
+const createNewChart = ({ data = [], startDate, budget = {} }) => {
 	if (singleton) {
 		console.info("returning singleton", singleton);
 		return singleton;
@@ -15,6 +18,9 @@ const createNewChart = ({ data = [], startDate }) => {
 	Chart.register(...registerables);
 
 	const ctx = document.getElementById("myChart").getContext("2d");
+
+	console.debug({ data, budget });
+
 	let myChart = new Chart(ctx, {
 		type: "line",
 		data: {
@@ -47,53 +53,37 @@ const createNewChart = ({ data = [], startDate }) => {
 					],
 					borderWidth: 1,
 				},
+				{
+					label: "Budget",
+					data: budget,
+					backgroundColor: [
+						"rgba(255, 99, 132, 0.2)",
+						"rgba(54, 162, 235, 0.2)",
+						"rgba(255, 206, 86, 0.2)",
+						"rgba(75, 192, 192, 0.2)",
+						"rgba(153, 102, 255, 0.2)",
+						"rgba(255, 159, 64, 0.2)",
+					],
+				},
 			],
 		},
 		options: {
 			maintainAspectRatio: false,
 			scales: {
 				x: {
-					// min: "2021-11-07 00:00:00",
 					min: startDate,
 					type: "time",
 					time: {
 						unit: "month",
 					},
 
-					// type: "logarithmic",
 					bounds: "ticks",
 				},
 			},
-			// scales: {
-			// 	min: data[0].timestamp,
-			// 	max: data[data.length - 1].timestamp,
-			// 	x: {
-			// 		type: "time",
-			// 		time: {
-			// 			unit: "month",
-			// 		},
-			// 		//   offset: true,
-			// 		//   ticks: {
-			// 		//     major: {
-			// 		//       enabled: true,
-			// 		//     },
-			// 		//     fontStyle: (context) => (context.tick.major ? "bold" : undefined),
-			// 		//     source: "data",
-			// 		//     maxRotation: 0,
-			// 		//     autoSkip: true,
-			// 		//     autoSkipPadding: 75,
-			// 		//     sampleSize: 100,
-			// 		//   },
-			// 	},
-			// 	y: {
-			// 		type: "linear",
-			// 	},
-			// },
 			plugins: {
 				tooltip: {
 					callbacks: {
 						title: (context) => {
-							console.log({ context });
 							return context[0]?.raw?.name;
 						},
 						label: (context) => {
@@ -129,7 +119,7 @@ const createNewChart = ({ data = [], startDate }) => {
 	return myChart;
 };
 
-const calc = (initAmount, expenses) => {
+const calcExpenses = (initAmount, expenses) => {
 	let tempAmount = initAmount + 0;
 	const data = [];
 
@@ -150,31 +140,77 @@ const calc = (initAmount, expenses) => {
 	return data;
 };
 
-const ONE_MONTH_MS = 1000 * 60 * 60 * 24 * 30;
+const calcBudget = (budget, initAmount = 0, lookAhead = 3) => {
+	let data = [];
+	let tempAmount = initAmount;
+	let date = new Date("11.01.2022");
+	const budgetEntries = Object.entries(budget["11.2022"]);
+	const lookaheadBudgetEntries = new Array(lookAhead)
+		.fill(null)
+		.map(() => {
+			return [...budgetEntries];
+		})
+		.flat();
+
+	for (const [categoryId, amount] of lookaheadBudgetEntries) {
+		tempAmount = IncomeIds.includes(String(categoryId))
+			? tempAmount + amount
+			: tempAmount - amount;
+
+		const category = Categories.filter((category) => {
+			const subcategory = category.subCategories.filter((sub) => {
+				return String(sub.id) === String(categoryId);
+			})[0];
+			return subcategory;
+		})[0];
+
+		const name = category && category?.name;
+
+		data.push({
+			name,
+			amount: amount,
+			date,
+			y: tempAmount,
+			x: date,
+		});
+
+		date = new Date(date.getTime() + ONE_DAY_MS);
+	}
+
+	return data;
+};
 
 const FutureInsight = ({
-	budget = {},
 	initialAmount = 0,
-	lookaheadInMonths = 10,
+	lookaheadInMonths = 3,
 	startDate = new Date(new Date().getTime() - ONE_MONTH_MS * 3),
 }) => {
 	const canvasRef = useRef(null);
 	const { expensesArray: expenses } = useContext(ExpensesContext);
+	const { budget } = useContext(BudgetContext);
 	const expensesData = useMemo(
 		() =>
-			calc(
+			calcExpenses(
 				initialAmount,
 				expenses.sort((a, b) => a.timestamp - b.timestamp)
 			),
 		[expenses, initialAmount]
 	);
 
+	const budgetData = useMemo(() => {
+		return calcBudget(budget, initialAmount, lookaheadInMonths);
+	}, [budget]);
+
 	useEffect(() => {
 		if (!canvasRef.current) {
 			return;
 		}
 
-		const chart = createNewChart({ data: expensesData, startDate });
+		const chart = createNewChart({
+			data: expensesData,
+			startDate,
+			budget: budgetData,
+		});
 
 		return () => {
 			chart && chart.destroy();
