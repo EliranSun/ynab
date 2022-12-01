@@ -85,6 +85,8 @@ const Expense = ({
 					{new Date(expense.timestamp).toLocaleString("default", {
 						month: "long",
 						year: "numeric",
+						day: "numeric",
+						weekday: "long",
 					})}
 				</span>
 			</div>
