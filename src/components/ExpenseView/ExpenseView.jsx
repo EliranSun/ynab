@@ -6,6 +6,8 @@ import { Categories } from "../../constants";
 import { isExpenseInMonth } from "../../utils";
 
 import styles from "./ExpenseView.module.scss";
+import TopOneHundred from "./TopOneHundred";
+import DateChanger from "../DateChanger/DateChanger";
 const ONE_MONTH_MS = 1000 * 60 * 60 * 24 * 30;
 
 const getExpenseCategoryName = (expense) => {
@@ -120,62 +122,9 @@ const ExpenseView = ({ onCategoryClick = noop }) => {
 		setExpenseAsIncome,
 		setExpenseNote,
 	} = useContext(ExpensesContext);
-	const [timestamp, setTimestamp] = useState(new Date().getTime());
 	const [searchValue, setSearchValue] = useState("בריכת גורדון-מוסדות");
 	const [sum, setSum] = useState(0);
 	const [sort, setSort] = useState(SortBy.AMOUNT);
-	const orderedExpenses = useMemo(() => {
-		return orderBy(
-			expenses.filter(
-				(expense) =>
-					!expense.isIncome && isExpenseInMonth(expense.timestamp, timestamp)
-			),
-			sort,
-			"desc"
-		);
-	}, [expenses, timestamp, sort]);
-
-	const renderUnder100Sum = () => {
-		let count = 0;
-		const totalAmount = orderedExpenses
-			.reduce((acc, curr) => {
-				if (curr.amount < 100 && !curr.isIncome) {
-					count++;
-					return acc + curr.amount;
-				}
-				return acc;
-			}, 0)
-			.toFixed(2);
-
-		return (
-			<>
-				<span>{totalAmount} NIS </span>
-				<span>({count} Items)</span>
-				<div>TODO: a pie chart here</div>
-			</>
-		);
-	};
-
-	const renderAbove100Sum = () => {
-		let count = 0;
-		const totalAmount = orderedExpenses
-			.reduce((acc, curr) => {
-				if (curr.amount > 100 && !curr.isIncome) {
-					count++;
-					return acc + curr.amount;
-				}
-				return acc;
-			}, 0)
-			.toFixed(2);
-
-		return (
-			<>
-				<span>{totalAmount} NIS </span>
-				<span>({count} Items)</span>
-				<div>TODO: a pie chart here</div>
-			</>
-		);
-	};
 
 	return (
 		<div>
@@ -207,60 +156,105 @@ const ExpenseView = ({ onCategoryClick = noop }) => {
 						/>
 					))}
 			</div>
-			<div>
-				<button
-					onClick={() => {
-						setTimestamp(timestamp - ONE_MONTH_MS);
-					}}
-				>
-					Prev Month
-				</button>
-				<button
-					onClick={() => {
-						setTimestamp(timestamp + ONE_MONTH_MS);
-					}}
-					disabled={
-						new Date(timestamp).getMonth() + 1 > new Date().getMonth() &&
-						new Date(timestamp).getFullYear() >= new Date().getFullYear()
-					}
-				>
-					Next Month
-				</button>
-				<h2>
-					Expenses by {sort} for{" "}
-					{new Date(timestamp).toLocaleDateString("en-GB", {
-						month: "long",
-						year: "numeric",
-					})}
-				</h2>
-				<h3 className="float top right">
-					Subtotal: {Object.values(sum).reduce((acc, curr) => acc + curr, 0)}
-				</h3>
-				<h3>
-					Sum of all expenses above 100:{" "}
-					{renderAbove100Sum(orderedExpenses, sum, setSum)}
-				</h3>
-				<h3>
-					Sum of all expenses under 100:{" "}
-					{renderUnder100Sum(orderedExpenses, sum, setSum)}
-				</h3>
-				{orderedExpenses.map((expense) => (
-					<Expense
-						isListView
-						expense={expense}
-						onNoteChange={setExpenseNote}
-						onIsRecurringChange={setExpenseAsRecurring}
-						onIsIncomeChange={setExpenseAsIncome}
-						onCategoryClick={onCategoryClick}
-						onAmountClick={(id, amount) => {
-							setSum({
-								...sum,
-								[id]: sum[id] ? 0 : amount,
-							});
-						}}
-					/>
-				))}
-			</div>
+			<DateChanger>
+				{({ isSameDate, currentTimestamp }) => {
+					// TODO: refactor!!
+					const orderedExpenses = orderBy(
+						expenses.filter(
+							(expense) =>
+								!expense.isIncome &&
+								isExpenseInMonth(expense.timestamp, currentTimestamp)
+						),
+						sort,
+						"desc"
+					);
+
+					const renderUnder100Sum = () => {
+						let count = 0;
+						const totalAmount = orderedExpenses
+							.reduce((acc, curr) => {
+								if (curr.amount < 100 && !curr.isIncome) {
+									count++;
+									return acc + curr.amount;
+								}
+								return acc;
+							}, 0)
+							.toFixed(2);
+
+						return (
+							<>
+								<span>{totalAmount} NIS </span>
+								<span>({count} Items)</span>
+								<div>TODO: a pie chart here</div>
+							</>
+						);
+					};
+
+					const renderAbove100Sum = () => {
+						let count = 0;
+						const totalAmount = orderedExpenses
+							.reduce((acc, curr) => {
+								if (curr.amount > 100 && !curr.isIncome) {
+									count++;
+									return acc + curr.amount;
+								}
+								return acc;
+							}, 0)
+							.toFixed(2);
+
+						return (
+							<>
+								<span>{totalAmount} NIS </span>
+								<span>({count} Items)</span>
+								<div>TODO: a pie chart here</div>
+							</>
+						);
+					};
+
+					return (
+						<>
+							<TopOneHundred expenses={expenses} isSameDate={isSameDate} />
+							<div>
+								<h2>
+									Expenses by {sort} for{" "}
+									{new Date(currentTimestamp).toLocaleDateString("en-GB", {
+										month: "long",
+										year: "numeric",
+									})}
+								</h2>
+								<h3 className="float top right">
+									Subtotal:{" "}
+									{Object.values(sum).reduce((acc, curr) => acc + curr, 0)}
+								</h3>
+								<h3>
+									Sum of all expenses above 100:{" "}
+									{renderAbove100Sum(orderedExpenses, sum, setSum)}
+								</h3>
+								<h3>
+									Sum of all expenses under 100:{" "}
+									{renderUnder100Sum(orderedExpenses, sum, setSum)}
+								</h3>
+								{orderedExpenses.map((expense) => (
+									<Expense
+										isListView
+										expense={expense}
+										onNoteChange={setExpenseNote}
+										onIsRecurringChange={setExpenseAsRecurring}
+										onIsIncomeChange={setExpenseAsIncome}
+										onCategoryClick={onCategoryClick}
+										onAmountClick={(id, amount) => {
+											setSum({
+												...sum,
+												[id]: sum[id] ? 0 : amount,
+											});
+										}}
+									/>
+								))}
+							</div>
+						</>
+					);
+				}}
+			</DateChanger>
 		</div>
 	);
 };
