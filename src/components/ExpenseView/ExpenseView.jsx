@@ -138,7 +138,7 @@ const ExpenseView = ({ onCategoryClick = noop }) => {
 					))}
 			</div>
 			<DateChanger>
-				{({ isSameDate, currentTimestamp }) => {
+				{({ isSameDate, currentTimestamp, toDate }) => {
 					// TODO: refactor!!
 					const orderedExpenses = orderBy(
 						expenses.filter(
@@ -194,7 +194,11 @@ const ExpenseView = ({ onCategoryClick = noop }) => {
 
 					return (
 						<>
-							<TopOneHundred expenses={expenses} isSameDate={isSameDate} />
+							<TopOneHundred
+								expenses={expenses}
+								isSameDate={isSameDate}
+								toDate={toDate}
+							/>
 							<div>
 								<h2>
 									Expenses by {sort} for{" "}

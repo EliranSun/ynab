@@ -43,9 +43,11 @@ const DateChanger = ({ children }) => {
 						new Date(currentTimestamp - ONE_MONTH_MS)
 					);
 				},
-				isSameDate: (
-					timestamp // TODO: rename to isCurrentMonth
-				) => isSameDate(new Date(currentTimestamp), new Date(timestamp)),
+				// TODO: rename to isCurrentMonth
+				isSameDate: (timestamp) => {
+					return isSameDate(new Date(currentTimestamp), new Date(timestamp));
+				},
+				toDate: (timestamp) => new Date(timestamp).toLocaleDateString("en-GB"),
 			})}
 		</div>
 	);

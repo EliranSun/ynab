@@ -4,10 +4,14 @@ export const isThirdPartyTransaction = (name) => {
 	return [BIT, BIT_INCOME, BANK, PAYBOX].includes(name);
 };
 
-export const aggregateTransactionsByName = (transactions) => {
+export const aggregateTransactionsByName = (transactions, isSameDate) => {
 	const aggregatedTransactions = [];
 	for (const transaction of transactions) {
-		const { name, amount } = transaction;
+		const { name, amount, timestamp } = transaction;
+
+		if (!isSameDate(timestamp)) {
+			continue;
+		}
 
 		if (isThirdPartyTransaction(name)) {
 			aggregatedTransactions.push(transaction);
