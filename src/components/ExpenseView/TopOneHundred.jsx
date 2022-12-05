@@ -11,7 +11,7 @@ const TopOneHundred = ({ expenses, isSameDate, toDate }) => {
 	const [isAggregateView, setIsAggregateView] = useState(false);
 	const items = useMemo(() => {
 		if (isAggregateView) {
-			return aggregateTransactionsByName(expenses, isSameDate).filter(
+			return aggregateTransactionsByName(expenses, isSameDate, true).filter(
 				(expense) =>
 					expense.amount > topAmount &&
 					!expense.isIncome &&
