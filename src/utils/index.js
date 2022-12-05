@@ -1,4 +1,4 @@
-import { BIT, BIT_INCOME, BANK, PAYBOX } from "../constants";
+import { BIT, BIT_INCOME, BANK, PAYBOX, Categories } from "../constants";
 
 export const isThirdPartyTransaction = (name) => {
 	return [BIT, BIT_INCOME, BANK, PAYBOX].includes(name);
@@ -45,6 +45,27 @@ export const isExpenseInMonth = (expenseTimestamp, timestamp) => {
 	const expenseYear = new Date(expenseTimestamp).getFullYear();
 
 	return expenseMonth === month && expenseYear === year;
+};
+
+export const getExpenseCategoryName = (categoryId) => {
+	let subcategoryName = "";
+	const category = Categories.find((category) => {
+		const subcategory = category.subCategories.filter(
+			(subcategory) => String(subcategory.id) === String(categoryId)
+		)[0]?.name;
+
+		if (subcategory) {
+			subcategoryName = subcategory;
+			return true;
+		}
+
+		return false;
+	});
+
+	return {
+		...category,
+		subcategoryName,
+	};
 };
 
 export * from "./localStorage";

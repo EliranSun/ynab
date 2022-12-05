@@ -2,34 +2,12 @@ import { useState, useContext, useMemo } from "react";
 import { orderBy, noop } from "lodash";
 import classNames from "classnames";
 import { ExpensesContext } from "../../context";
-import { Categories } from "../../constants";
-import { isExpenseInMonth } from "../../utils";
+import { isExpenseInMonth, getExpenseCategoryName } from "../../utils";
 
 import styles from "./ExpenseView.module.scss";
 import TopOneHundred from "./TopOneHundred";
 import DateChanger from "../DateChanger/DateChanger";
 const ONE_MONTH_MS = 1000 * 60 * 60 * 24 * 30;
-
-const getExpenseCategoryName = (expense) => {
-	let subcategoryName = "";
-	const category = Categories.find((category) => {
-		const subcategory = category.subCategories.filter(
-			(subcategory) => String(subcategory.id) === String(expense.categoryId)
-		)[0]?.name;
-
-		if (subcategory) {
-			subcategoryName = subcategory;
-			return true;
-		}
-
-		return false;
-	});
-
-	return {
-		...category,
-		subcategoryName,
-	};
-};
 
 const SortBy = {
 	DATE: "date",
@@ -47,7 +25,10 @@ const Expense = ({
 	onAmountClick = noop,
 	isListView = false,
 }) => {
-	const category = useMemo(() => getExpenseCategoryName(expense), [expense]);
+	const category = useMemo(
+		() => getExpenseCategoryName(expense.categoryId),
+		[expense]
+	);
 
 	return (
 		<div
