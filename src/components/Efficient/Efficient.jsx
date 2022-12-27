@@ -166,7 +166,7 @@ const Efficient = () => {
 					/>
 				))}
 
-				<h2>FINAL QUESTION YOU SON OF A BITCH</h2>
+				<h2>FINAL QUESTION YOU SON OF A BITCH (SORRY FOR THE LANGUAGE)</h2>
 				<Question
 					isError={error}
 					onSliderChange={() => setSlidersChangedCount(slidersChangedCount + 1)}
