@@ -5,6 +5,7 @@ import {
 	BudgetView,
 	CategoryView,
 	ExpenseView,
+	Efficient,
 } from "./components";
 
 import "./App.css";
@@ -15,15 +16,16 @@ const Pages = {
 	BUDGET_VIEW: "BUDGET_VIEW",
 	CATEGORY_VIEW: "CATEGORY_VIEW",
 	EXPENSE_VIEW: "EXPENSE_VIEW",
+	EFFICIENT: "EFFICIENT",
 };
 
 function App() {
 	const [categoryId, setCategoryId] = useState(1);
-	const [page, setPage] = useState(Pages.CATEGORY_SELECTION);
+	const [page, setPage] = useState(Pages.EFFICIENT);
 
 	return (
 		<>
-			<nav className="menu">
+			{/* <nav className="menu">
 				<span onClick={() => setPage(Pages.CATEGORY_SELECTION)}>
 					Transaction Category Selection |{" "}
 				</span>
@@ -31,10 +33,12 @@ function App() {
 				<span onClick={() => setPage(Pages.CATEGORY_VIEW)}>
 					Category View |{" "}
 				</span>
-				<span onClick={() => setPage(Pages.EXPENSE_VIEW)}>Expense View</span>
-			</nav>
+				<span onClick={() => setPage(Pages.EXPENSE_VIEW)}>Expense View | </span>
+				<span onClick={() => setPage(Pages.EFFICIENT)}>Efficiency</span>
+			</nav> */}
 			<div className="layout">
 				<ExpensesContextProvider>
+					{page === Pages.EFFICIENT && <Efficient />}
 					{page === Pages.CATEGORY_SELECTION && <PasteExpensesList />}
 					<BudgetContextProvider>
 						{page === Pages.BUDGET_VIEW && (

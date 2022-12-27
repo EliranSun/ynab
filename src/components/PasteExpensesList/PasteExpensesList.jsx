@@ -71,7 +71,8 @@ const PasteExpensesList = () => {
 					}
 
 					// setParsedExpenses(newExpenses);
-					setExpenses([...expenses, ...newExpenses]);
+					// setExpenses([...expenses, ...newExpenses]);
+					setExpenses(newExpenses);
 				}}
 			>
 				Parse

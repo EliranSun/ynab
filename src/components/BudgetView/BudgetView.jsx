@@ -126,6 +126,27 @@ const BudgetView = ({
 	return (
 		<div>
 			<h1>Plan (Budget View)</h1>
+
+			<div>
+				<h1>
+					{new Date(timestamp).toLocaleString("en-GB", {
+						month: "long",
+					})}
+				</h1>
+				<h2>
+					Expenses this month:{" "}
+					<span style={{ color: "tomato" }}>{totalExpenses}</span>
+				</h2>
+				<h2>
+					Income this month:{" "}
+					<span style={{ color: "olive" }}>{totalIncome}</span>
+				</h2>
+				<h2>Bottom Line: {bottomLine}</h2>
+				<hr />
+				<h2>Budget this month: {budgetExpenses}</h2>
+				<h2>Income Budget this month: {budgetIncome}</h2>
+				<h2>Bottom Line: {budgetBottomLine}</h2>
+			</div>
 			<FutureInsight
 				budget={budget}
 				initialAmount={
@@ -136,15 +157,6 @@ const BudgetView = ({
 			/>
 			<div>
 				<input type="number" placeholder="Started the month with" />
-			</div>
-			<div>
-				<h2>Expenses this month: {totalExpenses}</h2>
-				<h2>Income this month: {totalIncome}</h2>
-				<h2>Bottom Line: {bottomLine}</h2>
-				<hr />
-				<h2>Budget this month: {budgetExpenses}</h2>
-				<h2>Income Budget this month: {budgetIncome}</h2>
-				<h2>Bottom Line: {budgetBottomLine}</h2>
 			</div>
 
 			<table>
