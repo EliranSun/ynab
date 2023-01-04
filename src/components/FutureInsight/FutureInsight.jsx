@@ -76,7 +76,6 @@ const createNewChart = ({ data = [], startDate, budget = {} }) => {
 					time: {
 						unit: "month",
 					},
-
 					bounds: "ticks",
 				},
 			},
@@ -108,6 +107,18 @@ const createNewChart = ({ data = [], startDate, budget = {} }) => {
 								}).format(context.parsed.y);
 							}
 							return `Date: ${date} | Expense Amount: ${amount} | Total: ${label}`;
+						},
+					},
+				},
+				zoom: {
+					pan: {
+						enabled: true,
+						mode: "x",
+					},
+					zoom: {
+						mode: "x",
+						wheel: {
+							enabled: true,
 						},
 					},
 				},

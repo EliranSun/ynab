@@ -21,11 +21,11 @@ const Pages = {
 
 function App() {
 	const [categoryId, setCategoryId] = useState(1);
-	const [page, setPage] = useState(Pages.EFFICIENT);
+	const [page, setPage] = useState(Pages.CATEGORY_VIEW);
 
 	return (
 		<>
-			{/* <nav className="menu">
+			<nav className="menu">
 				<span onClick={() => setPage(Pages.CATEGORY_SELECTION)}>
 					Transaction Category Selection |{" "}
 				</span>
@@ -35,7 +35,7 @@ function App() {
 				</span>
 				<span onClick={() => setPage(Pages.EXPENSE_VIEW)}>Expense View | </span>
 				<span onClick={() => setPage(Pages.EFFICIENT)}>Efficiency</span>
-			</nav> */}
+			</nav>
 			<div className="layout">
 				<ExpensesContextProvider>
 					{page === Pages.EFFICIENT && <Efficient />}
