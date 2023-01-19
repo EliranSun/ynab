@@ -315,7 +315,7 @@ const calcProjection = (projectionData, lookAhead = 3, initBalance) => {
 	let data = [];
 	const thisMonthAndYearExpenses = projectionData.filter((data) => {
 		const date = new Date(data.date);
-		const currentDate = new Date().getTime() - ONE_MONTH_MS * 0;
+		const currentDate = new Date().getTime() - ONE_MONTH_MS * 0; // TODO: dynamic and through UI
 		return (
 			date.getMonth() === new Date(currentDate).getMonth() &&
 			date.getFullYear() === new Date(currentDate).getFullYear()
@@ -326,7 +326,7 @@ const calcProjection = (projectionData, lookAhead = 3, initBalance) => {
 		.map((_, index) => {
 			return thisMonthAndYearExpenses.map((expense) => {
 				const date = new Date(expense.date);
-				const newDate = new Date(date.getTime() + ONE_MONTH_MS * (3 + index));
+				const newDate = new Date(date.getTime() + ONE_MONTH_MS * (1 + index)); // TODO: dynamic and through UI
 
 				return {
 					...expense,
