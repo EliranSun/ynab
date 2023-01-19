@@ -42,7 +42,7 @@ const FutureInsight = ({
 			return;
 		}
 
-		const projectionData = calcProjection(expensesData, lookaheadInMonths);
+		const projectionData = calcProjection(expensesData, 4);
 		console.log({
 			projectionData: projectionData.length,
 			expensesData: expensesData.length,
@@ -298,6 +298,7 @@ const calcExpenses = (initAmount, expenses) => {
 			name: expense.name,
 			amount: expense.amount,
 			isIncome: expense.isIncome,
+			categoryId: expense.categoryId,
 			balance: tempAmount,
 		});
 	}
@@ -308,22 +309,47 @@ const calcExpenses = (initAmount, expenses) => {
 const calcProjection = (projectionData, lookAhead = 3) => {
 	// this calculates the projection of what if you keep pattern of current month
 	let data = [];
-	const thisMonthExpenses = projectionData.filter((data) => {
-		return new Date(data.date).getMonth() === new Date().getMonth();
+	const thisMonthAndYearExpenses = projectionData.filter((data) => {
+		const date = new Date(data.date);
+		const currentDate = new Date().getTime() - ONE_MONTH_MS;
+		return (
+			date.getMonth() === new Date(currentDate).getMonth() &&
+			date.getFullYear() === new Date(currentDate).getFullYear()
+		);
 	});
 	const lookaheadArray = new Array(lookAhead)
 		.fill(null)
-		.map(() => {
-			return thisMonthExpenses;
+		.map((_, index) => {
+			return thisMonthAndYearExpenses.map((expense) => {
+				const date = new Date(expense.date);
+				const newDate = new Date(date.setMonth(date.getMonth() + index));
+				return {
+					...expense,
+					date: newDate,
+				};
+			});
 		})
 		.flat();
 
-	let date = new Date(lookaheadArray[0].date);
+	if (lookaheadArray.length === 0) return data;
+
+	// let date = new Date(lookaheadArray[0].date);
 	let tempAmount = lookaheadArray[0].balance;
 
-	for (const { isIncome, amount } of lookaheadArray) {
-		tempAmount = isIncome ? tempAmount + amount : tempAmount - amount;
+	for (const expense of lookaheadArray) {
+		const { amount, isIncome, categoryId, date } = expense;
 
+		// Bi-monthly categories: 36,
+		if (
+			[36, 33, 34].includes(categoryId) &&
+			new Date(date).getMonth() % 2 === 0
+		) {
+			// the category is bi-monthly and the month is even
+			console.log("bi-monthly", expense.name, expense.amount);
+			continue;
+		}
+
+		tempAmount = isIncome ? tempAmount + amount : tempAmount - amount;
 		data.push({
 			y: tempAmount,
 			x: date.getTime(),
@@ -331,7 +357,7 @@ const calcProjection = (projectionData, lookAhead = 3) => {
 			amount,
 		});
 
-		date = new Date(date.getTime() + ONE_DAY_MS);
+		// date = new Date(date.getTime() + ONE_DAY_MS);
 	}
 
 	return data;

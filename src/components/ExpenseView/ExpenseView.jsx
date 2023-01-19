@@ -25,6 +25,7 @@ const Expense = ({
 	onAmountClick = noop,
 	isListView = false,
 }) => {
+	const [note, setNote] = useState(expense.note);
 	const category = useMemo(
 		() => getExpenseCategoryName(expense.categoryId),
 		[expense]
@@ -57,9 +58,12 @@ const Expense = ({
 			</div>
 			<span className={styles.note}>
 				<textarea
-					value={expense.note}
+					value={note}
+					onBlur={() => {
+						onNoteChange(expense.id, note);
+					}}
 					onInput={(event) => {
-						onNoteChange(expense.id, event.target.value);
+						setNote(event.target.value);
 					}}
 				/>
 			</span>
