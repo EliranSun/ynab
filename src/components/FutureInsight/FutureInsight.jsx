@@ -42,7 +42,11 @@ const FutureInsight = ({
 			return;
 		}
 
-		const projectionData = calcProjection(expensesData, 4);
+		const projectionData = calcProjection(
+			expensesData,
+			4,
+			expensesData[expensesData.length - 1].balance
+		);
 		console.log({
 			projectionData: projectionData.length,
 			expensesData: expensesData.length,
@@ -306,12 +310,12 @@ const calcExpenses = (initAmount, expenses) => {
 	return data;
 };
 
-const calcProjection = (projectionData, lookAhead = 3) => {
+const calcProjection = (projectionData, lookAhead = 3, initBalance) => {
 	// this calculates the projection of what if you keep pattern of current month
 	let data = [];
 	const thisMonthAndYearExpenses = projectionData.filter((data) => {
 		const date = new Date(data.date);
-		const currentDate = new Date().getTime() - ONE_MONTH_MS;
+		const currentDate = new Date().getTime() - ONE_MONTH_MS * 0;
 		return (
 			date.getMonth() === new Date(currentDate).getMonth() &&
 			date.getFullYear() === new Date(currentDate).getFullYear()
@@ -322,7 +326,8 @@ const calcProjection = (projectionData, lookAhead = 3) => {
 		.map((_, index) => {
 			return thisMonthAndYearExpenses.map((expense) => {
 				const date = new Date(expense.date);
-				const newDate = new Date(date.setMonth(date.getMonth() + index));
+				const newDate = new Date(date.getTime() + ONE_MONTH_MS * (3 + index));
+
 				return {
 					...expense,
 					date: newDate,
@@ -334,7 +339,7 @@ const calcProjection = (projectionData, lookAhead = 3) => {
 	if (lookaheadArray.length === 0) return data;
 
 	// let date = new Date(lookaheadArray[0].date);
-	let tempAmount = lookaheadArray[0].balance;
+	let tempAmount = initBalance;
 
 	for (const expense of lookaheadArray) {
 		const { amount, isIncome, categoryId, date } = expense;
