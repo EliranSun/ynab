@@ -1,15 +1,152 @@
 import "chartjs-adapter-date-fns";
-import { useRef, useEffect, useMemo, useContext } from "react";
+import { useState, useRef, useEffect, useMemo, useContext } from "react";
 import { Chart, registerables } from "chart.js";
 import { BudgetContext, ExpensesContext } from "../../context";
 import { Categories } from "../../constants";
+import { deleteExpense } from "../../utils";
 
 const ONE_DAY_MS = 1000 * 60 * 60 * 24;
 const ONE_MONTH_MS = 1000 * 60 * 60 * 24 * 30;
 let singleton = null;
 const IncomeIds = ["81", "82", "83"];
 
-const createNewChart = ({ data = [], startDate, budget = {} }) => {
+let chart;
+const FutureInsight = ({
+	initialAmount = 0,
+	lookaheadInMonths = 3,
+	startDate = new Date(new Date().getTime() - ONE_MONTH_MS * 3),
+}) => {
+	const canvasRef = useRef(null);
+	const [selectedExpenseId, setSelectedExpenseId] = useState(null);
+	const { expensesArray: expenses } = useContext(ExpensesContext);
+	const { budget } = useContext(BudgetContext);
+	const expensesData = useMemo(
+		() =>
+			calcExpenses(
+				initialAmount,
+				expenses.sort((a, b) => a.timestamp - b.timestamp)
+			),
+		[expenses, initialAmount]
+	);
+
+	const budgetData = useMemo(() => {
+		return calcBudget(budget, initialAmount, lookaheadInMonths);
+	}, [budget]);
+
+	// const projectionData = useMemo(() => {
+	// 	return calcProjection(expensesData, initialAmount, lookaheadInMonths);
+	// }, [expensesData]);
+
+	useEffect(() => {
+		if (!canvasRef.current) {
+			return;
+		}
+
+		const projectionData = calcProjection(expensesData, lookaheadInMonths);
+		console.log({
+			projectionData: projectionData.length,
+			expensesData: expensesData.length,
+			budgetData: budgetData.length,
+		});
+		chart = createNewChart({
+			startDate,
+			data: expensesData,
+			budget: budgetData,
+			projectionData,
+		});
+
+		return () => {
+			chart && chart.destroy();
+			singleton = null;
+		};
+	}, [
+		canvasRef,
+		expensesData,
+		budgetData,
+		startDate,
+		initialAmount,
+		lookaheadInMonths,
+	]);
+
+	return (
+		<div className="flex">
+			<div style={{ maxHeight: "90vh", width: "33vw", overflow: "auto" }}>
+				<table>
+					<tbody>
+						{expensesData.map((expense) => {
+							return (
+								<tr
+									id={expense.id}
+									key={expense.id}
+									onClick={() => {
+										setSelectedExpenseId(expense.id);
+									}}
+									style={{
+										color: expense.isIncome ? "olive" : "tomato",
+										backgroundColor:
+											expense.id === selectedExpenseId ? "black" : "white",
+									}}
+								>
+									<td>{new Date(expense.date).toLocaleDateString()}</td>
+									<td>{expense.name}</td>
+									<td>{expense.amount}</td>
+									<td>{expense.balance.toFixed(2)}</td>
+									<td
+										style={{
+											cursor: "pointer",
+											opacity: expense.id === selectedExpenseId ? 1 : 0.5,
+										}}
+										onClick={() => {
+											if (expense.id !== selectedExpenseId) {
+												return;
+											}
+											if (!window.confirm("Are you sure?")) {
+												return;
+											}
+
+											deleteExpense(expense.id);
+										}}
+									>
+										❌
+									</td>
+								</tr>
+							);
+						})}
+					</tbody>
+				</table>
+			</div>
+			<div
+				style={{ maxHeight: "80vh", width: "100%" }}
+				onClick={(event) => {
+					chart
+						.getElementsAtEventForMode(
+							event,
+							"nearest",
+							{ intersect: true },
+							true
+						)
+						.forEach((element) => {
+							console.log(element.index, expensesData[element.index]);
+							setSelectedExpenseId(expensesData[element.index].id);
+							// scroll to the expense
+							document
+								.getElementById(expensesData[element.index].id)
+								.scrollIntoView();
+						});
+				}}
+			>
+				<canvas id="myChart" ref={canvasRef}></canvas>
+			</div>
+		</div>
+	);
+};
+
+const createNewChart = ({
+	data = [],
+	startDate,
+	budget = {},
+	projectionData = {},
+}) => {
 	if (singleton) {
 		console.info("returning singleton", singleton);
 		return singleton;
@@ -18,8 +155,6 @@ const createNewChart = ({ data = [], startDate, budget = {} }) => {
 	Chart.register(...registerables);
 
 	const ctx = document.getElementById("myChart").getContext("2d");
-
-	console.debug({ data, budget });
 
 	let myChart = new Chart(ctx, {
 		type: "line",
@@ -56,6 +191,18 @@ const createNewChart = ({ data = [], startDate, budget = {} }) => {
 				{
 					label: "Budget",
 					data: budget,
+					backgroundColor: [
+						"rgba(255, 99, 132, 0.2)",
+						"rgba(54, 162, 235, 0.2)",
+						"rgba(255, 206, 86, 0.2)",
+						"rgba(75, 192, 192, 0.2)",
+						"rgba(153, 102, 255, 0.2)",
+						"rgba(255, 159, 64, 0.2)",
+					],
+				},
+				{
+					label: "Projection",
+					data: projectionData,
 					backgroundColor: [
 						"rgba(255, 99, 132, 0.2)",
 						"rgba(54, 162, 235, 0.2)",
@@ -139,13 +286,52 @@ const calcExpenses = (initAmount, expenses) => {
 		tempAmount = expense.isIncome
 			? tempAmount + expense.amount
 			: tempAmount - expense.amount;
+
+		const x = expense.timestamp;
+		const y = tempAmount;
+		const date = expense.timestamp;
 		data.push({
+			x,
+			y,
+			date,
+			id: expense.id,
 			name: expense.name,
 			amount: expense.amount,
-			date: expense.timestamp,
-			y: tempAmount,
-			x: expense.timestamp,
+			isIncome: expense.isIncome,
+			balance: tempAmount,
 		});
+	}
+
+	return data;
+};
+
+const calcProjection = (projectionData, lookAhead = 3) => {
+	// this calculates the projection of what if you keep pattern of current month
+	let data = [];
+	const thisMonthExpenses = projectionData.filter((data) => {
+		return new Date(data.date).getMonth() === new Date().getMonth();
+	});
+	const lookaheadArray = new Array(lookAhead)
+		.fill(null)
+		.map(() => {
+			return thisMonthExpenses;
+		})
+		.flat();
+
+	let date = new Date(lookaheadArray[0].date);
+	let tempAmount = lookaheadArray[0].balance;
+
+	for (const { isIncome, amount } of lookaheadArray) {
+		tempAmount = isIncome ? tempAmount + amount : tempAmount - amount;
+
+		data.push({
+			y: tempAmount,
+			x: date.getTime(),
+			date: date,
+			amount,
+		});
+
+		date = new Date(date.getTime() + ONE_DAY_MS);
 	}
 
 	return data;
@@ -162,7 +348,6 @@ const calcBudget = (budget, initAmount = 0, lookAhead = 3) => {
 			return [...budgetEntries];
 		})
 		.flat();
-
 	for (const [categoryId, amount] of lookaheadBudgetEntries) {
 		tempAmount = IncomeIds.includes(String(categoryId))
 			? tempAmount + amount
@@ -182,58 +367,13 @@ const calcBudget = (budget, initAmount = 0, lookAhead = 3) => {
 			amount: amount,
 			date,
 			y: tempAmount,
-			x: date,
+			x: date.getTime(),
 		});
 
 		date = new Date(date.getTime() + ONE_DAY_MS);
 	}
 
 	return data;
-};
-
-const FutureInsight = ({
-	initialAmount = 0,
-	lookaheadInMonths = 10,
-	startDate = new Date(new Date().getTime() - ONE_MONTH_MS * 3),
-}) => {
-	const canvasRef = useRef(null);
-	const { expensesArray: expenses } = useContext(ExpensesContext);
-	const { budget } = useContext(BudgetContext);
-	const expensesData = useMemo(
-		() =>
-			calcExpenses(
-				initialAmount,
-				expenses.sort((a, b) => a.timestamp - b.timestamp)
-			),
-		[expenses, initialAmount]
-	);
-
-	const budgetData = useMemo(() => {
-		return calcBudget(budget, initialAmount, lookaheadInMonths);
-	}, [budget]);
-
-	useEffect(() => {
-		if (!canvasRef.current) {
-			return;
-		}
-
-		const chart = createNewChart({
-			data: expensesData,
-			startDate,
-			budget: budgetData,
-		});
-
-		return () => {
-			chart && chart.destroy();
-			singleton = null;
-		};
-	}, [canvasRef, expensesData]);
-
-	return (
-		<div>
-			<canvas id="myChart" ref={canvasRef} width="400" height="400"></canvas>
-		</div>
-	);
 };
 
 export default FutureInsight;

@@ -2,7 +2,6 @@ import { useState, useContext } from "react";
 import { orderBy, noop } from "lodash";
 import { ExpensesContext, BudgetContext } from "./../../context";
 import { Categories } from "../../constants";
-import { FutureInsight } from "../FutureInsight";
 
 const IncomeIds = ["81", "82", "83"];
 
@@ -147,14 +146,14 @@ const BudgetView = ({
 				<h2>Income Budget this month: {budgetIncome}</h2>
 				<h2>Bottom Line: {budgetBottomLine}</h2>
 			</div>
-			<FutureInsight
+			{/* <FutureInsight
 				budget={budget}
 				initialAmount={
 					// TODO: support date for this, so it will be your grounding point
 					// ...Or go back until the openning of the bank account
 					-1282.03 // From around 16/09/2022
 				}
-			/>
+			/> */}
 			<div>
 				<input type="number" placeholder="Started the month with" />
 			</div>
@@ -170,7 +169,6 @@ const BudgetView = ({
 							year: "numeric",
 						});
 
-						console.debug({ budget, dateKey });
 						return (
 							<>
 								<td>

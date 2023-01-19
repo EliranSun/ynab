@@ -8,6 +8,7 @@ import {
 	getDocs,
 	collection,
 	writeBatch,
+	deleteDoc,
 } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -52,6 +53,11 @@ export const getExpenses = async () => {
 export const updateExpense = async (expenseId, props) => {
 	const expensesRef = doc(db, EXPENSES_COLLECTION, expenseId);
 	return await updateDoc(expensesRef, props);
+};
+
+export const deleteExpense = async (expenseId) => {
+	const expensesRef = doc(db, EXPENSES_COLLECTION, expenseId);
+	return await deleteDoc(expensesRef);
 };
 
 export const addExpenses = async (expenses) => {
