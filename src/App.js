@@ -6,11 +6,13 @@ import {
 	CategoryView,
 	ExpenseView,
 	Efficient,
+	DateChanger,
+	FutureInsight,
+	Login,
+	ErrorBoundary,
 } from "./components";
 
 import "./App.css";
-import { DateChanger } from "./components/DateChanger";
-import { FutureInsight } from "./components/FutureInsight";
 
 const Pages = {
 	CATEGORY_SELECTION: "CATEGORY_SELECTION",
@@ -52,56 +54,58 @@ function App() {
 	];
 
 	return (
-		<>
-			<nav className="menu">
-				{MenuItems.map((item) => (
-					<span onClick={item.onClick}>{item.name} ▫ </span>
-				))}
-			</nav>
-			<div className="layout">
-				<ExpensesContextProvider>
-					{page === Pages.EFFICIENT && <Efficient />}
-					{page === Pages.CATEGORY_SELECTION && <PasteExpensesList />}
-					<BudgetContextProvider>
-						{page === Pages.BUDGET_VIEW && (
-							<DateChanger>
-								{({ isPreviousMonth, currentTimestamp, isSameDate }) => (
-									<BudgetView
-										isSameDate={isSameDate}
-										isPreviousMonth={isPreviousMonth}
-										timestamp={currentTimestamp}
-									/>
-								)}
-							</DateChanger>
+		<Login>
+			<ErrorBoundary>
+				<nav className="menu">
+					{MenuItems.map((item) => (
+						<span onClick={item.onClick}>{item.name} ▫ </span>
+					))}
+				</nav>
+				<div className="layout">
+					<ExpensesContextProvider>
+						{page === Pages.EFFICIENT && <Efficient />}
+						{page === Pages.CATEGORY_SELECTION && <PasteExpensesList />}
+						<BudgetContextProvider>
+							{page === Pages.BUDGET_VIEW && (
+								<DateChanger>
+									{({ isPreviousMonth, currentTimestamp, isSameDate }) => (
+										<BudgetView
+											isSameDate={isSameDate}
+											isPreviousMonth={isPreviousMonth}
+											timestamp={currentTimestamp}
+										/>
+									)}
+								</DateChanger>
+							)}
+							{page === Pages.FURTUNE_TELLER && (
+								<DateChanger>
+									{({ isPreviousMonth, currentTimestamp, isSameDate }) => (
+										<FutureInsight
+											initialAmount={
+												// TODO: support date for this, so it will be your grounding point
+												// ...Or go back until the openning of the bank account
+												-1282.03 // From around 16/09/2022
+											}
+										/>
+									)}
+								</DateChanger>
+							)}
+						</BudgetContextProvider>
+						{page === Pages.CATEGORY_VIEW && (
+							<CategoryView categoryId={categoryId} />
 						)}
-						{page === Pages.FURTUNE_TELLER && (
-							<DateChanger>
-								{({ isPreviousMonth, currentTimestamp, isSameDate }) => (
-									<FutureInsight
-										initialAmount={
-											// TODO: support date for this, so it will be your grounding point
-											// ...Or go back until the openning of the bank account
-											-1282.03 // From around 16/09/2022
-										}
-									/>
-								)}
-							</DateChanger>
+						{page === Pages.EXPENSE_VIEW && (
+							<ExpenseView
+								onCategoryClick={(categoryId) => {
+									setCategoryId(categoryId);
+									setPage(Pages.CATEGORY_VIEW);
+								}}
+							/>
 						)}
-					</BudgetContextProvider>
-					{page === Pages.CATEGORY_VIEW && (
-						<CategoryView categoryId={categoryId} />
-					)}
-					{page === Pages.EXPENSE_VIEW && (
-						<ExpenseView
-							onCategoryClick={(categoryId) => {
-								setCategoryId(categoryId);
-								setPage(Pages.CATEGORY_VIEW);
-							}}
-						/>
-					)}
-				</ExpensesContextProvider>
-			</div>
-		</>
+					</ExpensesContextProvider>
+				</div>
+			</ErrorBoundary>
+		</Login>
 	);
 }
 
