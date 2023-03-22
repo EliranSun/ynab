@@ -11,139 +11,6 @@ let singleton = null;
 const IncomeIds = ["81", "82", "83"];
 
 let chart;
-const FutureInsight = ({
-	initialAmount = 0,
-	lookaheadInMonths = 3,
-	startDate = new Date(new Date().getTime() - ONE_MONTH_MS * 3),
-}) => {
-	const canvasRef = useRef(null);
-	const [selectedExpenseId, setSelectedExpenseId] = useState(null);
-	const { expensesArray: expenses } = useContext(ExpensesContext);
-	const { budget } = useContext(BudgetContext);
-	const expensesData = useMemo(
-		() =>
-			calcExpenses(
-				initialAmount,
-				expenses.sort((a, b) => a.timestamp - b.timestamp)
-			),
-		[expenses, initialAmount]
-	);
-
-	const budgetData = useMemo(() => {
-		return calcBudget(budget, initialAmount, lookaheadInMonths);
-	}, [budget]);
-
-	// const projectionData = useMemo(() => {
-	// 	return calcProjection(expensesData, initialAmount, lookaheadInMonths);
-	// }, [expensesData]);
-
-	useEffect(() => {
-		if (!canvasRef.current) {
-			return;
-		}
-
-		const projectionData = calcProjection(
-			expensesData,
-			4,
-			expensesData[expensesData.length - 1].balance
-		);
-		console.log({
-			projectionData: projectionData.length,
-			expensesData: expensesData.length,
-			budgetData: budgetData.length,
-		});
-		chart = createNewChart({
-			startDate,
-			data: expensesData,
-			budget: budgetData,
-			projectionData,
-		});
-
-		return () => {
-			chart && chart.destroy();
-			singleton = null;
-		};
-	}, [
-		canvasRef,
-		expensesData,
-		budgetData,
-		startDate,
-		initialAmount,
-		lookaheadInMonths,
-	]);
-
-	return (
-		<div className="flex">
-			<div style={{ maxHeight: "90vh", width: "33vw", overflow: "auto" }}>
-				<table>
-					<tbody>
-						{expensesData.map((expense) => {
-							return (
-								<tr
-									id={expense.id}
-									key={expense.id}
-									onClick={() => {
-										setSelectedExpenseId(expense.id);
-									}}
-									style={{
-										color: expense.isIncome ? "olive" : "tomato",
-										backgroundColor:
-											expense.id === selectedExpenseId ? "black" : "white",
-									}}
-								>
-									<td>{new Date(expense.date).toLocaleDateString()}</td>
-									<td>{expense.name}</td>
-									<td>{expense.amount}</td>
-									<td>{expense.balance.toFixed(2)}</td>
-									<td
-										style={{
-											cursor: "pointer",
-											opacity: expense.id === selectedExpenseId ? 1 : 0.5,
-										}}
-										onClick={() => {
-											if (expense.id !== selectedExpenseId) {
-												return;
-											}
-											if (!window.confirm("Are you sure?")) {
-												return;
-											}
-
-											deleteExpense(expense.id);
-										}}
-									>
-										❌
-									</td>
-								</tr>
-							);
-						})}
-					</tbody>
-				</table>
-			</div>
-			<div
-				style={{ maxHeight: "80vh", width: "100%" }}
-				onClick={(event) => {
-					chart
-						.getElementsAtEventForMode(
-							event,
-							"nearest",
-							{ intersect: true },
-							true
-						)
-						.forEach((element) => {
-							console.log(element.index, expensesData[element.index]);
-							setSelectedExpenseId(expensesData[element.index].id);
-							// scroll to the expense
-							document
-								.getElementById(expensesData[element.index].id)
-								.scrollIntoView();
-						});
-				}}
-			>
-				<canvas id="myChart" ref={canvasRef}></canvas>
-			</div>
-		</div>
-	);
-};
 
 const createNewChart = ({
 	data = [],
@@ -405,6 +272,140 @@ const calcBudget = (budget, initAmount = 0, lookAhead = 3) => {
 	}
 
 	return data;
+};
+
+const FutureInsight = ({
+	initialAmount = 0,
+	lookaheadInMonths = 3,
+	startDate = new Date(new Date().getTime() - ONE_MONTH_MS * 3),
+}) => {
+	const canvasRef = useRef(null);
+	const [selectedExpenseId, setSelectedExpenseId] = useState(null);
+	const { expensesArray: expenses } = useContext(ExpensesContext);
+	const { budget } = useContext(BudgetContext);
+	const expensesData = useMemo(
+		() =>
+			calcExpenses(
+				initialAmount,
+				expenses.sort((a, b) => a.timestamp - b.timestamp)
+			),
+		[expenses, initialAmount]
+	);
+
+	const budgetData = useMemo(() => {
+		return calcBudget(budget, initialAmount, lookaheadInMonths);
+	}, [budget]);
+
+	// const projectionData = useMemo(() => {
+	// 	return calcProjection(expensesData, initialAmount, lookaheadInMonths);
+	// }, [expensesData]);
+
+	useEffect(() => {
+		if (!canvasRef.current) {
+			return;
+		}
+
+		const projectionData = calcProjection(
+			expensesData,
+			4,
+			expensesData[expensesData.length - 1].balance
+		);
+		console.log({
+			projectionData: projectionData.length,
+			expensesData: expensesData.length,
+			budgetData: budgetData.length,
+		});
+		chart = createNewChart({
+			startDate,
+			data: expensesData,
+			budget: budgetData,
+			projectionData,
+		});
+
+		return () => {
+			chart && chart.destroy();
+			singleton = null;
+		};
+	}, [
+		canvasRef,
+		expensesData,
+		budgetData,
+		startDate,
+		initialAmount,
+		lookaheadInMonths,
+	]);
+
+	return (
+		<div className="flex">
+			<div style={{ maxHeight: "90vh", width: "33vw", overflow: "auto" }}>
+				<table>
+					<tbody>
+						{expensesData.map((expense) => {
+							return (
+								<tr
+									id={expense.id}
+									key={expense.id}
+									onClick={() => {
+										setSelectedExpenseId(expense.id);
+									}}
+									style={{
+										color: expense.isIncome ? "olive" : "tomato",
+										backgroundColor:
+											expense.id === selectedExpenseId ? "black" : "white",
+									}}
+								>
+									<td>{new Date(expense.date).toLocaleDateString("en-GB")}</td>
+									<td>{expense.name}</td>
+									<td>{expense.amount}</td>
+									<td>{expense.balance.toFixed(2)}</td>
+									<td
+										style={{
+											cursor: "pointer",
+											opacity: expense.id === selectedExpenseId ? 1 : 0.5,
+										}}
+										onClick={() => {
+											if (expense.id !== selectedExpenseId) {
+												return;
+											}
+											if (!window.confirm("Are you sure?")) {
+												return;
+											}
+
+											deleteExpense(expense.id);
+										}}
+									>
+										❌
+									</td>
+								</tr>
+							);
+						})}
+					</tbody>
+				</table>
+			</div>
+			<div
+				style={{ maxHeight: "80vh", width: "100%" }}
+				onClick={(event) => {
+					chart
+						.getElementsAtEventForMode(
+							event,
+							"nearest",
+							{ intersect: true },
+							true
+						)
+						.forEach((element) => {
+							console.log(element.index, expensesData[element.index]);
+							setSelectedExpenseId(expensesData[element.index].id);
+							// scroll to the expense
+							document
+								.getElementById(expensesData[element.index].id)
+								.scrollIntoView();
+						});
+				}}
+			>
+				<canvas id="myChart" ref={canvasRef}></canvas>
+			</div>
+		</div>
+	);
 };
 
 export default FutureInsight;

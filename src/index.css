@@ -97,6 +97,7 @@ table td * {
 
 .expenses-view-list {
 	display: flex;
+	flex-wrap: wrap;
 }
 
 .expense-box {
