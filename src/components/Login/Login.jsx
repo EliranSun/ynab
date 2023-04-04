@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { login, logout } from "../../utils/auth";
+import useAuthState from "../../hooks/useAuth";
 
 const Login = ({ children }) => {
-	const [user, setUser] = useState(null);
+	// const [user, setUser] = useState(null);
+	const [user, setUser] = useAuthState();
 
 	if (user && user.uid) {
 		return children;

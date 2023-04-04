@@ -7,7 +7,7 @@ import {
 
 const provider = new GoogleAuthProvider();
 
-const auth = getAuth();
+export const auth = getAuth();
 
 export const login = async () => {
 	try {
@@ -37,3 +37,4 @@ export const logout = () => {
 			console.error(error);
 		});
 };
+

@@ -6,6 +6,6 @@ export * from "./CategoryView";
 export * from "./ExpenseView";
 export * from "./Efficient";
 export * from "./DateChanger";
-export * from "./FutureInsight";
+export * from "./FortuneTeller";
 export * from "./Login";
 export * from "./ErrorBoundary";

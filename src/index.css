@@ -1,122 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
-	margin: 0;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-		"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-		sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-		monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
 
 .error {
-	color: tomato;
-	font-weight: 900;
+    color: tomato;
+    font-weight: 900;
 }
 
 .flex {
-	display: flex;
+    display: flex;
 }
 
 .layout {
 }
 
 table {
-	width: 100%;
+    width: 100%;
 }
 
 table td,
 table td * {
-	vertical-align: top;
+    vertical-align: top;
 }
 
 .info-box {
-	position: fixed;
-	bottom: 0;
-	right: 0;
-	width: 250px;
-	height: 250px;
-	background: #fff;
-	border: 1px solid #ccc;
-	overflow: auto;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 250px;
+    height: 250px;
+    background: #fff;
+    border: 1px solid #ccc;
+    overflow: auto;
 }
 
 .category-selection {
-	height: 90vh;
-	overflow: auto;
+    height: 90vh;
+    overflow: auto;
 }
 
 .category-selection td {
-	width: 150px;
-	font-size: 1.2em;
+    width: 150px;
+    font-size: 1.2em;
 }
 
 .category-selection td:last-of-type {
-	width: 1000px;
+    width: 1000px;
 }
 
 .category {
-	margin: 4px;
-	padding: 4px;
-	display: flex;
-	background-color: #fff;
-	border: 1px solid tomato;
+    margin: 4px;
+    padding: 4px;
+    display: flex;
+    background-color: #fff;
+    border: 1px solid tomato;
 }
 
 .subcategory {
-	margin: 2px;
-	width: 90px;
-	height: 60px;
-	border-radius: 4px;
-	padding: 4px;
-	display: inline-flex;
-	flex-direction: column;
-	align-items: center;
-	border: 1px solid tomato;
-	cursor: pointer;
+    margin: 2px;
+    width: 90px;
+    height: 60px;
+    border-radius: 4px;
+    padding: 4px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid tomato;
+    cursor: pointer;
 }
 
 .subcategory:hover {
-	background: tomato;
-	color: #fff;
+    background: tomato;
+    color: #fff;
 }
 
 .subcategory-select {
-	display: grid;
-	grid-template-columns: 430px 430px;
-	column-gap: 12px;
+    display: grid;
+    grid-template-columns: 430px 430px;
+    column-gap: 12px;
 }
 
 .subcategory-select-group {
-	border: 1px solid tomato;
-	margin: 4px;
+    border: 1px solid tomato;
+    margin: 4px;
 }
 
 .expenses-view-list {
-	display: flex;
-	flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .expense-box {
-	width: 250px;
-	height: 250px;
-	background: #fff;
-	border: 1px solid #ccc;
-	overflow: auto;
+    width: 250px;
+    height: 250px;
+    background: #fff;
+    border: 1px solid #ccc;
+    overflow: auto;
 }
 
 .float {
-	position: fixed;
-	background-color: white;
+    position: fixed;
+    background-color: white;
 }
 
 .top {
-	top: 10px;
+    top: 10px;
 }
 
 .right {
-	right: 10px;
+    right: 10px;
 }
