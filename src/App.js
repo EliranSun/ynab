@@ -25,7 +25,7 @@ const Pages = {
 
 function App() {
     const [categoryId, setCategoryId] = useState(1);
-    const [page, setPage] = useState(Pages.CATEGORY_SELECTION);
+    const [page, setPage] = useState(Pages.FORTUNE_TELLER);
     const MenuItems = [
         {
             name: "Transactions",

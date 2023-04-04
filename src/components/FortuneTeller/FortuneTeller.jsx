@@ -343,7 +343,7 @@ const FortuneTeller = ({
         const projectionData = calcProjection(
             expensesData,
             4,
-            expensesData[expensesData.length - 1].balance
+            expensesData[expensesData.length - 1]?.balance
         );
         const data = expensesData.filter((expense) => {
             if (expense.isRecurring) {
