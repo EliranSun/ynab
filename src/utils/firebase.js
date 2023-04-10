@@ -1,15 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import {
-    getFirestore,
-    doc,
-    setDoc,
-    updateDoc,
-    getDocs,
-    collection,
-    writeBatch,
-    deleteDoc,
-} from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, getFirestore, setDoc, updateDoc, writeBatch, } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -42,7 +33,7 @@ export const getExpenses = async () => {
             const expense = doc.data();
             expenses[expense.id] = expense;
         });
-
+        
         // TODO: Model
         return expenses;
     } catch (error) {
@@ -69,7 +60,7 @@ export const addExpenses = async (expenses) => {
             const expenseRef = doc(db, EXPENSES_COLLECTION, expense.id);
             batch.set(expenseRef, { ...expense }); // must be a plain object
         });
-
+        
         await batch.commit();
     } catch (error) {
         throw new Error(error);
@@ -86,7 +77,7 @@ export const getBudget = async () => {
                 [doc.id]: doc.data(),
             };
         });
-
+        
         return budget;
     } catch (error) {
         console.error("Error getting document:", error);
@@ -98,14 +89,14 @@ export const addBudget = async ({ dateKey, categoryId, amount }) => {
     console.info("Adding budget to DB", { dateKey, categoryId, amount });
     const budget = await getBudget();
     const isExist = budget[dateKey];
-
+    
     if (isExist) {
         const docRef = doc(db, BUDGET_COLLECTION, String(dateKey));
         return await updateDoc(docRef, {
             [String(categoryId)]: Number(amount),
         });
     }
-
+    
     const docRef = doc(db, BUDGET_COLLECTION, String(dateKey));
     return await setDoc(docRef, {
         [String(categoryId)]: Number(amount),
@@ -116,3 +107,7 @@ export const updateBudget = async (budgetId, props) => {
     const budgetRef = doc(db, BUDGET_COLLECTION, budgetId);
     return await updateDoc(budgetRef, props);
 };
+
+export const updateCategory = async (expenseId, categoryId) => {
+    return await updateExpense(expenseId, { categoryId });
+}
