@@ -14,7 +14,7 @@ export const ExpensesContextProvider = ({ children }) => {
     }, [expenses]);
     const expensesPerMonthPerCategory = useMemo(() => {
         const expensesPerMonthPerCategory = {};
-
+        
         expensesArray.forEach((expense) => {
             const { categoryId } = expense;
             // TODO: util
@@ -22,7 +22,7 @@ export const ExpensesContextProvider = ({ children }) => {
                 month: "numeric",
                 year: "numeric",
             });
-
+            
             if (!expensesPerMonthPerCategory[categoryId]) {
                 expensesPerMonthPerCategory[categoryId] = {
                     [dateKey]: expense.amount,
@@ -33,17 +33,17 @@ export const ExpensesContextProvider = ({ children }) => {
                 expensesPerMonthPerCategory[categoryId][dateKey] += expense.amount;
             }
         });
-
+        
         return expensesPerMonthPerCategory;
     }, [expensesArray]);
-
+    
     useEffect(() => {
         (async () => {
             const expenses = await getExpenses();
             setExpenses(expenses);
         })();
     }, []);
-
+    
     const setExpenseAsRecurring = (expenseId, isRecurring) => {
         updateExpense(expenseId, { isRecurring });
         setExpenses({
@@ -54,7 +54,7 @@ export const ExpensesContextProvider = ({ children }) => {
             },
         });
     };
-
+    
     const setExpenseAsIncome = (expenseId, isIncome) => {
         updateExpense(expenseId, { isIncome });
         setExpenses({
@@ -65,9 +65,16 @@ export const ExpensesContextProvider = ({ children }) => {
             },
         });
     };
-
-    const setExpenseNote = (expenseId, note) => {
-        updateExpense(expenseId, { note });
+    
+    const setExpenseNote = async (expenseId, note) => {
+        if (note === expenses[expenseId].note) {
+            return;
+        }
+        
+        await updateExpense(expenseId, { note });
+        
+        alert('Note updated successfully!');
+        
         setExpenses({
             ...expenses,
             [expenseId]: {
@@ -76,7 +83,7 @@ export const ExpensesContextProvider = ({ children }) => {
             },
         });
     };
-
+    
     const changeExpenseCategory = (expenseId, categoryId) => {
         const expense = expenses[expenseId];
         const allExpensesWithTheSameName = expensesArray.filter(
@@ -93,10 +100,10 @@ export const ExpensesContextProvider = ({ children }) => {
                     },
                 });
             });
-
+            
             return;
         }
-
+        
         updateExpense(expenseId, { categoryId });
         setExpenses({
             ...expenses,
@@ -106,7 +113,7 @@ export const ExpensesContextProvider = ({ children }) => {
             },
         });
     };
-
+    
     return (
         <ExpensesContext.Provider
             value={{
@@ -122,7 +129,7 @@ export const ExpensesContextProvider = ({ children }) => {
                     newExpenses.forEach((expense) => {
                         expensesObject[expense.id] = expense;
                     });
-
+                    
                     try {
                         await addExpenses(newExpenses);
                         setExpenses(expensesObject);

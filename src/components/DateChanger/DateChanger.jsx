@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import classNames from "classnames";
 
 const ONE_MONTH_MS = 1000 * 60 * 60 * 24 * 30;
 const now = new Date();
@@ -13,7 +14,9 @@ const isSameDate = (date1, date2) => {
 const Button = ({ onClick, children, disabled }) => {
     return (
         <button
-            className="border border-black p-4 w-40"
+            className={classNames("border border-black p-4 w-40", {
+                "opacity-20": disabled,
+            })}
             onClick={onClick}
             disabled={disabled}
         >

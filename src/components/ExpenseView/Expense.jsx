@@ -54,7 +54,6 @@ const Expense = ({
                 })}
             </div>
             <h1 className="w-40 whitespace-nowrap text-ellipsis overflow-hidden">{expense.name}</h1>
-            {/*onClick={() => onCategoryClick(category.id)}*/}
             <CategoriesDropdownMenu
                 onCategoryChange={async (categoryId) => {
                     const results = await updateCategory(expense.id, categoryId)

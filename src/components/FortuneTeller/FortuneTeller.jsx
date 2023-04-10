@@ -24,11 +24,11 @@ const createNewChart = ({
         console.info("returning singleton", singleton);
         return singleton;
     }
-
+    
     Chart.register(...registerables);
-
+    
     const ctx = document.getElementById("myChart").getContext("2d");
-
+    
     let myChart = new Chart(ctx, {
         type: "line",
         data: {
@@ -119,7 +119,7 @@ const createNewChart = ({
                                 style: "currency",
                                 currency: "ILS",
                             }).format(context?.raw?.amount);
-
+                            
                             if (context.parsed.y !== null) {
                                 label += new Intl.NumberFormat("he-IL", {
                                     style: "currency",
@@ -145,7 +145,7 @@ const createNewChart = ({
             },
         },
     });
-
+    
     singleton = myChart;
     return myChart;
 };
@@ -176,22 +176,22 @@ const calcExpenses = (expenses = [], initAmount = 0, initDate = new Date()) => {
         }
     }
     console.log({ data: data.length });
-
+    
     for (let i = 0; i < expenses.length; i++) {
         const expense = expenses[i];
-
+        
         if (expense.timestamp < initDate.getTime()) {
             continue;
         }
-
+        
         tempAmount = expense.isIncome
             ? tempAmount + expense.amount
             : tempAmount - expense.amount;
-
+        
         const x = expense.timestamp;
         const y = tempAmount;
         const date = expense.timestamp;
-
+        
         data.push({
             x,
             y,
@@ -204,7 +204,7 @@ const calcExpenses = (expenses = [], initAmount = 0, initDate = new Date()) => {
             balance: tempAmount,
         });
     }
-
+    
     console.log({ data: data.length });
     return data;
 };
@@ -226,7 +226,7 @@ const calcProjection = (projectionData, lookAhead = 3, initBalance) => {
             return thisMonthAndYearExpenses.map((expense) => {
                 const date = new Date(expense.date);
                 const newDate = new Date(date.getTime() + ONE_MONTH_MS * (1 + index)); // TODO: dynamic and through UI
-
+                
                 return {
                     ...expense,
                     date: newDate,
@@ -234,15 +234,15 @@ const calcProjection = (projectionData, lookAhead = 3, initBalance) => {
             });
         })
         .flat();
-
+    
     if (lookaheadArray.length === 0) return data;
-
+    
     // let date = new Date(lookaheadArray[0].date);
     let tempAmount = initBalance;
-
+    
     for (const expense of lookaheadArray) {
         const { amount, isIncome, categoryId, date } = expense;
-
+        
         // Bi-monthly categories: 36,
         if (
             [36, 33, 34].includes(categoryId) &&
@@ -252,7 +252,7 @@ const calcProjection = (projectionData, lookAhead = 3, initBalance) => {
             console.log("bi-monthly", expense.name, expense.amount);
             continue;
         }
-
+        
         tempAmount = isIncome ? tempAmount + amount : tempAmount - amount;
         data.push({
             y: tempAmount,
@@ -260,10 +260,10 @@ const calcProjection = (projectionData, lookAhead = 3, initBalance) => {
             date: date,
             amount,
         });
-
+        
         // date = new Date(date.getTime() + ONE_DAY_MS);
     }
-
+    
     return data;
 };
 
@@ -282,16 +282,16 @@ const calcBudget = (budget, initAmount = 0, lookAhead = 3) => {
         tempAmount = IncomeIds.includes(String(categoryId))
             ? tempAmount + amount
             : tempAmount - amount;
-
+        
         const category = Categories.filter((category) => {
             const subcategory = category.subCategories.filter((sub) => {
                 return String(sub.id) === String(categoryId);
             })[0];
             return subcategory;
         })[0];
-
+        
         const name = category && category?.name;
-
+        
         data.push({
             name,
             amount: amount,
@@ -299,13 +299,17 @@ const calcBudget = (budget, initAmount = 0, lookAhead = 3) => {
             y: tempAmount,
             x: date.getTime(),
         });
-
+        
         date = new Date(date.getTime() + ONE_DAY_MS);
     }
-
+    
     return data;
 };
 
+
+// TODO: support date for this, so it will be your grounding point
+// ...Or go back until the opening of the bank account
+// -1282.03 // From around 16/09/2022
 const FortuneTeller = ({
     initialAmount = 0,
     lookaheadInMonths = 3,
@@ -326,20 +330,20 @@ const FortuneTeller = ({
             ),
         [expenses, initialAmount]
     );
-
+    
     const budgetData = useMemo(() => {
         return calcBudget(budget, initialAmount, lookaheadInMonths);
     }, [budget]);
-
+    
     // const projectionData = useMemo(() => {
     // 	return calcProjection(expensesData, initialAmount, lookaheadInMonths);
     // }, [expensesData]);
-
+    
     useEffect(() => {
         if (!canvasRef.current) {
             return;
         }
-
+        
         const projectionData = calcProjection(
             expensesData,
             4,
@@ -352,14 +356,14 @@ const FortuneTeller = ({
             }
             return expense.date >= startDate.getTime();
         });
-
+        
         chart = createNewChart({
             startDate,
             data,
             budget: budgetData,
             projectionData,
         });
-
+        
         return () => {
             chart && chart.destroy();
             singleton = null;
@@ -372,7 +376,7 @@ const FortuneTeller = ({
         initialAmount,
         lookaheadInMonths,
     ]);
-
+    
     return (
         <div className="h-screen">
             <button
@@ -425,7 +429,7 @@ const FortuneTeller = ({
                                                 if (!window.confirm("Are you sure?")) {
                                                     return;
                                                 }
-
+                                                
                                                 deleteExpense(expense.id);
                                             }}
                                         >

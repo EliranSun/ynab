@@ -3,9 +3,8 @@ import { noop, orderBy } from "lodash";
 import { useDebounce } from "react-use";
 import { ExpensesContext } from "../../context";
 import Expense from "./Expense";
-import { DateChanger } from "../DateChanger";
 import { isExpenseInMonth } from "../../utils";
-import TopOneHundred from "./TopOneHundred";
+import TopExpensesView from "./TopExpensesView";
 import { useDate } from "../DateChanger/DateChanger";
 
 const SortBy = {
@@ -39,24 +38,39 @@ const SearchInput = ({
     );
 }
 
-const renderBetween = (expenses = [], min = 1000, max = 7500) => {
+const BoxAmount = ({ expenses = [], min = 1000, max = 7500 }) => {
     let count = 0;
-    const totalAmount = expenses
-        .reduce((acc, curr) => {
-            if (curr.amount < max && curr.amount >= min && !curr.isIncome) {
-                count++;
-                return acc + curr.amount;
-            }
-            return acc;
-        }, 0)
-        .toFixed(2);
+    const totalAmount = useMemo(() => {
+        return expenses
+            .reduce((acc, curr) => {
+                if (max === -1 && curr.amount >= min && !curr.isIncome) {
+                    count++;
+                    return acc + curr.amount;
+                }
+                
+                if (min === -1 && curr.amount < max && !curr.isIncome) {
+                    count++;
+                    return acc + curr.amount;
+                }
+                
+                if (curr.amount < max && curr.amount >= min && !curr.isIncome) {
+                    count++;
+                    return acc + curr.amount;
+                }
+                return acc;
+            }, 0)
+            .toFixed(2);
+    }, [expenses, max, min, count]);
     
+    // TODO: a pie chart here
     return (
-        <>
-            <span>{totalAmount} NIS </span>
+        <div className="bg-gray-200 w-48 h-48 flex flex-col items-center justify-center">
+            <span>
+                {min === -1 ? "∞" : min} - {max === -1 ? "∞" : max}
+            </span>
+            <span>{totalAmount} NIS</span>
             <span>({count} Items)</span>
-            <div>TODO: a pie chart here</div>
-        </>
+        </div>
     );
 };
 
@@ -68,7 +82,6 @@ const ExpenseView = ({ onCategoryClick = noop }) => {
         setExpenseNote,
     } = useContext(ExpensesContext);
     const [searchValue, setSearchValue] = useState("");
-    const [sum, setSum] = useState(0);
     const [sort, setSort] = useState(SortBy.AMOUNT);
     const [isSearchingAll, setIsSearchingAll] = useState(false);
     const { isSameDate, currentTimestamp, toDate, formattedDate, NextButton, PreviousButton } = useDate();
@@ -94,9 +107,9 @@ const ExpenseView = ({ onCategoryClick = noop }) => {
     }, [searchValue, thisMonthExpenses, isSearchingAll]);
     
     return (
-        <div>
-            <h1 className="text-3xl my-4">Understand (Expense View)</h1>
-            <div className="fixed top-10 right-20 bg-white shadow-xl">
+        <div className="pb-96">
+            <h1 className="text-3xl my-4">Track (Expense View)</h1>
+            <div className="fixed bottom-10 right-20 bg-white shadow-xl p-2">
                 <PreviousButton/>
                 <NextButton/>
             </div>
@@ -132,21 +145,23 @@ const ExpenseView = ({ onCategoryClick = noop }) => {
                     ))}
                 </div>
             </div>
-            <h2 className="text-2xl my-4 bg-gray-200">Top Expenses in {formattedDate}</h2>
-            <TopOneHundred
+            <TopExpensesView
+                date={formattedDate}
                 expenses={expenses}
                 isSameDate={isSameDate}
                 toDate={toDate}
             />
-            <h2 className="text-2xl my-4 bg-gray-200">Stats for {formattedDate}</h2>
-            <h3 className="float top right">
-                Subtotal:{" "}
-                {Object.values(sum).reduce((acc, curr) => acc + curr, 0)}
-            </h3>
-            <h3>Sum of all expenses above 100: {renderBetween(thisMonthExpenses, 100, 100000)}</h3>
-            <h3>Sum of all expenses 1,000-10,000: {renderBetween(thisMonthExpenses, 1000, 10000)}</h3>
-            <h3>Sum of all expenses 100-1,000: {renderBetween(thisMonthExpenses, 100, 1000)}</h3>
-            <h3>Sum of all expenses under 100: {renderBetween(thisMonthExpenses, 0, 100)}</h3>
+            <div>
+                <h2 className="text-2xl my-4 bg-gray-200">Stats for {formattedDate}</h2>
+                <h3>Sums</h3>
+                <div className="flex gap-4">
+                    <BoxAmount expenses={thisMonthExpenses} min={-1} max={-1}/>
+                    <BoxAmount expenses={thisMonthExpenses} min={-1} max={100}/>
+                    <BoxAmount expenses={thisMonthExpenses} min={100} max={-1}/>
+                    <BoxAmount expenses={thisMonthExpenses} min={100} max={1000}/>
+                    <BoxAmount expenses={thisMonthExpenses} min={1000} max={10000}/>
+                </div>
+            </div>
         </div>
     );
 };

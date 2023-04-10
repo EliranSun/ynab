@@ -2,19 +2,18 @@ import { useState, useContext } from "react";
 import { orderBy, noop } from "lodash";
 import { ExpensesContext, BudgetContext } from "./../../context";
 import { Categories } from "../../constants";
+import { DateChanger } from "../DateChanger";
+import { useDate } from "../DateChanger/DateChanger";
 
 const IncomeIds = ["81", "82", "83"];
 
-const BudgetView = ({
-                        timestamp,
-                        isPreviousMonth = noop,
-                        isSameDate = noop,
-                    }) => {
+const BudgetView = ({}) => {
+    const { currentTimestamp: timestamp, isPreviousMonth, isSameDate } = useDate();
     const { expensesArray: expenses, expensesPerMonthPerCategory } =
         useContext(ExpensesContext);
     const { setBudget, budget } = useContext(BudgetContext);
     const [hoveredCategoryId, setHoveredCategoryId] = useState(null);
-
+    
     const categoriesWithAmounts = Categories.map((category) => {
         let expensesInCategorySum = 0;
         category.subCategories.forEach((subcategory) => {
@@ -22,14 +21,14 @@ const BudgetView = ({
                 // TODO: same type instead of casting
                 return String(expense.categoryId) === String(subcategory.id);
             });
-
+            
             const thisMonthExpenses = expensesInCategory.filter((expense) => {
                 const date = new Date(timestamp);
                 const expenseDate = new Date(expense.timestamp);
                 if (expense.isRecurring) {
                     return expenseDate.getFullYear() === date.getFullYear();
                 }
-
+                
                 return (
                     expenseDate.getMonth() === date.getMonth() &&
                     expenseDate.getFullYear() === date.getFullYear()
@@ -38,10 +37,10 @@ const BudgetView = ({
             const thisMonthAmount = thisMonthExpenses.reduce((acc, expense) => {
                 return acc + expense.amount;
             }, 0);
-
+            
             expensesInCategorySum += thisMonthAmount;
         });
-
+        
         return {
             ...category,
             totalAmount: expensesInCategorySum,
@@ -60,7 +59,7 @@ const BudgetView = ({
         }, 0)
         .toFixed(2);
     const bottomLine = (totalIncome - totalExpenses).toFixed(2);
-
+    
     const budgetExpenses = Object.entries(budget["11.2022"]).reduce(
         (acc, curr) => {
             const [categoryId, amount] = curr;
@@ -72,7 +71,7 @@ const BudgetView = ({
         },
         0
     );
-
+    
     const budgetIncome = Object.entries(budget["11.2022"]).reduce((acc, curr) => {
         const [categoryId, amount] = curr;
         const isIncome = IncomeIds.includes(String(categoryId));
@@ -81,13 +80,13 @@ const BudgetView = ({
         }
         return acc + Number(amount);
     }, 0);
-
+    
     const budgetBottomLine = budgetIncome - budgetExpenses;
-
+    
     const handleBudgetChange = (value, subcategoryId, date) => {
         setBudget(value, subcategoryId, date);
     };
-
+    
     const renderCategories = () => {
         /* TODO: category model? will make things simpler here, but did complicated you last time */
         return categoriesWithAmounts.map((category) => (
@@ -105,10 +104,10 @@ const BudgetView = ({
             </td>
         ));
     };
-
+    
     const getAverageAmount = (id) => {
         if (!expensesPerMonthPerCategory[id]) return 0;
-
+        
         return (
             Object.values(expensesPerMonthPerCategory[id]).reduce(
                 (acc, curr) => acc + curr,
@@ -116,7 +115,7 @@ const BudgetView = ({
             ) / Object.values(expensesPerMonthPerCategory[id]).length
         );
     };
-
+    
     // TODO: break into smaller components
     // FIXME: income category does not count as income - have to mark it in expense view
     // FIXME: null category selection when reaching end of expenses from paste
@@ -125,7 +124,6 @@ const BudgetView = ({
     return (
         <div>
             <h1>Plan (Budget View)</h1>
-
             <div>
                 <h1>
                     {new Date(timestamp).toLocaleString("en-GB", {
@@ -146,18 +144,10 @@ const BudgetView = ({
                 <h2>Income Budget this month: {budgetIncome}</h2>
                 <h2>Bottom Line: {budgetBottomLine}</h2>
             </div>
-            {/* <FortuneTeller
-				budget={budget}
-				initialAmount={
-					// TODO: support date for this, so it will be your grounding point
-					// ...Or go back until the openning of the bank account
-					-1282.03 // From around 16/09/2022
-				}
-			/> */}
             <div>
                 <input type="number" placeholder="Started the month with"/>
             </div>
-
+            
             <table>
                 <thead>
                 <tr>{renderCategories()}</tr>
@@ -168,7 +158,7 @@ const BudgetView = ({
                         month: "numeric",
                         year: "numeric",
                     });
-
+                    
                     return (
                         <>
                             <td>
@@ -188,7 +178,7 @@ const BudgetView = ({
                                                     expenseDate.getFullYear() === date.getFullYear()
                                                 );
                                             }
-
+                                            
                                             return (
                                                 expenseDate.getMonth() === date.getMonth() &&
                                                 expenseDate.getFullYear() === date.getFullYear()
@@ -201,7 +191,7 @@ const BudgetView = ({
                                         },
                                         0
                                     );
-
+                                    
                                     const totalInPreviousMonth = expenses.reduce(
                                         (total, expense) => {
                                             if (
@@ -214,11 +204,11 @@ const BudgetView = ({
                                         },
                                         0
                                     );
-
+                                    
                                     const averageAmount = getAverageAmount(
                                         String(subcategory.id)
                                     );
-
+                                    
                                     return (
                                         <div
                                             style={{

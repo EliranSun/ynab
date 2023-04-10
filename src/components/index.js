@@ -9,3 +9,5 @@ export * from "./DateChanger";
 export * from "./FortuneTeller";
 export * from "./Login";
 export * from "./ErrorBoundary";
+
+export * from "./molecules";
