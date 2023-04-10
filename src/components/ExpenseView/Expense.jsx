@@ -42,11 +42,18 @@ const Expense = ({
     
     return (
         <div id={expense.id}
-            // className={classNames("border border-black w-1/5", {
-            //     "flex flex-row w-screen ": isListView,
-            // })}
+             className={classNames("border border-black w-full", {
+                 "flex flex-row w-full gap-4 items-center": isListView,
+             })}
         >
-            <h1>{expense.name}</h1>
+            <div className="w-30 border-r border-black whitespace-nowrap text-ellipsis overflow-hidden px-4">
+                {new Date(expense.timestamp).toLocaleString("en-GB", {
+                    month: "short",
+                    year: "numeric",
+                    day: "numeric",
+                })}
+            </div>
+            <h1 className="w-40 whitespace-nowrap text-ellipsis overflow-hidden">{expense.name}</h1>
             {/*onClick={() => onCategoryClick(category.id)}*/}
             <CategoriesDropdownMenu
                 onCategoryChange={async (categoryId) => {
@@ -54,29 +61,21 @@ const Expense = ({
                     console.log(results);
                 }}
                 defaultValueId={category.subcategoryId}/>
-            {/*<div*/}
-            {/*    onClick={() => onAmountClick(expense.id, expense.amount)}>*/}
-            {/*    {expense.amount} NIS*/}
-            {/*</div>*/}
-            {/*<textarea*/}
-            {/*    value={note}*/}
-            {/*    onBlur={() => {*/}
-            {/*        onNoteChange(expense.id, note);*/}
-            {/*    }}*/}
-            {/*    onInput={(event) => {*/}
-            {/*        setNote(event.target.value);*/}
-            {/*    }}*/}
-            {/*/>*/}
-            {/*<div>*/}
-            {/*    <span>*/}
-            {/*      {new Date(expense.timestamp).toLocaleString("default", {*/}
-            {/*          month: "long",*/}
-            {/*          year: "numeric",*/}
-            {/*          day: "numeric",*/}
-            {/*          weekday: "long",*/}
-            {/*      })}*/}
-            {/*    </span>*/}
-            {/*</div>*/}
+            <div
+                className="w-20"
+                onClick={() => onAmountClick(expense.id, expense.amount)}>
+                {expense.amount} NIS
+            </div>
+            <textarea
+                value={note}
+                className="border border-black"
+                onBlur={() => {
+                    onNoteChange(expense.id, note);
+                }}
+                onInput={(event) => {
+                    setNote(event.target.value);
+                }}
+            />
             <div>
                 <label>Is recurring?</label>
                 <input
