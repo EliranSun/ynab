@@ -14,17 +14,17 @@ const MainMenu = ({ onMenuItemClick = noop, currentPage = '' }) => {
             onClick: () => onMenuItemClick(Pages.BUDGET_VIEW),
         },
         {
-            name: Pages.FORTUNE_TELLER,
-            onClick: () => onMenuItemClick(Pages.FORTUNE_TELLER),
+            name: Pages.EXPENSE_VIEW,
+            onClick: () => onMenuItemClick(Pages.EXPENSE_VIEW),
         },
         {
             name: Pages.CATEGORY_VIEW,
             onClick: () => onMenuItemClick(Pages.CATEGORY_VIEW),
         },
         {
-            name: Pages.EXPENSE_VIEW,
-            onClick: () => onMenuItemClick(Pages.EXPENSE_VIEW),
-        }
+            name: Pages.FORTUNE_TELLER,
+            onClick: () => onMenuItemClick(Pages.FORTUNE_TELLER),
+        },
     ], []);
     
     return (

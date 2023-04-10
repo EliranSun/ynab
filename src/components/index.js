@@ -10,4 +10,5 @@ export * from "./FortuneTeller";
 export * from "./Login";
 export * from "./ErrorBoundary";
 
+export * from "./atoms";
 export * from "./molecules";

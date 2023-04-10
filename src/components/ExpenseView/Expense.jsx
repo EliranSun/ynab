@@ -54,10 +54,11 @@ const Expense = ({
                 })}
             </div>
             <h1 className="w-40 whitespace-nowrap text-ellipsis overflow-hidden">{expense.name}</h1>
+            <span>{expense.categoryId}</span>
             <CategoriesDropdownMenu
                 onCategoryChange={async (categoryId) => {
                     const results = await updateCategory(expense.id, categoryId)
-                    console.log(results);
+                    alert("Updated category to " + results.categoryId);
                 }}
                 defaultValueId={category.subcategoryId}/>
             <div

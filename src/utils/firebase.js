@@ -44,7 +44,7 @@ export const getExpenses = async () => {
 
 export const updateExpense = async (expenseId, props) => {
     const expensesRef = doc(db, EXPENSES_COLLECTION, expenseId);
-    return await updateDoc(expensesRef, props);
+    return updateDoc(expensesRef, props);
 };
 
 export const deleteExpense = async (expenseId) => {
@@ -109,5 +109,10 @@ export const updateBudget = async (budgetId, props) => {
 };
 
 export const updateCategory = async (expenseId, categoryId) => {
-    return await updateExpense(expenseId, { categoryId });
+    try {
+        return updateExpense(expenseId, { categoryId: Number(categoryId) });
+    } catch (error) {
+        console.error("Error updating category:", error);
+        return {};
+    }
 }
