@@ -26,9 +26,9 @@ const MainMenu = ({ onMenuItemClick = noop, currentPage = '' }) => {
             onClick: () => onMenuItemClick(Pages.FORTUNE_TELLER),
         },
     ], []);
-    
+
     return (
-        <nav className="bg-gray-100">
+        <nav className="bg-gray-100 fixed top-0 w-screen">
             <ul className="flex">
                 {MenuItems.map((item, index) => (
                     <li

@@ -13,18 +13,17 @@ import {
 import { Pages } from "./constants";
 import { MainMenu } from "./components";
 
-
 function App() {
     const [categoryId, setCategoryId] = useState(1);
     const [page, setPage] = useState(Pages.PASTE_AND_SELECT_TRANSACTIONS);
-    
+
     return (
         <Login>
             <ErrorBoundary>
                 <MainMenu onMenuItemClick={setPage} currentPage={page}/>
                 <ExpensesContextProvider>
                     <BudgetContextProvider>
-                        <div className="layout p-4">
+                        <div className="layout p-4 pt-12">
                             <PageRenderer
                                 currentPageName={page}
                                 pageName={Pages.PASTE_AND_SELECT_TRANSACTIONS}
