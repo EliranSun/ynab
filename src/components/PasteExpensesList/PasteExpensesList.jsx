@@ -11,7 +11,7 @@ const isExistingExpense = (newExpense, expenses) => {
             newExpense.amount === expense.amount
         );
     });
-
+    
     return expenseFound;
 };
 
@@ -20,9 +20,9 @@ const PasteExpensesList = () => {
     const { expensesArray: expenses, setExpenses } = useContext(ExpensesContext);
     const [isUncategorizedView, setIsUncategorizedView] = useState(true);
     const [message, setMessage] = useState("");
-
+    
     return (
-        <div>
+        <div className="mt-16">
             <CategorySelection
                 isUncategorizedView={isUncategorizedView}
                 expenses={expenses.filter((expense) =>
@@ -35,12 +35,12 @@ const PasteExpensesList = () => {
                     if (!textAreaRef.current) {
                         return;
                     }
-
+                    
                     const rows = textAreaRef.current.value.split("\n");
                     const newExpenses = rows
                         .map((row) => {
                             const cells = row.split("\t");
-
+                            
                             const name = cells[0];
                             const amount = cells[4];
                             const dateParts = cells[1]?.split("/");
@@ -51,11 +51,11 @@ const PasteExpensesList = () => {
                             const parsedAmount =
                                 amount &&
                                 parseFloat(amount.replace(",", "").replace("₪", "").trim());
-
+                            
                             if (!name || !parsedAmount || !timestamp) {
                                 return {};
                             }
-
+                            
                             return new Expense({
                                 name: name,
                                 timestamp: timestamp,
@@ -67,15 +67,15 @@ const PasteExpensesList = () => {
                             if (isExistingExpense(row, expenses)) {
                                 return false;
                             }
-
+                            
                             return row.name && row.amount && row.timestamp;
                         });
-
+                    
                     if (newExpenses.length === 0) {
                         setMessage("No new expenses found in this paste");
                         return;
                     }
-
+                    
                     // setParsedExpenses(newExpenses);
                     // setExpenses([...expenses, ...newExpenses]);
                     setExpenses(newExpenses);

@@ -1,12 +1,9 @@
-import { BANK, BIT, BIT_INCOME, Categories, PAYBOX } from "../constants";
-
-export const isThirdPartyTransaction = (name) => {
-    return [BIT, BIT_INCOME, BANK, PAYBOX].includes(name);
-};
+import { noop } from 'lodash';
+import { ThirdParties, Categories } from "../constants";
 
 export const aggregateTransactionsByName = (
     transactions,
-    isSameDate,
+    isSameDate = noop,
     shouldOverrideThirdPartyCheck = false
 ) => {
     const aggregatedTransactions = [];
@@ -17,7 +14,7 @@ export const aggregateTransactionsByName = (
             continue;
         }
         
-        if (!shouldOverrideThirdPartyCheck && isThirdPartyTransaction(name)) {
+        if (!shouldOverrideThirdPartyCheck && ThirdParties.includes(name)) {
             aggregatedTransactions.push(transaction);
             continue;
         }
