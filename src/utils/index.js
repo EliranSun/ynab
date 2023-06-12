@@ -1,12 +1,12 @@
-import { noop } from 'lodash';
 import { ThirdParties, Categories } from "../constants";
 
 export const aggregateTransactionsByName = (
     transactions,
-    isSameDate = noop,
+    isSameDate = null,
     shouldOverrideThirdPartyCheck = false
 ) => {
     const aggregatedTransactions = [];
+    
     for (const transaction of transactions) {
         const { name, amount, timestamp } = transaction;
         
@@ -23,9 +23,7 @@ export const aggregateTransactionsByName = (
             (aggregatedTransaction) => aggregatedTransaction.name === name
         );
         
-        const hasTransactionName = transactionIndex !== -1;
-        
-        if (hasTransactionName) {
+        if (transactionIndex !== -1) {
             aggregatedTransactions[transactionIndex].amount += amount;
             aggregatedTransactions[transactionIndex].transactions = [
                 ...(aggregatedTransactions[transactionIndex].transactions || []),
