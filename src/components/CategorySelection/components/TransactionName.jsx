@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import translate from "translate";
 
 const TranslatedExpenseName = ({ name }) => {
-    const [translatedName, setTranslatedName] = useState(null);
+    const [isOriginalView, setIsOriginalView] = useState(true);
+    const [translatedName, setTranslatedName] = useState(name);
     
     useEffect(() => {
         (async () => {
@@ -16,7 +17,13 @@ const TranslatedExpenseName = ({ name }) => {
         })();
     }, [name]);
     
-    return <b>{translatedName || name}</b>;
+    return (
+        <b
+            onMouseEnter={() => setIsOriginalView(true)}
+            onMouseLeave={() => setIsOriginalView(false)}>
+            {isOriginalView ? name : translatedName}
+        </b>
+    );
 }
 
 const TransactionName = ({ name }) => {
@@ -28,3 +35,4 @@ const TransactionName = ({ name }) => {
 };
 
 export default TransactionName;
+    
