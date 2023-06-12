@@ -1,7 +1,14 @@
+import { Title } from "../../atoms";
+
+// ₪
 const TransactionAmount = ({ amount }) => {
-	return (
-		<span className="category-selection__item__name">{amount?.toFixed(2)}</span>
-	);
+    return (
+        <Title type={Title.Types.H2}>
+            <b>
+                {amount?.toFixed(2)} ILS
+            </b>
+        </Title>
+    );
 };
 
 export default TransactionAmount;

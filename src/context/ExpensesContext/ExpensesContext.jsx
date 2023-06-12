@@ -1,6 +1,6 @@
-import { useState, createContext, useMemo, useEffect } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import { noop } from "lodash";
-import { getExpenses, updateExpense, addExpenses } from "../../utils";
+import { addExpenses, getExpenses, updateExpense } from "../../utils";
 
 export const ExpensesContext = createContext({
     expenses: {},
@@ -84,14 +84,14 @@ export const ExpensesContextProvider = ({ children }) => {
         });
     };
     
-    const changeExpenseCategory = (expenseId, categoryId) => {
+    const changeExpenseCategory = async (expenseId, categoryId, note = "") => {
         const expense = expenses[expenseId];
         const allExpensesWithTheSameName = expensesArray.filter(
             ({ name }) => name === expense.name
         );
         if (!expense.isThirdParty) {
             allExpensesWithTheSameName.forEach((expense) => {
-                updateExpense(expense.id, { categoryId });
+                updateExpense(expense.id, { categoryId, note });
                 setExpenses({
                     ...expenses,
                     [expense.id]: {
@@ -104,7 +104,7 @@ export const ExpensesContextProvider = ({ children }) => {
             return;
         }
         
-        updateExpense(expenseId, { categoryId });
+        await updateExpense(expenseId, { categoryId, note });
         setExpenses({
             ...expenses,
             [expenseId]: {

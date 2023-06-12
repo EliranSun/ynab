@@ -1,13 +1,17 @@
+import { Title } from "../../atoms";
+
 const TransactionDate = ({ timestamp }) => {
-	return (
-		<span className="category-selection__item__name">
-			{new Date(timestamp).toLocaleDateString("en-gb", {
-				year: "numeric",
-				month: "short",
-				day: "numeric",
-			})}
-		</span>
-	);
+    return (
+        <Title type={Title.Types.H2}>
+            <b>
+                {new Date(timestamp).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                })}
+            </b>
+        </Title>
+    );
 };
 
 export default TransactionDate;
