@@ -1,19 +1,29 @@
 import { useState } from "react";
 import { BudgetContextProvider, ExpensesContextProvider } from "./context";
-import { BudgetView, CategoryView, ErrorBoundary, ExpenseView, FortuneTeller, Login, MainMenu, PageRenderer, PasteExpensesList, } from "./components";
+import {
+    BudgetView,
+    CategoryView,
+    ErrorBoundary,
+    ExpenseView,
+    FortuneTeller,
+    Login,
+    MainMenu,
+    PageRenderer,
+    PasteExpensesList,
+} from "./components";
 import { Pages } from "./constants";
 
 function App() {
     const [categoryId, setCategoryId] = useState(1);
     const [page, setPage] = useState(Pages.PASTE_AND_SELECT_TRANSACTIONS);
-    
+
     return (
         <Login>
             <ErrorBoundary>
                 <MainMenu onMenuItemClick={setPage} currentPage={page}/>
                 <ExpensesContextProvider>
                     <BudgetContextProvider>
-                        <div className="layout p-4 pt-6">
+                        <div className="layout p-4 pt-20">
                             <PageRenderer
                                 currentPageName={page}
                                 pageName={Pages.PASTE_AND_SELECT_TRANSACTIONS}
@@ -42,8 +52,9 @@ function App() {
                                 pageName={Pages.FORTUNE_TELLER}
                                 element={
                                     <FortuneTeller
-                                        startDate={new Date("08/30/2022")}
-                                        initialAmount={7099.12}
+                                        startDate={new Date("08/01/2022")}
+                                        // initialAmount={7099.12}
+                                        initialAmount={-11204.03}
                                     />
                                 }/>
                         </div>

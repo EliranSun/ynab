@@ -1,4 +1,4 @@
-const Categories = [
+export const Categories = [
     {
         id: 1,
         name: "🍔 Eating",
@@ -267,4 +267,10 @@ const Categories = [
     },
 ];
 
-export default Categories;
+export const getSubCategoryName = (id) => {
+    const subCategory = Categories
+        .flatMap((category) => category.subCategories)
+        .find((subCategory) => subCategory.id === id);
+
+    return subCategory ? `${subCategory.icon} ${subCategory.name}` : "Unknown";
+}
