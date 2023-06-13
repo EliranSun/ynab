@@ -4,14 +4,15 @@ import { orderBy } from "lodash";
 import { BudgetContext, ExpensesContext } from "../../context";
 import TransactionsSection from "./TransactionsSection";
 import { calcExpenses, chart, ONE_MONTH_MS, useChart } from "./utils";
+import { useDebounce } from "react-use";
 
 const FortuneTeller = ({
-    initialAmount = 0,
     lookaheadInMonths = 3,
     startDate = new Date(new Date().getTime() - ONE_MONTH_MS * 10),
 }) => {
     const canvasRef = useRef(null);
-    const [balance, setBalance] = useState(initialAmount);
+    const [balance, setBalance] = useState(Number(localStorage.getItem("balance")));
+    const [debouncedBalance, setDebouncedBalance] = useState(balance);
     const { expensesArray: expenses } = useContext(ExpensesContext);
     const [selectedExpenseId, setSelectedExpenseId] = useState(null);
     const { budget } = useContext(BudgetContext);
@@ -19,21 +20,27 @@ const FortuneTeller = ({
         () =>
             calcExpenses(
                 orderBy(expenses, ["timestamp"], ["asc"]),
-                balance,
+                debouncedBalance,
                 startDate
             ),
-        [expenses, balance, startDate]
+        [expenses, debouncedBalance, startDate]
     );
+
+    const [isReady] = useDebounce(() => {
+        setDebouncedBalance(balance);
+    }, 2000, [balance]);
 
     useChart({
         expensesData,
         budget,
-        balance,
+        balance: debouncedBalance,
+        initialAmount: debouncedBalance,
         lookaheadInMonths,
         startDate,
         canvasRef,
-        initialAmount
-    })
+    });
+
+    const ready = isReady();
 
     return (
         <div className="h-screen">
@@ -44,7 +51,10 @@ const FortuneTeller = ({
                     type="number"
                     placeholder="Current balance"
                     value={balance}
-                    onChange={(e) => setBalance(Number(e.target.value))}
+                    onChange={(e) => {
+                        setBalance(Number(e.target.value));
+                        localStorage.setItem("balance", e.target.value);
+                    }}
                     className="border-b border-black ml-4"/>
 
             </div>
@@ -52,6 +62,7 @@ const FortuneTeller = ({
                 selectedExpenseId={selectedExpenseId}
                 setSelectedExpenseId={setSelectedExpenseId}
                 data={expensesData}/>
+            {!ready && <div>Calculating...</div>}
             <div
                 className="h-3/5 w-full"
                 onClick={(event) => {
@@ -64,7 +75,6 @@ const FortuneTeller = ({
                         )
                         .forEach(({ element }) => {
                             const expenseId = element['$context']?.raw?.id;
-                            console.log(expenseId);
                             setSelectedExpenseId(expenseId);
                             document
                                 .getElementById(expenseId)
