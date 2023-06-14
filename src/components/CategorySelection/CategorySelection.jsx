@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import { aggregateTransactionsByName } from "../../utils";
 import { Transaction, TransactionList } from "./components";
 import { Title } from "../atoms";
@@ -8,7 +8,7 @@ const CategorySelectionViewModes = {
     LIST: "LIST",
 };
 
-const CategorySelection = ({ expenses = [], isUncategorizedView = true }) => {
+const CategorySelection = ({ expenses = [] }) => {
     const [viewMode, setViewMode] = useState(CategorySelectionViewModes.SLIDES);
     const aggregatedExpenses = useMemo(
         () => aggregateTransactionsByName(expenses),
@@ -16,10 +16,8 @@ const CategorySelection = ({ expenses = [], isUncategorizedView = true }) => {
     );
     const firstUncategorizedTransactionIndex = useMemo(
         () =>
-            aggregatedExpenses.findIndex((expense) =>
-                isUncategorizedView ? !expense.categoryId : true
-            ),
-        [aggregatedExpenses, isUncategorizedView]
+            aggregatedExpenses.findIndex((expense) => !expense.categoryId),
+        [aggregatedExpenses]
     );
     
     const [transactionIndex, setTransactionIndex] = useState(
@@ -29,11 +27,7 @@ const CategorySelection = ({ expenses = [], isUncategorizedView = true }) => {
     );
     
     if (!aggregatedExpenses.length) {
-        return (
-            <div className="category-selection">
-                <p>Nothing parsed yet, paste/upload file above</p>
-            </div>
-        );
+        return null;
     }
     
     // TODO: show only unhandled expense
@@ -45,13 +39,25 @@ const CategorySelection = ({ expenses = [], isUncategorizedView = true }) => {
                 <div>
                     <button
                         disabled={transactionIndex === 0}
-                        onClick={() => setTransactionIndex(transactionIndex - 1)}
+                        onClick={() => {
+                            if (transactionIndex === 0) {
+                                return;
+                            }
+                            
+                            setTransactionIndex(prev => prev - 1);
+                        }}
                     >
                         Previous Transaction
                     </button>
                     <span>{" "}{transactionIndex + 1} / {aggregatedExpenses.length}{" "}</span>
                     <button
-                        onClick={() => setTransactionIndex(transactionIndex + 1)}
+                        onClick={() => {
+                            if (transactionIndex === aggregatedExpenses.length - 1) {
+                                return;
+                            }
+                            
+                            setTransactionIndex(prev => prev + 1);
+                        }}
                         disabled={transactionIndex === aggregatedExpenses.length + 1}
                     >
                         Next Transaction
@@ -59,13 +65,18 @@ const CategorySelection = ({ expenses = [], isUncategorizedView = true }) => {
                     <div>
                         {viewMode === CategorySelectionViewModes.SLIDES ? (
                             <Transaction
-                                onSelect={() => setTransactionIndex(transactionIndex + 1)}
+                                onSelect={() => {
+                                    if (transactionIndex === aggregatedExpenses.length - 1) {
+                                        return;
+                                    }
+                                    
+                                    setTransactionIndex(prev => prev + 1)
+                                }}
                                 transaction={aggregatedExpenses[transactionIndex]}
                             />
                         ) : (
                             <TransactionList
                                 transactions={aggregatedExpenses}
-                                isUncategorizedView={isUncategorizedView}
                             />
                         )}
                     </div>
