@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import classNames from "classnames";
 
 const ONE_MONTH_MS = 1000 * 60 * 60 * 24 * 30;
@@ -14,16 +14,16 @@ const isSameDate = (date1, date2) => {
 const Button = ({ onClick, children, disabled }) => {
     return (
         <button
-            className={classNames("border border-black p-4 w-40", {
-                "opacity-20": disabled,
-            })}
             onClick={onClick}
             disabled={disabled}
+            className={classNames("p-4 bg-gray-200 text-white rounded-full w-16 h-16 text-xl font-bold", {
+                "opacity-20": disabled,
+            })}
         >
             {children}
         </button>
     );
-}
+};
 
 export const useDate = () => {
     const [currentTimestamp, setCurrentTimestamp] = useState(now.getTime());
@@ -39,9 +39,7 @@ export const useDate = () => {
             month: "long",
             year: "numeric",
         }),
-        previousMonthString: new Date(
-            currentTimestamp - ONE_MONTH_MS
-        ).toLocaleString("en-GB", {
+        previousMonthString: new Date(currentTimestamp - ONE_MONTH_MS).toLocaleString("en-GB", {
             month: "long",
         }),
         isPreviousMonth: (timestamp) => {
@@ -54,19 +52,19 @@ export const useDate = () => {
             return isSameDate(new Date(currentTimestamp), new Date(timestamp));
         },
         toDate: (timestamp) => new Date(timestamp).toLocaleDateString("en-GB"),
-        NextButton: () => (
+        NextButton: ({ children }) => (
             <Button
                 disabled={isSame}
                 onClick={() => setCurrentTimestamp(currentTimestamp + ONE_MONTH_MS)}
             >
-                Next month
+                {'>'}
             </Button>
         ),
-        PreviousButton: () => (
+        PreviousButton: ({ children }) => (
             <Button
                 onClick={() => setCurrentTimestamp(currentTimestamp - ONE_MONTH_MS)}
             >
-                Previous month
+                {'<'}
             </Button>
         ),
     };
@@ -84,13 +82,13 @@ const DateChanger = ({ children }) => {
             <Button
                 onClick={() => setCurrentTimestamp(currentTimestamp - ONE_MONTH_MS)}
             >
-                Previous month
+                {'<'}
             </Button>
             <Button
                 disabled={isSame}
                 onClick={() => setCurrentTimestamp(currentTimestamp + ONE_MONTH_MS)}
             >
-                Next month
+                {'>'}
             </Button>
             {children({
                 formattedDate: new Date(currentTimestamp).toLocaleDateString("en-GB", {
