@@ -1,18 +1,16 @@
-import { useState, useRef, useContext } from "react";
+import { useContext, useRef, useState } from "react";
 import { Expense } from "../../models";
 import { ExpensesContext } from "../../context";
 import { CategorySelection } from "../CategorySelection";
 
 const isExistingExpense = (newExpense, expenses) => {
-    const expenseFound = expenses.find((expense) => {
+    return expenses.find((expense) => {
         return (
             expense.name === newExpense.name &&
             expense.timestamp === newExpense.timestamp &&
             newExpense.amount === expense.amount
         );
     });
-    
-    return expenseFound;
 };
 
 const PasteExpensesList = () => {
@@ -64,6 +62,7 @@ const PasteExpensesList = () => {
                             });
                         })
                         .filter((row) => {
+                            console.log({ row });
                             if (isExistingExpense(row, expenses)) {
                                 return false;
                             }

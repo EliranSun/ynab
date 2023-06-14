@@ -6,7 +6,7 @@ import TransactionsSection from "./TransactionsSection";
 import { calcExpenses, chart, ONE_MONTH_MS, useChart } from "./utils";
 import { useDebounce } from "react-use";
 
-const FortuneTeller = ({
+const FuturePredictionPage = ({
     lookaheadInMonths = 3,
     startDate = new Date(new Date().getTime() - ONE_MONTH_MS * 10),
 }) => {
@@ -25,11 +25,11 @@ const FortuneTeller = ({
             ),
         [expenses, debouncedBalance, startDate]
     );
-
+    
     const [isReady] = useDebounce(() => {
         setDebouncedBalance(balance);
     }, 2000, [balance]);
-
+    
     useChart({
         expensesData,
         budget,
@@ -39,9 +39,9 @@ const FortuneTeller = ({
         startDate,
         canvasRef,
     });
-
+    
     const ready = isReady();
-
+    
     return (
         <div className="h-screen">
             <div className="text-4xl my-4">
@@ -56,7 +56,7 @@ const FortuneTeller = ({
                         localStorage.setItem("balance", e.target.value);
                     }}
                     className="border-b border-black ml-4"/>
-
+            
             </div>
             <TransactionsSection
                 selectedExpenseId={selectedExpenseId}
@@ -88,4 +88,4 @@ const FortuneTeller = ({
     );
 };
 
-export default FortuneTeller;
+export default FuturePredictionPage;

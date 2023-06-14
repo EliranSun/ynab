@@ -119,6 +119,10 @@ export const ExpensesContextProvider = ({ children }) => {
             value={{
                 expenses,
                 expensesPerMonthPerCategory,
+                refetch: async () => {
+                    const expenses = await getExpenses();
+                    setExpenses(expenses);
+                },
                 setExpenseAsRecurring,
                 setExpenseAsIncome,
                 changeExpenseCategory,
