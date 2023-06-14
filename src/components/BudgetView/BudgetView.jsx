@@ -20,12 +20,12 @@ const formatCurrency = (amount) => {
 };
 
 const BudgetView = () => {
-    const { currentTimestamp, NextButton, PreviousButton } = useDate();
+    const { currentTimestamp, NextButton, PreviousButton, isSameDate, isPreviousMonth } = useDate();
     const { expensesArray: expenses } = useContext(ExpensesContext);
     const { setBudget, budget } = useContext(BudgetContext);
     const [selectedId, setSelectedId] = useState(null);
     
-    const categoriesWithAmounts = Categories.map((category) => {
+    const categoriesWithAmounts = useMemo(() => Categories.map((category) => {
         let expensesInCategorySum = 0;
         category.subCategories.forEach((subcategory) => {
             const expensesInCategory = expenses.filter((expense) => {
@@ -56,7 +56,8 @@ const BudgetView = () => {
             ...category,
             totalAmount: expensesInCategorySum,
         };
-    });
+    }), [expenses, currentTimestamp]);
+    
     const totalExpenses = useMemo(() => {
         return Object.values(categoriesWithAmounts)
             .reduce((acc, curr) => {
@@ -148,7 +149,8 @@ const BudgetView = () => {
                         currencyDisplay: 'symbol',
                         notation: 'compact',
                     }).format(total);
-                    const subcategories = Categories.find((c) => c.id === category.id)?.subCategories;
+                    const subcategories = Categories.find((c) =>
+                        c.id === category.id)?.subCategories;
                     
                     if (total === 0) {
                         return null;
@@ -179,7 +181,10 @@ const BudgetView = () => {
                                             key={subcategory.id}
                                             isSelected={selectedId === subcategory.id}
                                             onSubcategoryClick={setSelectedId}
-                                            currentTimestamp={currentTimestamp}/>
+                                            currentTimestamp={currentTimestamp}
+                                            isPreviousMonth={isPreviousMonth}
+                                            isSameDate={isSameDate}
+                                        />
                                     );
                                 })}
                             </div>
