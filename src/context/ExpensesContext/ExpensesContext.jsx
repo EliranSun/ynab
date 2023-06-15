@@ -25,12 +25,21 @@ export const ExpensesContextProvider = ({ children }) => {
             
             if (!expensesPerMonthPerCategory[categoryId]) {
                 expensesPerMonthPerCategory[categoryId] = {
-                    [dateKey]: expense.amount,
+                    [dateKey]: {
+                        amount: expense.amount,
+                        expenses: [expense],
+                    },
                 };
             } else if (!expensesPerMonthPerCategory[categoryId][dateKey]) {
-                expensesPerMonthPerCategory[categoryId][dateKey] = expense.amount;
+                expensesPerMonthPerCategory[categoryId][dateKey] = {
+                    amount: expense.amount,
+                    expenses: [expense],
+                };
             } else {
-                expensesPerMonthPerCategory[categoryId][dateKey] += expense.amount;
+                expensesPerMonthPerCategory[categoryId][dateKey] = {
+                    amount: expensesPerMonthPerCategory[categoryId][dateKey].amount + expense.amount,
+                    expenses: [...expensesPerMonthPerCategory[categoryId][dateKey].expenses, expense],
+                };
             }
         });
         

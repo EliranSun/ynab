@@ -68,10 +68,17 @@ const Subcategory = ({
     }, [expenses, id, thisMonthExpenses]);
     
     const getAverageAmount = (id) => {
-        if (!expensesPerMonthPerCategory[id]) return 0;
+        if (!expensesPerMonthPerCategory[id]) {
+            return 0;
+        }
         
-        const total = Object.values(expensesPerMonthPerCategory[id]).reduce((acc, curr) => acc + curr, 0);
-        const count = Object.values(expensesPerMonthPerCategory[id]).length;
+        let total = 0;
+        let count = 0;
+        const months = Object.values(expensesPerMonthPerCategory[id]);
+        for (const month of months) {
+            total += month.amount;
+            count += month.expenses.length;
+        }
         
         return formatCurrency(total / count);
     };
@@ -96,11 +103,6 @@ const Subcategory = ({
         return null;
     }
     
-    const test = thisMonthExpenses.find((expense) => expense.name === 'מפייבוקס שלי');
-    if (test) {
-        console.log(test);
-    }
-    
     return (
         <div className="relative">
             <div className="bg-gray-300 p-4" onClick={() => onSubcategoryClick(id)}>
@@ -115,10 +117,38 @@ const Subcategory = ({
             </div>
             {isSelected && expensesInCategoryThisDate.length > 0 &&
                 <ul
+                    dir="rtl"
                     onClick={() => onSubcategoryClick(null)}
-                    className="absolute z-10 top-0 left-full bg-white p-4 w-60 drop-shadow-2xl">
+                    className="absolute z-10 top-0 left-full bg-white p-4 w-60 drop-shadow-2xl text-right">
                     <button>✖️</button>
-                    {expensesInCategoryThisDate}
+                    {/*{expensesInCategoryThisDate}*/}
+                    {orderBy(Object.entries(expensesPerMonthPerCategory[id]), ([monthYear]) => {
+                        const day = '1';
+                        const month = monthYear.split('.')[0];
+                        const year = monthYear.split('.')[1];
+                        
+                        const date = new Date(year, month, day);
+                        return date.getTime();
+                    }, ['desc'])
+                        .map(([monthName, { expenses, amount }], index) => {
+                            return (
+                                <>
+                                    {index > 0 && <hr/>}
+                                    <div className="my-4">
+                                        <b className="">{monthName}: {formatCurrency(amount)}</b>
+                                        <div>
+                                            {expenses.map((expense) => {
+                                                return (
+                                                    <div>
+                                                        ▪ {expense.name} {expense.amount}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                </>
+                            );
+                        })}
                 </ul>}
         </div>
     );
