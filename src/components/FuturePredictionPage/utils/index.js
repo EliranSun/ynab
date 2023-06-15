@@ -62,7 +62,12 @@ export const createNewChart = ({
             ],
         },
         options: {
+            responsive: true,
             maintainAspectRatio: false,
+            interaction: {
+                intersect: false
+            },
+            radius: 0,
             scales: {
                 x: {
                     min: startDate,
@@ -72,6 +77,17 @@ export const createNewChart = ({
                     },
                     bounds: "ticks",
                 },
+                y: {
+                    grid: {
+                        color: function (context) {
+                            if (context.tick.value === 0) {
+                                return 'red';
+                            }
+                            
+                            return 'rgba(0,0,0,0.1)';
+                        },
+                    }
+                }
             },
             plugins: {
                 tooltip: {
@@ -104,18 +120,18 @@ export const createNewChart = ({
                         },
                     },
                 },
-                zoom: {
-                    pan: {
-                        enabled: true,
-                        mode: "x",
-                    },
-                    zoom: {
-                        mode: "x",
-                        wheel: {
-                            enabled: true,
-                        },
-                    },
-                },
+                // zoom: {
+                //     pan: {
+                //         enabled: true,
+                //         mode: "x",
+                //     },
+                //     zoom: {
+                //         mode: "x",
+                //         wheel: {
+                //             enabled: true,
+                //         },
+                //     },
+                // },
             },
         },
     });
