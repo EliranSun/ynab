@@ -23,13 +23,23 @@ const PasteExpensesList = () => {
     const textAreaRef = useRef(null);
     const { expensesArray: expenses, setExpenses } = useContext(ExpensesContext);
     const [message, setMessage] = useState("");
+    const [isParseButtonDisabled, setIsParseButtonDisabled] = useState(true);
     
     return (
-        <div className="">
+        <div>
+            <CategorySelection
+                expenses={expenses.filter((expense) => {
+                    return !Boolean(expense.categoryId);
+                })}/>
             <div className="my-4 flex gap-4 mx-auto justify-center">
                 <div className="w-1/3 text-center">
                     <Title type={Title.Types.H2}>Paste expenses</Title>
-                    <textarea ref={textAreaRef} className="border border-black w-96 h-96"/>
+                    <textarea
+                        ref={textAreaRef}
+                        onChange={event => {
+                            setIsParseButtonDisabled(!event.target.value);
+                        }}
+                        className="border border-black w-96 h-96"/>
                 </div>
                 <div className="flex items-center justify-center flex-col">
                     <VerticalHr/>
@@ -41,13 +51,9 @@ const PasteExpensesList = () => {
                     <SheetUpload/>
                 </div>
             </div>
-            <CategorySelection
-                expenses={expenses.filter((expense) => {
-                    return !Boolean(expense.categoryId);
-                })}/>
             <div className="w-full text-center">
                 <Button
-                    isDisabled={!textAreaRef.current || !textAreaRef.current.value}
+                    isDisabled={isParseButtonDisabled}
                     onClick={() => {
                         if (!textAreaRef.current) {
                             return;
