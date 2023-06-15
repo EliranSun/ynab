@@ -3,16 +3,8 @@ import { useContext, useMemo } from "react";
 import { noop, orderBy } from "lodash";
 import { ExpensesContext } from "../../context";
 import { isSameMonth } from "date-fns";
-
-const formatCurrency = (amount) => {
-    return new Intl.NumberFormat("he-IL", {
-        style: "currency",
-        currency: "ILS",
-        currencyDisplay: 'symbol',
-        notation: 'compact',
-        // notation: 'standard',
-    }).format(amount);
-};
+import { formatCurrency } from "../../utils";
+import SubcategoryExpensesList from "./SubcategoryExpensesList";
 
 const Subcategory = ({
     icon,
@@ -25,7 +17,6 @@ const Subcategory = ({
     currentTimestamp
 }) => {
     const { expensesArray: expenses, expensesPerMonthPerCategory } = useContext(ExpensesContext);
-    
     const expensesInCategory = expenses.filter((expense) => {
         // TODO: same type instead of casting
         return (
@@ -116,40 +107,11 @@ const Subcategory = ({
                 {/*<div>Budget: 0</div>*/}
             </div>
             {isSelected && expensesInCategoryThisDate.length > 0 &&
-                <ul
-                    dir="rtl"
-                    onClick={() => onSubcategoryClick(null)}
-                    className="absolute z-10 top-0 left-full bg-white p-4 w-60 drop-shadow-2xl text-right">
-                    <button>✖️</button>
-                    {/*{expensesInCategoryThisDate}*/}
-                    {orderBy(Object.entries(expensesPerMonthPerCategory[id]), ([monthYear]) => {
-                        const day = '1';
-                        const month = monthYear.split('.')[0];
-                        const year = monthYear.split('.')[1];
-                        
-                        const date = new Date(year, month, day);
-                        return date.getTime();
-                    }, ['desc'])
-                        .map(([monthName, { expenses, amount }], index) => {
-                            return (
-                                <>
-                                    {index > 0 && <hr/>}
-                                    <div className="my-4">
-                                        <b className="">{monthName}: {formatCurrency(amount)}</b>
-                                        <div>
-                                            {expenses.map((expense) => {
-                                                return (
-                                                    <div>
-                                                        ▪ {expense.name} {expense.amount}
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                </>
-                            );
-                        })}
-                </ul>}
+                <SubcategoryExpensesList
+                    id={id}
+                    expensesPerMonthPerCategory={expensesPerMonthPerCategory[id]}
+                    onSubcategoryClick={onSubcategoryClick}
+                />}
         </div>
     );
 };

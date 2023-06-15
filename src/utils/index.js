@@ -1,4 +1,4 @@
-import { ThirdParties, Categories } from "../constants";
+import { Categories, ThirdParties } from "../constants";
 
 export const aggregateTransactionsByName = (
     transactions,
@@ -77,3 +77,4 @@ export const getExpenseCategoryName = (categoryId) => {
 
 export * from "./localStorage";
 export * from "./firebase";
+export * from './currency';
