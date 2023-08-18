@@ -1,20 +1,31 @@
-import { useState, useContext } from "react";
-import { orderBy, noop } from "lodash";
-import { ExpensesContext, BudgetContext } from "./../../context";
+import { useContext, useMemo, useState } from "react";
+import { BudgetContext, ExpensesContext } from "./../../context";
 import { Categories } from "../../constants";
-import { DateChanger } from "../DateChanger";
 import { useDate } from "../DateChanger/DateChanger";
+import { Title } from "../atoms";
+import Subcategory from "./Subcategory";
+import { orderBy } from "lodash";
+import classNames from "classnames";
 
 const IncomeIds = ["81", "82", "83"];
 
-const BudgetView = ({}) => {
-    const { currentTimestamp: timestamp, isPreviousMonth, isSameDate } = useDate();
-    const { expensesArray: expenses, expensesPerMonthPerCategory } =
-        useContext(ExpensesContext);
+const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("he-IL", {
+        style: "currency",
+        currency: "ILS",
+        currencyDisplay: 'symbol',
+        notation: 'compact',
+        // notation: 'standard',
+    }).format(amount);
+};
+
+const BudgetView = () => {
+    const { currentTimestamp, NextButton, PreviousButton, isSameDate, isPreviousMonth } = useDate();
+    const { expensesArray: expenses } = useContext(ExpensesContext);
     const { setBudget, budget } = useContext(BudgetContext);
-    const [hoveredCategoryId, setHoveredCategoryId] = useState(null);
+    const [selectedId, setSelectedId] = useState(null);
     
-    const categoriesWithAmounts = Categories.map((category) => {
+    const categoriesWithAmounts = useMemo(() => Categories.map((category) => {
         let expensesInCategorySum = 0;
         category.subCategories.forEach((subcategory) => {
             const expensesInCategory = expenses.filter((expense) => {
@@ -23,7 +34,7 @@ const BudgetView = ({}) => {
             });
             
             const thisMonthExpenses = expensesInCategory.filter((expense) => {
-                const date = new Date(timestamp);
+                const date = new Date(currentTimestamp);
                 const expenseDate = new Date(expense.timestamp);
                 if (expense.isRecurring) {
                     return expenseDate.getFullYear() === date.getFullYear();
@@ -45,267 +56,142 @@ const BudgetView = ({}) => {
             ...category,
             totalAmount: expensesInCategorySum,
         };
-    });
-    const totalExpenses = Object.values(categoriesWithAmounts)
-        .reduce((acc, curr) => {
-            if (curr.isIncome) return acc;
-            return acc + curr.totalAmount;
-        }, 0)
-        .toFixed(2);
-    const totalIncome = Object.values(categoriesWithAmounts)
-        .reduce((acc, curr) => {
-            if (!curr.isIncome) return acc;
-            return acc + curr.totalAmount;
-        }, 0)
-        .toFixed(2);
-    const bottomLine = (totalIncome - totalExpenses).toFixed(2);
+    }), [expenses, currentTimestamp]);
     
-    const budgetExpenses = Object.entries(budget["11.2022"]).reduce(
-        (acc, curr) => {
-            const [categoryId, amount] = curr;
-            const isIncome = IncomeIds.includes(String(categoryId));
-            if (isIncome) {
-                return acc;
-            }
-            return acc + Number(amount);
-        },
-        0
-    );
+    const totalExpenses = useMemo(() => {
+        return Object.values(categoriesWithAmounts)
+            .reduce((acc, curr) => {
+                if (curr.isIncome) return acc;
+                return acc + curr.totalAmount;
+            }, 0);
+    }, [categoriesWithAmounts]);
+    const totalIncome = useMemo(() => {
+        return Object.values(categoriesWithAmounts)
+            .reduce((acc, curr) => {
+                if (!curr.isIncome) return acc;
+                return acc + curr.totalAmount;
+            }, 0);
+    }, [categoriesWithAmounts]);
     
-    const budgetIncome = Object.entries(budget["11.2022"]).reduce((acc, curr) => {
-        const [categoryId, amount] = curr;
-        const isIncome = IncomeIds.includes(String(categoryId));
-        if (!isIncome) {
-            return acc;
-        }
-        return acc + Number(amount);
-    }, 0);
+    const bottomLine = totalIncome - totalExpenses;
     
-    const budgetBottomLine = budgetIncome - budgetExpenses;
+    // const budgetExpenses = Object.entries(budget["11.2022"]).reduce(
+    //     (acc, curr) => {
+    //         const [categoryId, amount] = curr;
+    //         const isIncome = IncomeIds.includes(String(categoryId));
+    //         if (isIncome) {
+    //             return acc;
+    //         }
+    //         return acc + Number(amount);
+    //     },
+    //     0
+    // );
+    //
+    // const budgetIncome = Object.entries(budget["11.2022"]).reduce((acc, curr) => {
+    //     const [categoryId, amount] = curr;
+    //     const isIncome = IncomeIds.includes(String(categoryId));
+    //     if (!isIncome) {
+    //         return acc;
+    //     }
+    //     return acc + Number(amount);
+    // }, 0);
+    //
+    // const budgetBottomLine = budgetIncome - budgetExpenses;
     
-    const handleBudgetChange = (value, subcategoryId, date) => {
-        setBudget(value, subcategoryId, date);
-    };
+    // const handleBudgetChange = (value, subcategoryId, date) => {
+    //     setBudget(value, subcategoryId, date);
+    // };
     
-    const renderCategories = () => {
-        /* TODO: category model? will make things simpler here, but did complicated you last time */
-        return categoriesWithAmounts.map((category) => (
-            <td>
-                <h2>{category.name}</h2>
-                <h3>Total: {category.totalAmount} NIS</h3>
-                <h3>
-                    Budget:{" "}
-                    {category.subCategories.reduce((acc, curr) => {
-                        if (!budget[curr.id]?.amount) return acc;
-                        return acc + Number(budget[curr.id]?.amount);
-                    }, 0)}{" "}
-                    NIS
-                </h3>
-            </td>
-        ));
-    };
-    
-    const getAverageAmount = (id) => {
-        if (!expensesPerMonthPerCategory[id]) return 0;
-        
-        return (
-            Object.values(expensesPerMonthPerCategory[id]).reduce(
-                (acc, curr) => acc + curr,
-                0
-            ) / Object.values(expensesPerMonthPerCategory[id]).length
-        );
-    };
-    
-    // TODO: break into smaller components
-    // FIXME: income category does not count as income - have to mark it in expense view
-    // FIXME: null category selection when reaching end of expenses from paste
-    // TODO: auto recognition of income as income
-    // TODO: suggest categorization based on previous expenses
     return (
         <div>
-            <h1>Plan (Budget View)</h1>
             <div>
-                <h1>
-                    {new Date(timestamp).toLocaleString("en-GB", {
-                        month: "long",
-                    })}
-                </h1>
-                <h2>
-                    Expenses this month:{" "}
-                    <span style={{ color: "tomato" }}>{totalExpenses}</span>
-                </h2>
-                <h2>
-                    Income this month:{" "}
-                    <span style={{ color: "olive" }}>{totalIncome}</span>
-                </h2>
-                <h2>Bottom Line: {bottomLine}</h2>
-                <hr/>
-                <h2>Budget this month: {budgetExpenses}</h2>
-                <h2>Income Budget this month: {budgetIncome}</h2>
-                <h2>Bottom Line: {budgetBottomLine}</h2>
+                <div className="flex w-full gap-4 items-center font-mono">
+                    <div className="flex justify-center items-center">
+                        <div className="flex gap-2 mr-4">
+                            <PreviousButton/>
+                            <NextButton/>
+                        </div>
+                        <Title className="h-full">
+                            {new Date(currentTimestamp).toLocaleString("en-US", {
+                                month: "short",
+                                year: "2-digit",
+                            })}:
+                        </Title>
+                    </div>
+                    <div className="flex mx-6">
+                        <Title className="text-green-400">
+                            +{formatCurrency(totalIncome)}
+                        </Title>
+                        <Title className="text-red-400">
+                            -{formatCurrency(totalExpenses)}
+                        </Title>
+                    </div>
+                    <Title>
+                        =
+                    </Title>
+                    <Title className={classNames("text-white", {
+                        'bg-green-500': bottomLine > 0,
+                        'bg-red-500': bottomLine < 0,
+                    })}>
+                        {formatCurrency(bottomLine)}
+                    </Title>
+                </div>
+                {/*<h2>Budget this month: {budgetExpenses}</h2>*/}
+                {/*<h2>Income Budget this month: {budgetIncome}</h2>*/}
+                {/*<h2>Bottom Line: {budgetBottomLine}</h2>*/}
             </div>
-            <div>
-                <input type="number" placeholder="Started the month with"/>
-            </div>
-            
-            <table>
-                <thead>
-                <tr>{renderCategories()}</tr>
-                </thead>
-                <tbody>
-                {Categories.map((category) => {
-                    const dateKey = new Date(timestamp).toLocaleString("he-IL", {
-                        month: "numeric",
-                        year: "numeric",
-                    });
+            <div className="flex flex-wrap">
+                {orderBy(categoriesWithAmounts, ['totalAmount'], ['desc']).map((category) => {
+                    const total = Math.round(category.totalAmount);
+                    const totalCurrency = new Intl.NumberFormat('he-IL', {
+                        style: 'currency',
+                        currency: 'ILS',
+                        currencyDisplay: 'symbol',
+                        notation: 'compact',
+                    }).format(total);
+                    const subcategories = Categories.find((c) =>
+                        c.id === category.id)?.subCategories;
+                    
+                    if (total === 0) {
+                        return null;
+                    }
                     
                     return (
-                        <>
-                            <td>
-                                {category?.subCategories?.map((subcategory) => {
-                                    const expensesInCategory = expenses.filter((expense) => {
-                                        // TODO: same type instead of casting
-                                        return (
-                                            String(expense.categoryId) === String(subcategory.id)
-                                        );
-                                    });
-                                    const thisMonthExpenses = expensesInCategory.filter(
-                                        (expense) => {
-                                            const date = new Date(timestamp);
-                                            const expenseDate = new Date(expense.timestamp);
-                                            if (expense.isRecurring) {
-                                                return (
-                                                    expenseDate.getFullYear() === date.getFullYear()
-                                                );
-                                            }
-                                            
-                                            return (
-                                                expenseDate.getMonth() === date.getMonth() &&
-                                                expenseDate.getFullYear() === date.getFullYear()
-                                            );
-                                        }
-                                    );
-                                    const thisMonthAmount = thisMonthExpenses.reduce(
-                                        (acc, expense) => {
-                                            return acc + expense.amount;
-                                        },
-                                        0
-                                    );
-                                    
-                                    const totalInPreviousMonth = expenses.reduce(
-                                        (total, expense) => {
-                                            if (
-                                                subcategory.id === expense.categoryId &&
-                                                isPreviousMonth(expense.timestamp)
-                                            ) {
-                                                return total + expense.amount;
-                                            }
-                                            return total;
-                                        },
-                                        0
-                                    );
-                                    
-                                    const averageAmount = getAverageAmount(
-                                        String(subcategory.id)
-                                    );
+                        <div
+                            key={category.id}
+                            className="bg-gray-200 m-4 p-4 w-fit gap-4 items-center text-center">
+                            <Title type={Title.Types.H2}>
+                                {category.name} {totalCurrency}
+                            </Title>
+                            {/*<h3>*/}
+                            {/*    Budget:{" "}*/}
+                            {/*    {category.subCategories.reduce((acc, curr) => {*/}
+                            {/*        if (!budget[curr.id]?.amount) return acc;*/}
+                            {/*        return acc + Number(budget[curr.id]?.amount);*/}
+                            {/*    }, 0)}{" "}*/}
+                            {/*    NIS*/}
+                            {/*</h3>*/}
+                            <div className="flex gap-4">
+                                {subcategories.map((subcategory) => {
+                                    if (subcategory.amount === 0) return null;
                                     
                                     return (
-                                        <div
-                                            style={{
-                                                border:
-                                                    Number(thisMonthAmount) >
-                                                    Number(budget[subcategory.id]?.amount)
-                                                        ? "5px solid red"
-                                                        : "5px solid olive",
-                                            }}
-                                        >
-                                            {hoveredCategoryId === subcategory.id && (
-                                                <div className="info-box">
-                                                    <h3>This month</h3>
-                                                    {orderBy(
-                                                        expensesInCategory
-                                                            .filter((expense) =>
-                                                                isSameDate(expense.timestamp)
-                                                            )
-                                                            .map((expense) => {
-                                                                return (
-                                                                    <div>
-                                                                        <span>{expense.name.slice(0, 20)}</span>
-                                                                        {" | "}
-                                                                        <span>{expense.amount}</span>
-                                                                    </div>
-                                                                );
-                                                            }),
-                                                        "amount",
-                                                        "desc"
-                                                    )}
-                                                </div>
-                                            )}
-                                            <tbody
-                                                border="1"
-                                                key={subcategory.id}
-                                                onClick={() => setHoveredCategoryId(subcategory.id)}
-                                            >
-                                            <tr>
-                                                <td>
-                                                    <h3>
-                                                        {subcategory.icon} {subcategory.name}
-                                                    </h3>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-															<span>
-																Current: <b>{thisMonthAmount?.toFixed(2)}</b>
-															</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-															<span>
-																Previous:{" "}
-                                                                <b>{totalInPreviousMonth?.toFixed(2)}</b>
-															</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-															<span>
-																Average: <b>{averageAmount.toFixed(2)}</b>
-															</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-															<span>
-																Budget:
-																<input
-                                                                    type="number"
-                                                                    onChange={(event) =>
-                                                                        handleBudgetChange(
-                                                                            event.target.value,
-                                                                            subcategory.id,
-                                                                            timestamp
-                                                                        )
-                                                                    }
-                                                                    value={
-                                                                        budget[dateKey] &&
-                                                                        budget[dateKey][String(subcategory.id)]
-                                                                    }
-                                                                />
-															</span>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </div>
+                                        <Subcategory
+                                            {...subcategory}
+                                            key={subcategory.id}
+                                            isSelected={selectedId === subcategory.id}
+                                            onSubcategoryClick={setSelectedId}
+                                            currentTimestamp={currentTimestamp}
+                                            isPreviousMonth={isPreviousMonth}
+                                            isSameDate={isSameDate}
+                                        />
                                     );
                                 })}
-                            </td>
-                        </>
-                    );
+                            </div>
+                        </div>
+                    )
                 })}
-                </tbody>
-            </table>
+            </div>
         </div>
     );
 };

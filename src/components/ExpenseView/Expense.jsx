@@ -1,38 +1,19 @@
 import { useMemo, useState } from "react";
-import { getExpenseCategoryName, updateCategory } from "../../utils";
+import { deleteExpense, getExpenseCategoryName, updateCategory } from "../../utils";
 import { noop } from "lodash";
-import { Categories } from "../../constants";
 import classNames from "classnames";
-
-const CategoriesDropdownMenu = ({ defaultValueId = null, onCategoryChange = noop }) => {
-    return (
-        <select onChange={event => {
-            onCategoryChange(event.target.value);
-        }}>
-            {Categories.map((category) => (
-                category.subCategories.map((subCategory) => {
-                    return (
-                        <option
-                            key={subCategory.id}
-                            selected={String(defaultValueId) === String(subCategory.id)}
-                            value={subCategory.id}>
-                            {category.name} > {subCategory.name}
-                        </option>
-                    );
-                })
-            ))}
-        </select>
-    );
-};
+import { Button } from "../atoms";
+import { CategoriesDropdownMenu } from "./CategoriesDropdownMenu";
 
 const Expense = ({
     expense,
     onIsIncomeChange = noop,
+    onCategoryClick = noop,
     onIsRecurringChange = noop,
     onNoteChange = noop,
-    onCategoryClick = noop,
     onAmountClick = noop,
     isListView = false,
+    onDelete = noop
 }) => {
     const [note, setNote] = useState(expense.note);
     const category = useMemo(
@@ -86,16 +67,16 @@ const Expense = ({
                     }}
                 />
             </div>
-            <div>
-                <label>Is income?</label>
-                <input
-                    checked={expense.isIncome}
-                    type="checkbox"
-                    onChange={() => {
-                        onIsIncomeChange(expense.id, !expense.isIncome);
-                    }}
-                />
-            </div>
+            <Button
+                type={Button.Types.Danger}
+                onClick={async () => {
+                    if (window.confirm(`Are you sure you want to delete ${expense.name}?`)) {
+                        await deleteExpense(expense.id);
+                        onDelete();
+                    }
+                }}>
+                DELETE
+            </Button>
         </div>
     );
 };

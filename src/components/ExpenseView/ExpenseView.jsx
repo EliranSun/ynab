@@ -1,78 +1,14 @@
-import { useContext, useState, useMemo } from "react";
+import { useContext, useMemo, useState } from "react";
 import { noop, orderBy } from "lodash";
-import { useDebounce } from "react-use";
 import { ExpensesContext } from "../../context";
 import Expense from "./Expense";
 import { isExpenseInMonth } from "../../utils";
 import TopExpensesView from "./TopExpensesView";
 import { useDate } from "../DateChanger/DateChanger";
-
-const SortBy = {
-    DATE: "date",
-    CATEGORY: "category",
-    AMOUNT: "amount",
-    NAME: "name",
-};
-
-const SearchInput = ({
-    placeholder = "Search through expenses",
-    onChange = noop
-}) => {
-    const [value, setValue] = useState("");
-    useDebounce(
-        () => {
-            onChange(value);
-        },
-        500,
-        [value]
-    );
-    return (
-        <input
-            className="w-2/5 text-xl border-b border-black"
-            type="text"
-            placeholder={placeholder}
-            onChange={(event) => {
-                setValue(event.target.value);
-            }}
-        />
-    );
-}
-
-const BoxAmount = ({ expenses = [], min = 1000, max = 7500 }) => {
-    let count = 0;
-    const totalAmount = useMemo(() => {
-        return expenses
-            .reduce((acc, curr) => {
-                if (max === -1 && curr.amount >= min && !curr.isIncome) {
-                    count++;
-                    return acc + curr.amount;
-                }
-                
-                if (min === -1 && curr.amount < max && !curr.isIncome) {
-                    count++;
-                    return acc + curr.amount;
-                }
-                
-                if (curr.amount < max && curr.amount >= min && !curr.isIncome) {
-                    count++;
-                    return acc + curr.amount;
-                }
-                return acc;
-            }, 0)
-            .toFixed(2);
-    }, [expenses, max, min, count]);
-    
-    // TODO: a pie chart here
-    return (
-        <div className="bg-gray-200 w-48 h-48 flex flex-col items-center justify-center">
-            <span>
-                {min === -1 ? "∞" : min} - {max === -1 ? "∞" : max}
-            </span>
-            <span>{totalAmount} NIS</span>
-            <span>({count} Items)</span>
-        </div>
-    );
-};
+import { Button } from "../atoms";
+import { SearchInput } from "./SearchInput";
+import { BoxAmount } from "./BoxAmount";
+import { SortBy } from "./constants";
 
 const ExpenseView = ({ onCategoryClick = noop }) => {
     const {
@@ -80,35 +16,55 @@ const ExpenseView = ({ onCategoryClick = noop }) => {
         setExpenseAsRecurring,
         setExpenseAsIncome,
         setExpenseNote,
+        refetch
     } = useContext(ExpensesContext);
+    
     const [searchValue, setSearchValue] = useState("");
-    const [sort, setSort] = useState(SortBy.AMOUNT);
+    const [sort, setSort] = useState(SortBy.DATE);
     const [isSearchingAll, setIsSearchingAll] = useState(false);
-    const { isSameDate, currentTimestamp, toDate, formattedDate, NextButton, PreviousButton } = useDate();
-    const thisMonthExpenses = useMemo(() => orderBy(
-        expenses.filter(
-            (expense) =>
-                !expense.isIncome &&
-                isExpenseInMonth(expense.timestamp, currentTimestamp)
-        ),
-        sort,
-        "desc"
-    ), [expenses, currentTimestamp, sort]);
+    const {
+        isSameDate,
+        currentTimestamp,
+        toDate,
+        formattedDate,
+        NextButton,
+        PreviousButton
+    } = useDate();
+    
+    const thisMonthExpenses = useMemo(() => {
+        const thisMonth = expenses.filter((expense) => {
+            return isExpenseInMonth(expense.timestamp, currentTimestamp);
+        });
+        
+        return orderBy(thisMonth, sort, "desc");
+    }, [expenses, currentTimestamp, sort]);
+    
+    console.log({ thisMonthExpenses })
+    
     const filteredExpenses = useMemo(() => {
         if (searchValue === "") {
             return isSearchingAll ? [] : thisMonthExpenses;
         }
         
-        return (isSearchingAll ? expenses : thisMonthExpenses).filter((expense) => {
+        const filtered = (isSearchingAll ? expenses : thisMonthExpenses).filter((expense) => {
             return expense.name
                 .toLowerCase()
                 .includes(searchValue.toLowerCase());
         });
+        
+        return orderBy(filtered, ['timestamp'], "asc");
     }, [searchValue, thisMonthExpenses, isSearchingAll]);
     
     return (
         <div className="pb-96">
             <h1 className="text-3xl my-4">Track (Expense View)</h1>
+            <h2>Sort by</h2>
+            <div className="flex gap-4">
+                <Button onClick={() => setSort(SortBy.DATE)}>Date</Button>
+                <Button onClick={() => setSort(SortBy.AMOUNT)}>Amount</Button>
+                <Button onClick={() => setSort(SortBy.CATEGORY)}>Category</Button>
+                <Button onClick={() => setSort(SortBy.NAME)}>Name</Button>
+            </div>
             <div className="fixed bottom-10 right-20 bg-white shadow-xl p-2">
                 <PreviousButton/>
                 <NextButton/>
@@ -141,6 +97,7 @@ const ExpenseView = ({ onCategoryClick = noop }) => {
                             onIsIncomeChange={setExpenseAsIncome}
                             onCategoryClick={onCategoryClick}
                             onNoteChange={setExpenseNote}
+                            onDelete={refetch}
                         />
                     ))}
                 </div>

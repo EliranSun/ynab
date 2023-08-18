@@ -6,7 +6,7 @@ export * from "./CategoryView";
 export * from "./ExpenseView";
 export * from "./Efficient";
 export * from "./DateChanger";
-export * from "./FortuneTeller";
+export * from "./FuturePredictionPage";
 export * from "./Login";
 export * from "./ErrorBoundary";
 

@@ -25,12 +25,21 @@ export const ExpensesContextProvider = ({ children }) => {
             
             if (!expensesPerMonthPerCategory[categoryId]) {
                 expensesPerMonthPerCategory[categoryId] = {
-                    [dateKey]: expense.amount,
+                    [dateKey]: {
+                        amount: expense.amount,
+                        expenses: [expense],
+                    },
                 };
             } else if (!expensesPerMonthPerCategory[categoryId][dateKey]) {
-                expensesPerMonthPerCategory[categoryId][dateKey] = expense.amount;
+                expensesPerMonthPerCategory[categoryId][dateKey] = {
+                    amount: expense.amount,
+                    expenses: [expense],
+                };
             } else {
-                expensesPerMonthPerCategory[categoryId][dateKey] += expense.amount;
+                expensesPerMonthPerCategory[categoryId][dateKey] = {
+                    amount: expensesPerMonthPerCategory[categoryId][dateKey].amount + expense.amount,
+                    expenses: [...expensesPerMonthPerCategory[categoryId][dateKey].expenses, expense],
+                };
             }
         });
         
@@ -119,6 +128,10 @@ export const ExpensesContextProvider = ({ children }) => {
             value={{
                 expenses,
                 expensesPerMonthPerCategory,
+                refetch: async () => {
+                    const expenses = await getExpenses();
+                    setExpenses(expenses);
+                },
                 setExpenseAsRecurring,
                 setExpenseAsIncome,
                 changeExpenseCategory,
